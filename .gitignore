@@ -30,6 +30,8 @@ out/
 *~
 .DS_Store
 Thumbs.db
+*claude*
+*CLAUDE*
 
 # Logs
 logs/
