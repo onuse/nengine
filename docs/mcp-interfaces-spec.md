@@ -523,6 +523,14 @@ Debug output is sent via separate WebSocket channel to avoid contaminating the n
 - **Delta Updates**: Only changed data transmitted to UI
 - **Background Simulation**: NPC actions calculated during player input
 
+## Transaction Boundaries
+
+All multi-server operations within a single turn must complete successfully before calling . This ensures atomic turn execution:
+
+
+
+This pattern leverages Git as the transaction log - incomplete turns never create commits, ensuring the game state remains consistent even if operations fail partway through.
+
 ## Error Handling
 
 All MCP operations should handle:
