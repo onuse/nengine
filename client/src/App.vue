@@ -1,79 +1,44 @@
 <template>
   <div id="app">
     <div class="game-container" v-if="gameConfig">
-      <\!-- Viewport Panel - Conditionally rendered -->
-      <div v-if="gameConfig?.ui?.layout?.panels?.viewport?.visible" 
-           class="viewport-panel"
-           :class="gameConfig?.ui?.layout?.panels?.viewport?.customClass">
-        <div class="viewport">
-          <h2 v-if="gameConfig?.ui?.layout?.panels?.viewport?.showRoomName && gameState.currentRoom">
-            {{ gameState.currentRoom.name }}
-          </h2>
-          <p v-if="gameConfig?.ui?.layout?.panels?.viewport?.showDescription && gameState.currentRoom">
-            {{ gameState.currentRoom.description }}
-          </p>
-        </div>
+      <!-- Game Header -->
+      <div class="game-header">
+        <h1>{{ gameConfig?.game?.title || 'Narrative Engine' }}</h1>
+        <p v-if="gameConfig?.game?.description">{{ gameConfig.game.description }}</p>
       </div>
       
-      <div class="panels-container">
-        <\!-- Party Panel - Conditionally rendered -->
-        <div v-if="gameConfig?.ui?.layout?.panels?.party?.visible" 
-             class="party-panel"
-             :class="gameConfig?.ui?.layout?.panels?.party?.customClass">
-          <h3>Party</h3>
-          <div class="party-list">
-            <div v-for="member in gameState.party" :key="member.id">
-              {{ member.name }}
-            </div>
-          </div>
-        </div>
-        
-        <\!-- Actions Panel - Conditionally rendered -->
-        <div v-if="gameConfig?.ui?.layout?.panels?.actions?.visible" 
-             class="actions-panel"
-             :class="gameConfig?.ui?.layout?.panels?.actions?.customClass">
-          <div class="action-bar">
-            <button v-for="action in (gameConfig?.ui?.layout?.panels?.actions?.customActions || gameState.actions)" 
-                    :key="action" 
-                    @click="handleAction(action)">
-              {{ action }}
-            </button>
-          </div>
-        </div>
-        
-        <\!-- Inventory Panel - Conditionally rendered -->
-        <div v-if="gameConfig?.ui?.layout?.panels?.inventory?.visible" 
-             class="inventory-panel"
-             :class="gameConfig?.ui?.layout?.panels?.inventory?.customClass">
-          <h3>Inventory</h3>
-          <div class="inventory-list">
-            <div v-for="item in gameState.inventory" :key="item.id">
-              {{ item.name }}
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <\!-- Console Panel - Conditionally rendered (default to visible) -->
-      <div v-if="isConsolePanelVisible" 
-           class="console-panel"
-           :class="gameConfig?.ui?.layout?.panels?.console?.customClass">
+      <!-- Main Game Console -->
+      <div class="console-panel">
         <div class="text-console">
           <div class="messages" ref="messagesContainer">
             <div v-for="(msg, index) in messages" :key="index" class="message">
               {{ msg }}
+            </div>
+            <div v-if="isProcessing" class="processing-message">
+              <span class="processing-dots">{{ processingMessage }}</span>
+              <span class="dots">...</span>
             </div>
           </div>
           <input 
             v-model="inputCommand" 
             @keyup.enter="handleCommand"
             class="command-input"
-            placeholder="Enter command..."
+            :disabled="isProcessing"
+            :placeholder="isProcessing ? 'Processing...' : 'Type your command here and press Enter...'"
           />
         </div>
       </div>
+      
+      <!-- Quick Actions -->
+      <div class="action-bar" v-if="gameConfig?.mechanics?.commands">
+        <button v-for="action in quickActions" :key="action" 
+                @click="handleAction(action)" 
+                class="action-button"
+                :disabled="isProcessing">
+          {{ action }}
+        </button>
+      </div>
     </div>
-    
     
     <div v-else class="loading-container">
       <p>Loading game...</p>
@@ -101,15 +66,25 @@ const gameState = reactive<GameState>({
 });
 
 const messages = ref<string[]>([]);
+const isProcessing = ref(false);
+const processingMessage = ref('');
 
 const inputCommand = ref('');
 const messagesContainer = ref<HTMLElement>();
 
 let ws: WebSocket | null = null;
 
-const isConsolePanelVisible = computed(() => {
-  if (!gameConfig.value?.ui?.layout?.panels?.console) return true;
-  return gameConfig.value.ui.layout.panels.console.visible !== false;
+const quickActions = computed(() => {
+  if (!gameConfig.value?.mechanics?.commands) return ['look', 'inventory'];
+  
+  const commands = gameConfig.value.mechanics.commands;
+  const actions = [];
+  
+  if (commands.movement) actions.push(...commands.movement.slice(0, 4)); // first 4 directions
+  if (commands.interaction) actions.push('look', 'examine');
+  if (commands.meta) actions.push('inventory');
+  
+  return actions.slice(0, 8); // max 8 quick actions
 });
 
 onMounted(async () => {
@@ -155,48 +130,77 @@ async function loadGameConfig() {
 
 function connectWebSocket() {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  ws = new WebSocket(`${protocol}//${window.location.host}`);
+  const wsUrl = `${protocol}//${window.location.host}`;
+  
+  console.log('Attempting to connect to:', wsUrl);
+  addMessage('🔌 Connecting to server...');
+  
+  ws = new WebSocket(wsUrl);
   
   ws.onopen = () => {
-    console.log('Connected to server');
-    addMessage('Connected to game server');
+    console.log('✅ Connected to server');
+    addMessage('✅ Connected to game server');
     
     // Send initial "look" command to get the game state
     setTimeout(() => {
-      ws?.send(JSON.stringify({
-        type: 'player_action',
-        id: 'initial_look',
-        action: { 
-          type: 'look'
-        },
-        rawInput: 'look'
-      }));
+      if (ws?.readyState === WebSocket.OPEN) {
+        isProcessing.value = true;
+        processingMessage.value = 'Initializing game world...';
+        
+        ws.send(JSON.stringify({
+          type: 'player_action',
+          id: 'initial_look',
+          action: { 
+            type: 'look'
+          },
+          rawInput: 'look'
+        }));
+      }
     }, 500);
   };
   
   ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    handleServerMessage(data);
+    try {
+      const data = JSON.parse(event.data);
+      handleServerMessage(data);
+    } catch (error) {
+      console.error('Failed to parse server message:', error);
+      addMessage('❌ Received invalid message from server');
+    }
   };
   
-  ws.onclose = () => {
-    console.log('Disconnected from server');
-    addMessage('Disconnected from game server');
-    setTimeout(connectWebSocket, 3000);
+  ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
+    addMessage('❌ Connection error occurred');
+  };
+  
+  ws.onclose = (event) => {
+    console.log('❌ Disconnected from server. Code:', event.code, 'Reason:', event.reason);
+    addMessage('❌ Disconnected from game server');
+    
+    // Only reconnect if it wasn't a manual close
+    if (event.code !== 1000) {
+      addMessage('🔄 Attempting to reconnect in 3 seconds...');
+      setTimeout(connectWebSocket, 3000);
+    }
   };
 }
 
 function handleServerMessage(data: any) {
   console.log('Received message:', data);
   
+  // Clear processing state
+  isProcessing.value = false;
+  processingMessage.value = '';
+  
   if (data.type === 'narrative_response' || data.type === 'response') {
     // Handle narrative responses from the server
     if (data.result && data.result.narrative) {
       addMessage(data.result.narrative);
     } else if (data.result && data.result.error) {
-      addMessage(`Error: ${data.result.error}`);
+      addMessage(`❌ Error: ${data.result.error}`);
     } else if (data.error) {
-      addMessage(`Error: ${data.error}`);
+      addMessage(`❌ Error: ${data.error}`);
     }
   } else if (data.type === 'state') {
     Object.assign(gameState, data.state);
@@ -206,30 +210,40 @@ function handleServerMessage(data: any) {
 }
 
 function handleCommand() {
-  if (!inputCommand.value.trim()) return;
+  if (!inputCommand.value.trim() || isProcessing.value) return;
   
-  addMessage(`> ${inputCommand.value}`);
+  const command = inputCommand.value.trim();
+  addMessage(`> ${command}`);
+  inputCommand.value = '';
   
   if (ws && ws.readyState === WebSocket.OPEN) {
+    isProcessing.value = true;
+    processingMessage.value = 'Processing command...';
+    
     // Send as player_action message for the narrative engine
     ws.send(JSON.stringify({
       type: 'player_action',
       id: Date.now().toString(),
       action: { 
         type: 'interaction',
-        description: inputCommand.value 
+        description: command 
       },
-      rawInput: inputCommand.value
+      rawInput: command
     }));
+  } else {
+    addMessage('❌ Not connected to server');
   }
-  
-  inputCommand.value = '';
 }
 
 function handleAction(action: string) {
-  addMessage(`[Action: ${action}]`);
+  if (isProcessing.value) return;
+  
+  addMessage(`> ${action}`);
   
   if (ws && ws.readyState === WebSocket.OPEN) {
+    isProcessing.value = true;
+    processingMessage.value = `Processing "${action}" action...`;
+    
     // Send as player_action message for the narrative engine
     ws.send(JSON.stringify({
       type: 'player_action',
@@ -240,6 +254,8 @@ function handleAction(action: string) {
       },
       rawInput: action.toLowerCase()
     }));
+  } else {
+    addMessage('❌ Not connected to server');
   }
 }
 
@@ -287,81 +303,69 @@ body {
 
 .game-container {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-backgroundAlt);
+  background: var(--color-background);
   border: 2px solid var(--color-border);
+  overflow: hidden;
 }
 
-/* Dynamic panel layout */
-.viewport-panel {
-  min-height: 30%;
-  border-bottom: 1px solid var(--color-text);
-  padding: 10px;
-  overflow-y: auto;
+.game-header {
+  background: var(--color-backgroundAlt);
+  padding: 15px;
+  border-bottom: 2px solid var(--color-border);
+  text-align: left;
 }
 
-.viewport h2 {
-  color: var(--color-info);
-  margin-bottom: 10px;
+.game-header h1 {
+  color: var(--color-primary);
+  font-size: 24px;
+  margin-bottom: 5px;
+  text-shadow: 0 0 10px var(--color-primary);
 }
 
-.panels-container {
-  display: flex;
-  min-height: 35%;
-  border-bottom: 1px solid var(--color-text);
-}
-
-.party-panel {
-  width: 25%;
-  padding: 10px;
-  overflow-y: auto;
-  border-right: 1px solid var(--color-text);
-}
-
-.inventory-panel {
-  width: 25%;
-  padding: 10px;
-  overflow-y: auto;
-  border-left: 1px solid var(--color-text);
-}
-
-.actions-panel {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
+.game-header p {
+  color: var(--color-textAlt);
+  font-size: 14px;
+  font-style: italic;
 }
 
 .action-bar {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  padding: 10px;
+  background: var(--color-backgroundAlt);
+  border-top: 1px solid var(--color-border);
   flex-wrap: wrap;
+  justify-content: center;
 }
 
-.action-bar button {
+.action-button {
   background: var(--color-background);
-  color: var(--color-text);
-  border: 1px solid var(--color-text);
-  padding: 10px 20px;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: 8px 16px;
   cursor: pointer;
   font-family: inherit;
+  font-size: 12px;
   transition: all 0.2s;
+  text-transform: capitalize;
+  border-radius: var(--border-radius, 4px);
 }
 
-.action-bar button:hover {
-  background: var(--color-text);
+.action-button:hover {
+  background: var(--color-primary);
   color: var(--color-background);
+  box-shadow: 0 0 8px var(--color-primary);
 }
 
 .console-panel {
   flex: 1;
-  min-height: 35%;
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 15px;
+  background: var(--color-background);
 }
 
 .text-console {
@@ -373,29 +377,62 @@ body {
 .messages {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 10px;
-  padding: 5px;
-  background: var(--color-background);
-  border: 1px solid var(--color-text);
+  overflow-x: hidden;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: var(--color-backgroundAlt);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  min-height: 300px;
+  max-height: calc(100vh - 200px);
+  word-wrap: break-word;
 }
 
 .message {
   margin-bottom: 5px;
   word-wrap: break-word;
+  text-align: left;
 }
 
 .command-input {
-  background: var(--color-background);
+  background: var(--color-backgroundAlt);
   color: var(--color-text);
-  border: 1px solid var(--color-text);
-  padding: 10px;
+  border: 2px solid var(--color-border);
+  padding: 12px 16px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   outline: none;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .command-input:focus {
-  border-color: var(--color-info);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+}
+
+.command-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.processing-message {
+  color: var(--color-secondary);
+  font-style: italic;
+  padding: 10px;
+  border-left: 3px solid var(--color-secondary);
+  margin: 10px 0;
+  background: rgba(255, 0, 255, 0.1);
+}
+
+.dots {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 h3 {

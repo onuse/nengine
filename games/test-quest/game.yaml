@@ -126,6 +126,13 @@ llm:
     tone: "helpful"  # Clear responses for testing
     verbosity: "detailed"  # Full responses to validate
     perspective: "second"
+    
+  # Extra instructions that get appended to every LLM prompt
+  extraInstructions: |
+    Always respond with vivid, atmospheric descriptions.
+    Include sensory details like sounds, smells, and textures.
+    Maintain a slightly mysterious and engaging tone.
+    Keep responses focused and under 3 paragraphs unless the situation demands more detail.
 
 # Content paths - all files required for testing
 content:

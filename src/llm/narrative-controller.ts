@@ -14,6 +14,7 @@ export interface NarrativeConfig {
   temperature: number;
   maxContextTokens: number;
   historyDepth: number;
+  extraInstructions?: string;
 }
 
 export interface PlayerAction {
