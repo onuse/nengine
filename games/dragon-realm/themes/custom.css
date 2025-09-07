@@ -1,0 +1,312 @@
+/* Dragon Realm - Luxurious Fantasy Theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* Base styling with wood texture */
+body {
+  background: linear-gradient(135deg, #1a0f0a 0%, #2a1a10 50%, #1a0f0a 100%) !important;
+  color: var(--color-text) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add texture overlay */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(139, 69, 19, 0.03) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(139, 69, 19, 0.03) 3px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ornate viewport panel with gold frame */
+.fantasy-viewport {
+  background: linear-gradient(135deg, #2a1a10, #1a0f0a) !important;
+  border: 3px double #d4af37 !important;
+  border-radius: 12px !important;
+  padding: 15px !important;
+  position: relative !important;
+  box-shadow: 
+    inset 0 0 20px rgba(212, 175, 55, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Corner decorations */
+.fantasy-viewport::before,
+.fantasy-viewport::after {
+  content: '❦';
+  position: absolute;
+  color: #d4af37;
+  font-size: 24px;
+}
+.fantasy-viewport::before { top: 5px; left: 10px; }
+.fantasy-viewport::after { top: 5px; right: 10px; }
+
+/* Room image container */
+.room-image {
+  width: 100%;
+  height: 200px;
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Party panel with character portraits */
+.fantasy-party {
+  background: rgba(26, 15, 10, 0.9) !important;
+  border: 2px solid #8b4513 !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+}
+
+.character-portrait {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #d4af37;
+  border-radius: 50%;
+  margin: 10px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.character-health {
+  background: linear-gradient(90deg, #dc143c, #8b0000);
+  height: 4px;
+  border-radius: 2px;
+  margin: 5px 0;
+  box-shadow: 0 0 5px rgba(220, 20, 60, 0.5);
+}
+
+.character-mana {
+  background: linear-gradient(90deg, #4169e1, #191970);
+  height: 4px;
+  border-radius: 2px;
+  margin: 5px 0;
+  box-shadow: 0 0 5px rgba(65, 105, 225, 0.5);
+}
+
+/* Inventory with item icons */
+.fantasy-inventory {
+  background: rgba(26, 15, 10, 0.9) !important;
+  border: 2px solid #8b4513 !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+}
+
+.inventory-slot {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #8b4513;
+  border-radius: 4px;
+  margin: 5px;
+  display: inline-block;
+  background: rgba(42, 26, 16, 0.5);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.inventory-slot:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  transform: scale(1.1);
+}
+
+/* Radial action menu */
+.fantasy-actions {
+  position: relative !important;
+  width: 200px !important;
+  height: 200px !important;
+  margin: 0 auto !important;
+}
+
+.radial-menu {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.action-button {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #d4af37, #8b4513);
+  border: 2px solid #d4af37;
+  color: #1a0f0a;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+}
+
+/* Parchment-style console */
+.fantasy-console {
+  background: linear-gradient(135deg, #f9f2e6, #e8dcc0) !important;
+  color: #2a1a10 !important;
+  border: 3px double #8b4513 !important;
+  border-radius: 8px !important;
+  padding: 15px !important;
+  font-family: 'EB Garamond', serif !important;
+  position: relative !important;
+  box-shadow: inset 0 0 10px rgba(139, 69, 19, 0.2) !important;
+}
+
+/* Aged paper effect */
+.fantasy-console::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(ellipse at top left, transparent 0%, rgba(139, 69, 19, 0.1) 50%),
+    radial-gradient(ellipse at bottom right, transparent 0%, rgba(139, 69, 19, 0.1) 50%);
+  pointer-events: none;
+}
+
+.fantasy-console .message {
+  color: #2a1a10 !important;
+  text-shadow: 1px 1px 1px rgba(139, 69, 19, 0.2) !important;
+  font-size: 15px !important;
+  line-height: 1.8 !important;
+}
+
+.fantasy-console .command-input {
+  background: rgba(249, 242, 230, 0.8) !important;
+  border: 1px solid #8b4513 !important;
+  border-radius: 4px !important;
+  color: #2a1a10 !important;
+  font-family: 'EB Garamond', serif !important;
+  padding: 8px 12px !important;
+}
+
+/* Dialogue panel with speaker portraits */
+.fantasy-dialogue {
+  background: linear-gradient(135deg, rgba(26, 15, 10, 0.95), rgba(42, 26, 16, 0.95)) !important;
+  border: 3px double #d4af37 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6) !important;
+}
+
+.speaker-portrait {
+  width: 100px;
+  height: 100px;
+  border: 3px solid #d4af37;
+  border-radius: 8px;
+  float: left;
+  margin-right: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dialogue-text {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  color: #f4e4c1;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.dialogue-choices {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #8b4513;
+}
+
+.dialogue-choice {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid #8b4513;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dialogue-choice:hover {
+  background: rgba(212, 175, 55, 0.3);
+  border-color: #d4af37;
+  transform: translateX(5px);
+}
+
+/* Map panel with parchment look */
+.fantasy-map {
+  background: #f9f2e6 !important;
+  border: 2px solid #8b4513 !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  position: relative !important;
+}
+
+/* Journal with illuminated manuscript style */
+.fantasy-journal {
+  background: linear-gradient(135deg, #f9f2e6, #e8dcc0) !important;
+  border: 3px double #d4af37 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  font-family: 'EB Garamond', serif !important;
+}
+
+.fantasy-journal h2 {
+  font-family: 'Cinzel Decorative', serif !important;
+  color: #8b4513 !important;
+  text-align: center !important;
+  margin-bottom: 20px !important;
+  text-shadow: 1px 1px 2px rgba(212, 175, 55, 0.5) !important;
+}
+
+/* Initial letter styling */
+.fantasy-journal p:first-child:first-letter {
+  font-size: 48px !important;
+  font-family: 'Cinzel Decorative', serif !important;
+  color: #d4af37 !important;
+  float: left !important;
+  line-height: 40px !important;
+  margin: 0 5px 0 0 !important;
+  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3) !important;
+}
+
+/* Magical particle effects */
+@keyframes sparkle {
+  0% { opacity: 0; transform: translateY(0) scale(0); }
+  50% { opacity: 1; transform: translateY(-20px) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(0); }
+}
+
+.magic-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #d4af37, transparent);
+  border-radius: 50%;
+  animation: sparkle 2s infinite;
+}
+
+/* Glowing effect for magical items */
+.magical-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px #9370db; }
+  to { box-shadow: 0 0 20px #9370db, 0 0 30px #9370db; }
+}

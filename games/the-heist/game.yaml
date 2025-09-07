@@ -1,0 +1,122 @@
+# Example Game Configuration
+# This file defines the complete game setup including UI, mechanics, and content
+
+game:
+  title: "The Heist"
+  version: "1.0.0"
+  author: "Narrative Engine Team"
+  description: "A thrilling text adventure about assembling a team for the ultimate heist"
+  startingRoom: "prison_cell"
+  maxPartySize: 4
+
+# UI Configuration - Controls the entire user interface
+ui:
+  # Use predefined theme or custom theme object
+  theme: "retro-green"  # Options: retro-green, fantasy, scifi, horror, minimal, custom
+  
+  # Layout determines which panels are shown and where
+  layout:
+    type: "classic-adventure"  # Options: classic-adventure, text-only, roguelike, custom
+    
+    # Override specific panel settings
+    panels:
+      viewport:
+        showMinimap: false  # Heist game doesn't need minimap
+      
+      party:
+        showPortraits: true
+        maxVisible: 4
+      
+      actions:
+        customActions:
+          - "Examine"
+          - "Talk"
+          - "Sneak"
+          - "Lockpick"
+          - "Distract"
+      
+      # Enable special panels for this game type
+      dialogue:
+        visible: true
+        style: "choices"
+        showSpeakerPortrait: true
+      
+      journal:
+        visible: true
+        categories:
+          - "Team Members"
+          - "Heist Plans"
+          - "Guard Patrols"
+          - "Vault Codes"
+
+  # Feature toggles
+  features:
+    enableSound: true
+    enableMusic: true
+    enableAnimations: true
+    typewriterEffect: true  # Classic text adventure feel
+  
+  # Input configuration
+  input:
+    primaryInput: "both"  # Allow both text commands and clicking
+    enableKeyboardShortcuts: true
+    customKeybindings:
+      "1-9": "Select dialogue option"
+      "i": "Open inventory"
+      "j": "Open journal"
+      "m": "Toggle map"
+      "?": "Help"
+
+# Mechanics configuration
+mechanics:
+  combatSystem: "simple"  # No complex combat for heist game
+  skillSystem:
+    - "lockpicking"
+    - "persuasion"
+    - "stealth"
+    - "hacking"
+    - "athletics"
+  
+  difficultyLevels:
+    easy: 10
+    medium: 15
+    hard: 20
+    impossible: 25
+
+# LLM Configuration
+llm:
+  provider: "ollama"
+  model: "gemma2:9b"
+  fallbackModel: "mistral:7b"
+  contextWindow: 8192
+  
+  # Personality defaults for NPCs
+  personalityDepth: "deep"  # How complex NPC personalities should be
+  memoryPersistence: true   # NPCs remember past interactions
+  
+  # Narrative style hints
+  narrativeStyle:
+    tone: "noir"  # noir, comedic, serious, dramatic
+    verbosity: "moderate"  # terse, moderate, verbose
+    perspective: "second"  # first, second, third
+
+# Content paths
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/npcs/"
+  items: "./content/items.yaml"
+  dialogues: "./content/dialogues/"
+  
+# Save/Load settings
+saves:
+  autoSave: true
+  autoSaveInterval: 300  # seconds
+  maxSaves: 10
+  enableBranching: true  # Git-based timeline branching
+
+# Development settings
+development:
+  debugMode: false
+  showEntityIds: false
+  enableConsoleCommands: true
+  hotReload: true

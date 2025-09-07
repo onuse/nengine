@@ -1,0 +1,185 @@
+# Classic Quest - A Sierra-style Text Adventure
+# Minimal UI, text-focused gameplay with score tracking
+
+game:
+  title: "Classic Quest"
+  version: "1.0.0"
+  author: "Narrative Engine Team"
+  description: "A classic text adventure in the style of Sierra's golden age"
+  startingRoom: "forest_path"
+  maxPartySize: 1  # Solo adventure
+  
+  # Scoring system for classic feel
+  scoring:
+    enabled: true
+    maxScore: 350
+    showInStatusBar: true
+
+# Minimalist Sierra-style UI
+ui:
+  theme: "sierra-classic"  # Custom theme defined below
+  
+  layout:
+    type: "custom"
+    
+    panels:
+      # Score bar at the top (Sierra style)
+      statusBar:
+        visible: true
+        position: "top"
+        size: "40px"
+        content:
+          - "score"
+          - "turns"
+          - "location"
+        customClass: "sierra-status"
+      
+      # Main text console takes up most of the screen
+      console:
+        visible: true
+        position: "center"
+        size: "calc(100% - 40px)"  # Everything except status bar
+        maxLines: 1000
+        enableHistory: true
+        enableAutocomplete: false  # Classic games didn't have this
+        fontSize: "14px"
+        showTimestamps: false
+        typewriterEffect: true
+        typewriterSpeed: 30
+      
+      # All other panels disabled for pure text experience
+      viewport:
+        visible: false
+        showRoomName: false
+        showDescription: false
+        showExits: false
+      
+      party:
+        visible: false
+        showHealth: false
+        showStats: false
+      
+      inventory:
+        visible: false  # Inventory accessed via "i" command
+      
+      actions:
+        visible: false  # Text commands only
+        style: "none"
+      
+      dialogue:
+        visible: false  # Dialogue in main console
+      
+      map:
+        visible: false  # No visual map
+      
+      journal:
+        visible: false  # No journal UI
+
+  # Retro green-on-black theme config
+  themeConfig:
+    name: "Sierra Classic"
+    colors:
+      primary: "#00ff00"
+      secondary: "#00aa00"
+      background: "#000000"
+      backgroundAlt: "#000000"
+      text: "#00ff00"
+      textAlt: "#00aa00"
+      border: "#00ff00"
+      borderActive: "#00ffff"
+      success: "#00ff00"
+      warning: "#ffff00"
+      error: "#ff0000"
+      info: "#00ffff"
+      # Special colors for Sierra theme
+      statusBarBg: "#000080"  # Dark blue status bar
+      statusBarText: "#ffffff"  # White text on blue
+    fonts:
+      main: "'IBM Plex Mono', 'Courier New', monospace"
+      console: "'IBM Plex Mono', 'Courier New', monospace"
+      ui: "'IBM Plex Mono', 'Courier New', monospace"
+    borders:
+      style: "none"
+      width: "0"
+      radius: "0"
+  
+  features:
+    enableSound: true  # PC speaker beeps!
+    enableMusic: false  # No music in classic text adventures
+    enableAnimations: false
+    typewriterEffect: true
+    accessibilityMode: false
+  
+  input:
+    primaryInput: "text"  # Text commands only
+    enableKeyboardShortcuts: true
+    customKeybindings:
+      "i": "inventory"
+      "l": "look"
+      "n": "north"
+      "s": "south"
+      "e": "east"
+      "w": "west"
+      "u": "up"
+      "d": "down"
+      "g": "get"
+      "x": "examine"
+      "z": "wait"
+      "save": "save game"
+      "load": "load game"
+      "score": "show score"
+
+# Classic adventure mechanics
+mechanics:
+  combatSystem: "none"  # No combat in this adventure
+  
+  # Classic adventure commands
+  commands:
+    movement: ["north", "south", "east", "west", "up", "down", "enter", "exit"]
+    interaction: ["look", "examine", "get", "take", "drop", "use", "open", "close", "unlock", "push", "pull"]
+    conversation: ["talk", "ask", "tell", "give", "show"]
+    meta: ["inventory", "score", "save", "load", "quit", "help"]
+  
+  # Puzzle-based gameplay
+  puzzleSystem:
+    enabled: true
+    hintsAvailable: false  # Figure it out yourself!
+  
+  difficultyLevels:
+    easy: 10
+    medium: 15
+    hard: 20
+
+# LLM Configuration for parser
+llm:
+  provider: "ollama"
+  model: "gemma2:9b"
+  fallbackModel: "mistral:7b"
+  contextWindow: 4096  # Smaller context for faster responses
+  
+  parserMode: "classic"  # Understands two-word commands
+  
+  narrativeStyle:
+    tone: "classic"  # Terse, descriptive
+    verbosity: "terse"  # Short responses like classic games
+    perspective: "second"  # "You are standing..."
+
+# Content paths
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/npcs.yaml"
+  items: "./content/items.yaml"
+  puzzles: "./content/puzzles.yaml"
+
+# Save settings
+saves:
+  autoSave: false  # Classic games didn't autosave
+  maxSaves: 10
+  enableBranching: false  # Keep it simple
+
+# Development
+development:
+  debugMode: false
+  showEntityIds: false
+  enableConsoleCommands: true
+  hotReload: false

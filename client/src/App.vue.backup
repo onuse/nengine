@@ -1,0 +1,297 @@
+<template>
+  <div id="app">
+    <div class="game-container">
+      <div class="top-panel">
+        <div class="viewport">
+          <h2>{{ gameState.currentRoom?.name || 'Unknown Location' }}</h2>
+          <p>{{ gameState.currentRoom?.description || 'You are in a dark void.' }}</p>
+        </div>
+      </div>
+      
+      <div class="middle-section">
+        <div class="left-panel">
+          <h3>Party</h3>
+          <div class="party-list">
+            <div v-for="member in gameState.party" :key="member.id">
+              {{ member.name }}
+            </div>
+          </div>
+        </div>
+        
+        <div class="center-panel">
+          <div class="action-bar">
+            <button v-for="action in gameState.actions" :key="action" @click="handleAction(action)">
+              {{ action }}
+            </button>
+          </div>
+        </div>
+        
+        <div class="right-panel">
+          <h3>Inventory</h3>
+          <div class="inventory-list">
+            <div v-for="item in gameState.inventory" :key="item.id">
+              {{ item.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bottom-panel">
+        <div class="text-console">
+          <div class="messages" ref="messagesContainer">
+            <div v-for="(msg, index) in messages" :key="index" class="message">
+              {{ msg }}
+            </div>
+          </div>
+          <input 
+            v-model="inputCommand" 
+            @keyup.enter="handleCommand"
+            class="command-input"
+            placeholder="Enter command..."
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive, onMounted, nextTick } from 'vue';
+
+interface GameState {
+  currentRoom: any;
+  party: any[];
+  inventory: any[];
+  actions: string[];
+}
+
+const gameState = reactive<GameState>({
+  currentRoom: null,
+  party: [],
+  inventory: [],
+  actions: ['Look', 'Move', 'Talk', 'Use', 'Take']
+});
+
+const messages = ref<string[]>([
+  'Welcome to the Narrative Engine',
+  'Type "help" for available commands'
+]);
+
+const inputCommand = ref('');
+const messagesContainer = ref<HTMLElement>();
+
+let ws: WebSocket | null = null;
+
+onMounted(() => {
+  connectWebSocket();
+});
+
+function connectWebSocket() {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${protocol}//${window.location.host}`);
+  
+  ws.onopen = () => {
+    console.log('Connected to server');
+    addMessage('Connected to game server');
+  };
+  
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    handleServerMessage(data);
+  };
+  
+  ws.onclose = () => {
+    console.log('Disconnected from server');
+    addMessage('Disconnected from game server');
+    setTimeout(connectWebSocket, 3000);
+  };
+}
+
+function handleServerMessage(data: any) {
+  if (data.type === 'narrative') {
+    addMessage(data.text);
+  } else if (data.type === 'state') {
+    Object.assign(gameState, data.state);
+  }
+}
+
+function handleCommand() {
+  if (!inputCommand.value.trim()) return;
+  
+  addMessage(`> ${inputCommand.value}`);
+  
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({
+      type: 'command',
+      command: inputCommand.value
+    }));
+  }
+  
+  inputCommand.value = '';
+}
+
+function handleAction(action: string) {
+  addMessage(`[Action: ${action}]`);
+  
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({
+      type: 'action',
+      action: action
+    }));
+  }
+}
+
+async function addMessage(msg: string) {
+  messages.value.push(msg);
+  await nextTick();
+  if (messagesContainer.value) {
+    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+  }
+}
+</script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+  background: #000;
+  color: #0f0;
+  overflow: hidden;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+}
+
+.game-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #111;
+  border: 2px solid #0f0;
+}
+
+.top-panel {
+  height: 30%;
+  border-bottom: 1px solid #0f0;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.viewport h2 {
+  color: #0ff;
+  margin-bottom: 10px;
+}
+
+.middle-section {
+  height: 35%;
+  display: flex;
+  border-bottom: 1px solid #0f0;
+}
+
+.left-panel, .right-panel {
+  width: 25%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.left-panel {
+  border-right: 1px solid #0f0;
+}
+
+.right-panel {
+  border-left: 1px solid #0f0;
+}
+
+.center-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.action-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.action-bar button {
+  background: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.action-bar button:hover {
+  background: #0f0;
+  color: #000;
+}
+
+.bottom-panel {
+  flex: 1;
+  min-height: 35%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.text-console {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 5px;
+  background: #000;
+  border: 1px solid #0f0;
+}
+
+.message {
+  margin-bottom: 5px;
+  word-wrap: break-word;
+}
+
+.command-input {
+  background: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.command-input:focus {
+  border-color: #0ff;
+}
+
+h3 {
+  color: #0ff;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.party-list, .inventory-list {
+  font-size: 12px;
+}
+
+.party-list div, .inventory-list div {
+  margin-bottom: 5px;
+}
+</style>

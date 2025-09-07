@@ -1,0 +1,46 @@
+{
+  "name": "nengine",
+  "version": "1.0.0",
+  "description": "A next-generation text adventure system that combines the depth of classic interactive fiction with the narrative power of large language models.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "node node_modules/nodemon/bin/nodemon.js --exec \"node node_modules/tsx/dist/cli.mjs\" src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onuse/nengine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/onuse/nengine/issues"
+  },
+  "homepage": "https://github.com/onuse/nengine#readme",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.1",
+    "@types/ws": "^8.18.1",
+    "nodemon": "^3.1.10",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.5",
+    "axios": "^1.11.0",
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "isomorphic-git": "^1.33.1",
+    "ws": "^8.18.3",
+    "yaml": "^2.8.1"
+  }
+}

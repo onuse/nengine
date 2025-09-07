@@ -1,0 +1,246 @@
+# Dragon Realm - A Graphical Fantasy Adventure
+# Rich visual UI with multiple panels, images, and immersive graphics
+
+game:
+  title: "Dragon Realm: Chronicles of Aethermoor"
+  version: "1.0.0"
+  author: "Narrative Engine Team"
+  description: "An epic fantasy adventure with rich visuals and deep party mechanics"
+  startingRoom: "tavern_main_hall"
+  maxPartySize: 4  # Full party RPG
+
+# Luxurious fantasy UI with all bells and whistles
+ui:
+  theme: "fantasy-deluxe"  # Custom rich theme
+  
+  layout:
+    type: "custom"
+    
+    panels:
+      # Large viewport with room image
+      viewport:
+        visible: true
+        position: "top"
+        size: "40%"
+        showRoomName: true
+        showDescription: true
+        showExits: true
+        showMinimap: true
+        showRoomImage: true  # Display room artwork
+        customClass: "fantasy-viewport"
+      
+      # Party panel with portraits
+      party:
+        visible: true
+        position: "left"
+        size: "30%"
+        showHealth: true
+        showStats: true
+        showPortraits: true
+        showBuffs: true
+        maxVisible: 4
+        customClass: "fantasy-party"
+      
+      # Rich inventory with icons
+      inventory:
+        visible: true
+        position: "right"
+        size: "30%"
+        showWeight: true
+        showValue: true
+        showIcons: true
+        groupByType: true
+        quickSlots: 8
+        customClass: "fantasy-inventory"
+      
+      # Ornate action buttons
+      actions:
+        visible: true
+        position: "center"
+        style: "radial"  # Circular menu
+        showTooltips: true
+        showIcons: true
+        customActions:
+          - "Attack"
+          - "Magic"
+          - "Talk"
+          - "Examine"
+          - "Use Item"
+          - "Rest"
+        customClass: "fantasy-actions"
+      
+      # Styled console with parchment look
+      console:
+        visible: true
+        position: "bottom"
+        size: "25%"
+        maxLines: 50
+        enableHistory: true
+        enableAutocomplete: true
+        fontSize: "15px"
+        showTimestamps: false
+        typewriterEffect: true
+        customClass: "fantasy-console"
+      
+      # Special combat panel
+      combat:
+        visible: true
+        showInitiative: true
+        showTargets: true
+        animateDice: true
+        customClass: "fantasy-combat"
+      
+      # Dialogue with portraits
+      dialogue:
+        visible: true
+        style: "tree"
+        showSpeakerPortrait: true
+        typewriterEffect: true
+        customClass: "fantasy-dialogue"
+      
+      # Visual map
+      map:
+        visible: true
+        style: "drawn"
+        showFogOfWar: true
+        zoomable: true
+        customClass: "fantasy-map"
+      
+      # Illuminated journal
+      journal:
+        visible: true
+        categories:
+          - "Quests"
+          - "Lore"
+          - "Bestiary"
+          - "Characters"
+          - "Maps"
+        searchable: true
+        customClass: "fantasy-journal"
+
+  # Rich fantasy theme with gold and burgundy
+  themeConfig:
+    name: "Fantasy Deluxe"
+    colors:
+      primary: "#d4af37"      # Gold
+      secondary: "#8b4513"     # Saddle brown
+      background: "#1a0f0a"    # Dark wood
+      backgroundAlt: "#2a1a10" # Lighter wood
+      text: "#f4e4c1"         # Parchment
+      textAlt: "#c9b78b"      # Faded ink
+      border: "#8b4513"       # Brown border
+      borderActive: "#d4af37" # Gold active
+      success: "#4a7c4e"      # Forest green
+      warning: "#ff8c00"      # Dark orange
+      error: "#8b2635"        # Dark red
+      info: "#4682b4"         # Steel blue
+      # Special colors
+      magic: "#9370db"        # Medium purple
+      health: "#dc143c"       # Crimson
+      mana: "#4169e1"        # Royal blue
+      stamina: "#228b22"     # Forest green
+      parchment: "#f9f2e6"   # Light parchment
+    fonts:
+      main: "'Cinzel', 'Georgia', serif"
+      console: "'EB Garamond', 'Georgia', serif"
+      ui: "'Cinzel Decorative', 'Georgia', serif"
+    borders:
+      style: "double"
+      width: "3px"
+      radius: "8px"
+  
+  features:
+    enableSound: true
+    enableMusic: true
+    enableVibration: true
+    enableParticles: true  # Spell effects
+    enableAnimations: true
+    enableWeather: true    # Weather effects
+    enableDayNight: true   # Day/night cycle
+    accessibilityMode: false
+  
+  input:
+    primaryInput: "both"  # Click and text
+    enableKeyboardShortcuts: true
+    enableGamepad: true
+    customKeybindings:
+      "1-9": "Quick slot items"
+      "q": "Quest log"
+      "m": "Map"
+      "i": "Inventory"
+      "c": "Character sheet"
+      "p": "Party"
+      "space": "Pause"
+      "tab": "Target next"
+
+# Full RPG mechanics
+mechanics:
+  combatSystem: "d20"  # Full D&D-style combat
+  
+  # Character stats
+  attributes:
+    - "strength"
+    - "dexterity"
+    - "constitution"
+    - "intelligence"
+    - "wisdom"
+    - "charisma"
+  
+  # Skills system
+  skills:
+    combat: ["swordsmanship", "archery", "defense"]
+    magic: ["fire", "ice", "healing", "enchantment"]
+    social: ["persuasion", "intimidation", "deception"]
+    exploration: ["athletics", "stealth", "perception"]
+  
+  # Magic system
+  magicSystem:
+    enabled: true
+    manaPool: true
+    spellComponents: true
+    rituals: true
+  
+  difficultyLevels:
+    story: 5
+    easy: 10
+    normal: 15
+    hard: 20
+    nightmare: 25
+
+# LLM for rich NPC interactions
+llm:
+  provider: "ollama"
+  model: "gemma2:9b"
+  fallbackModel: "mistral:7b"
+  contextWindow: 8192
+  
+  personalityDepth: "deep"
+  memoryPersistence: true
+  
+  narrativeStyle:
+    tone: "epic"        # Grand fantasy
+    verbosity: "verbose" # Rich descriptions
+    perspective: "second"
+
+# Content
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/npcs.yaml"
+  items: "./content/items.yaml"
+  spells: "./content/spells.yaml"
+  quests: "./content/quests.yaml"
+  lore: "./content/lore.yaml"
+
+# Saves with branching
+saves:
+  autoSave: true
+  autoSaveInterval: 300
+  maxSaves: 20
+  enableBranching: true  # Multiple timelines
+
+# Development
+development:
+  debugMode: false
+  showEntityIds: false
+  enableConsoleCommands: true
+  hotReload: true
