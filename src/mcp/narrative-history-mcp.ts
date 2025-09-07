@@ -65,14 +65,14 @@ export interface EmotionSequence {
 export class NarrativeHistoryMCP extends BaseMCPServer {
   private transcript: TurnRecord[] = [];
   private contextCache: Map<string, CuratedContext> = new Map();
-  private gamePath: string;
+  private _gamePath: string; // Unused but kept for future use
   private transcriptFile: string;
   private maxTranscriptSize: number = 1000; // Max turns to keep in memory
   private maxCacheSize: number = 50; // Max cached contexts
 
   constructor(gamePath: string) {
     super('narrative-history-mcp', '1.0.0', ['narrative-history', 'context-curation', 'clean-slate']);
-    this.gamePath = gamePath;
+    this._gamePath = gamePath;
     this.transcriptFile = path.join(gamePath, 'narrative-transcript.json');
   }
 
@@ -609,7 +609,7 @@ export class NarrativeHistoryMCP extends BaseMCPServer {
     // Manage cache size
     if (this.contextCache.size > this.maxCacheSize) {
       const oldestKey = this.contextCache.keys().next().value;
-      this.contextCache.delete(oldestKey);
+      this.contextCache.delete(oldestKey!);
     }
 
     this.log(`Built curated context for "${params.currentAction}" (${tokenCount} estimated tokens)`);
@@ -649,7 +649,13 @@ export class NarrativeHistoryMCP extends BaseMCPServer {
 
   // Private implementation methods
   private performResearchPhase(params: ContextCurationParams): any {
-    const research = {
+    const research: {
+      recentTurns: TurnRecord[];
+      relevantInteractions: Interaction[];
+      characterStates: Record<string, any>;
+      worldChanges: ContextChunk[];
+      mechanicalContext: ContextChunk[];
+    } = {
       recentTurns: this.getRecentTurns(params.timeframe === 'immediate' ? 3 : params.timeframe === 'recent' ? 10 : 20),
       relevantInteractions: [],
       characterStates: {},

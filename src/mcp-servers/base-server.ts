@@ -38,7 +38,7 @@ export abstract class BaseMCPServer {
   async start(): Promise<void> {
     this.setupTools();
 
-    this.server.setRequestHandler('tools/list', async () => ({
+    this.server.setRequestHandler('tools/list' as any, async () => ({
       tools: Array.from(this.tools.values()).map(tool => ({
         name: tool.name,
         description: tool.description,
@@ -50,8 +50,8 @@ export abstract class BaseMCPServer {
       }))
     }));
 
-    this.server.setRequestHandler('tools/call', async (request) => {
-      const { name, arguments: args } = request.params as any;
+    this.server.setRequestHandler('tools/call' as any, async (request: any) => {
+      const { name, arguments: args } = (request as any).params;
       const tool = this.tools.get(name);
       
       if (!tool) {

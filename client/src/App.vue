@@ -11,8 +11,8 @@
       <div class="console-panel">
         <div class="text-console">
           <div class="messages" ref="messagesContainer">
-            <div v-for="(msg, index) in messages" :key="index" class="message">
-              {{ msg }}
+            <div v-for="(msg, index) in messages" :key="index" :class="['message', `message-${msg.type}`]">
+              {{ msg.text }}
             </div>
             <div v-if="isProcessing" class="processing-message">
               <span class="processing-dots">{{ processingMessage }}</span>
@@ -65,7 +65,12 @@ const gameState = reactive<GameState>({
   actions: []
 });
 
-const messages = ref<string[]>([]);
+interface GameMessage {
+  type: 'command' | 'description' | 'dialogue' | 'system' | 'error';
+  text: string;
+}
+
+const messages = ref<GameMessage[]>([]);
 const isProcessing = ref(false);
 const processingMessage = ref('');
 
@@ -101,10 +106,10 @@ async function loadGameConfig() {
       
       // Add welcome message based on game
       if (gameConfig.value?.game?.title) {
-        messages.value.push(`Welcome to ${gameConfig.value.game.title}`);
+        addMessage(`Welcome to ${gameConfig.value.game.title}`, 'system');
       }
       if (gameConfig.value?.game?.description) {
-        messages.value.push(gameConfig.value.game.description);
+        addMessage(gameConfig.value.game.description, 'system');
       }
       
       // Load custom CSS
@@ -196,16 +201,16 @@ function handleServerMessage(data: any) {
   if (data.type === 'narrative_response' || data.type === 'response') {
     // Handle narrative responses from the server
     if (data.result && data.result.narrative) {
-      addMessage(data.result.narrative);
+      addMessage(data.result.narrative, 'description');
     } else if (data.result && data.result.error) {
-      addMessage(`❌ Error: ${data.result.error}`);
+      addMessage(`❌ Error: ${data.result.error}`, 'error');
     } else if (data.error) {
-      addMessage(`❌ Error: ${data.error}`);
+      addMessage(`❌ Error: ${data.error}`, 'error');
     }
   } else if (data.type === 'state') {
     Object.assign(gameState, data.state);
   } else if (data.type === 'narrative') {
-    addMessage(data.text);
+    addMessage(data.text, 'description');
   }
 }
 
@@ -213,7 +218,7 @@ function handleCommand() {
   if (!inputCommand.value.trim() || isProcessing.value) return;
   
   const command = inputCommand.value.trim();
-  addMessage(`> ${command}`);
+  addMessage(`> ${command}`, 'command');
   inputCommand.value = '';
   
   if (ws && ws.readyState === WebSocket.OPEN) {
@@ -238,7 +243,7 @@ function handleCommand() {
 function handleAction(action: string) {
   if (isProcessing.value) return;
   
-  addMessage(`> ${action}`);
+  addMessage(`> ${action}`, 'command');
   
   if (ws && ws.readyState === WebSocket.OPEN) {
     isProcessing.value = true;
@@ -259,8 +264,8 @@ function handleAction(action: string) {
   }
 }
 
-async function addMessage(msg: string) {
-  messages.value.push(msg);
+async function addMessage(text: string, type: GameMessage['type'] = 'system') {
+  messages.value.push({ text, type });
   await nextTick();
   if (messagesContainer.value) {
     messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
@@ -315,7 +320,7 @@ body {
   background: var(--color-backgroundAlt);
   padding: 15px;
   border-bottom: 2px solid var(--color-border);
-  text-align: left;
+  text-align: center;
 }
 
 .game-header h1 {
@@ -383,15 +388,54 @@ body {
   background: var(--color-backgroundAlt);
   border: 2px solid var(--color-border);
   border-radius: 4px;
-  min-height: 300px;
-  max-height: calc(100vh - 200px);
+  min-height: 200px;
+  max-height: calc(100vh - 300px);
   word-wrap: break-word;
+  text-align: left;
 }
 
+/* Different message types */
+.message-command {
+  color: var(--color-info);
+  font-style: italic;
+  text-align: right;
+  opacity: 0.8;
+}
+
+.message-description {
+  color: var(--color-text);
+  text-align: left;
+  line-height: 1.6;
+  white-space: pre-line; /* Preserves line breaks and spaces */
+  margin-bottom: 15px;
+  padding: 5px 0;
+}
+
+/* Ensure all messages preserve formatting */
 .message {
   margin-bottom: 5px;
   word-wrap: break-word;
   text-align: left;
+  white-space: pre-line; /* Apply to all messages */
+}
+
+.message-dialogue {
+  color: var(--color-secondary);
+  text-align: left;
+  font-style: italic;
+}
+
+.message-system {
+  color: var(--color-textAlt);
+  text-align: center;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.message-error {
+  color: var(--color-error);
+  text-align: left;
+  font-weight: bold;
 }
 
 .command-input {

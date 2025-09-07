@@ -13,6 +13,7 @@ export interface LLMPrompt {
 
 export interface WorldContext {
   currentRoom: string;
+  currentRoomName: string;
   roomDescription: string;
   connectedRooms: string[];
   presentNPCs: NPCContext[];

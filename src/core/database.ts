@@ -4,10 +4,10 @@ import * as fs from 'fs';
 
 export class DatabaseManager {
   private db: Database.Database;
-  private dataDir: string;
+  private _dataDir: string; // Currently unused but may be needed later
 
   constructor(dataDir: string = './data') {
-    this.dataDir = dataDir;
+    this._dataDir = dataDir;
     
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });

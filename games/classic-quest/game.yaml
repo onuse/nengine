@@ -163,6 +163,16 @@ llm:
     tone: "classic"  # Terse, descriptive
     verbosity: "terse"  # Short responses like classic games
     perspective: "second"  # "You are standing..."
+    
+  # Extra instructions for classic Sierra-style adventure
+  extraInstructions: |
+    Respond in the classic Sierra text adventure style.
+    Keep responses brief and matter-of-fact, usually 1-2 sentences.
+    Use second person ("You see...", "You are...").
+    Include specific object names and exact locations.
+    End responses with simple, declarative statements.
+    Avoid flowery descriptions - be direct and functional.
+    Never use modern slang or references.
 
 # Content paths
 content:

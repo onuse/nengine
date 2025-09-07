@@ -402,7 +402,7 @@ export class OllamaProvider implements LLMProvider {
 
     // World state
     parts.push(`\nCURRENT SITUATION:`);
-    parts.push(`Location: ${prompt.worldState.currentRoom}`);
+    parts.push(`Location: ${prompt.worldState.currentRoomName}`);
     parts.push(`Description: ${prompt.worldState.roomDescription}`);
     
     if (prompt.worldState.presentNPCs.length > 0) {

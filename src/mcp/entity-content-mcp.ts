@@ -419,11 +419,11 @@ export class EntityContentMCP extends BaseMCPServer {
     };
   }
 
-  combineItems(itemIds: string[]): MutationResult & { created: EntityId } {
+  combineItems(itemIds: string[]): MutationResult {
     if (itemIds.length < 2) {
       return {
         success: false,
-        created: { id: '', isStatic: false },
+        created: [],
         consumed: [],
         message: 'Need at least 2 items to combine'
       };
@@ -433,7 +433,7 @@ export class EntityContentMCP extends BaseMCPServer {
     if (templates.length !== itemIds.length) {
       return {
         success: false,
-        created: { id: '', isStatic: false },
+        created: [],
         consumed: [],
         message: 'One or more items not found'
       };
@@ -448,7 +448,7 @@ export class EntityContentMCP extends BaseMCPServer {
     if (!canCombine) {
       return {
         success: false,
-        created: { id: '', isStatic: false },
+        created: [],
         consumed: [],
         message: 'These items cannot be combined'
       };
@@ -470,7 +470,7 @@ export class EntityContentMCP extends BaseMCPServer {
     
     return {
       success: true,
-      created: combinedId,
+      created: [combinedId],
       consumed: itemIds,
       message: `The items combine into a ${resultTemplate}`
     };

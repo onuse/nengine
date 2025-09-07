@@ -119,6 +119,12 @@ llm:
     tone: "adventurous"
     verbosity: "detailed"
     perspective: "second"
+  
+  # Optional: Custom instructions appended to every LLM prompt
+  extraInstructions: |
+    Always respond with vivid, atmospheric descriptions.
+    Include sensory details like sounds, smells, and textures.
+    Keep responses focused and under 3 paragraphs unless the situation demands more detail.
 
 # Content file paths
 content:
@@ -678,6 +684,65 @@ skills:
 ```
 
 ## Advanced Features
+
+### Custom LLM Instructions
+
+The `extraInstructions` field allows you to customize how the LLM responds throughout your game. These instructions are automatically appended to every prompt sent to the language model, affecting both narrative descriptions and NPC dialogue.
+
+#### Basic Usage
+
+```yaml
+llm:
+  provider: "ollama"
+  model: "gemma2:9b"
+  extraInstructions: |
+    Always respond with vivid, atmospheric descriptions.
+    Include sensory details like sounds, smells, and textures.
+    Keep responses focused and under 3 paragraphs.
+```
+
+#### Use Cases
+
+**Tone Control:**
+```yaml
+extraInstructions: |
+  Maintain a dark, horror atmosphere throughout.
+  Use ominous language and emphasize danger.
+  Never break tension with humor or lightness.
+```
+
+**Style Guidelines:**
+```yaml
+extraInstructions: |
+  Respond in classic Sierra text adventure style.
+  Keep responses brief and matter-of-fact, usually 1-2 sentences.
+  Use second person ("You see...", "You are...").
+  Avoid flowery descriptions - be direct and functional.
+```
+
+**Content Guidelines:**
+```yaml
+extraInstructions: |
+  Keep all content family-friendly and appropriate for all ages.
+  Avoid violence, scary themes, or adult content.
+  Focus on puzzle-solving and exploration.
+```
+
+**Historical/Setting Consistency:**
+```yaml
+extraInstructions: |
+  Stay true to medieval fantasy setting.
+  Use appropriate language for the time period.
+  Never reference modern technology or concepts.
+  Maintain consistency with established lore.
+```
+
+#### Important Notes
+
+- **Server Restart Required:** Changes to `extraInstructions` require restarting the server to take effect
+- **Applies Everywhere:** Instructions affect all LLM responses - descriptions, NPC dialogue, and generated content
+- **YAML Multiline:** Use the `|` syntax for multi-line instructions for better readability
+- **Be Specific:** Vague instructions may not produce consistent results
 
 ### Custom Themes
 

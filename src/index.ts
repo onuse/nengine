@@ -42,8 +42,17 @@ async function initializeGame() {
     mcpManager = new MCPServerManager(gameLoader.getGamePath()!, savesPath || './game-state', startingRoom);
     await mcpManager.initialize();
     
-    // Initialize Narrative Controller
-    narrativeController = new NarrativeController(mcpManager);
+    // Initialize Narrative Controller with game configuration
+    const narrativeConfig = {
+      model: currentGame.llm?.model || 'gemma2:9b',
+      fallbackModel: currentGame.llm?.fallbackModel || 'mistral:7b',
+      temperature: currentGame.llm?.temperature || 0.7,
+      maxContextTokens: currentGame.llm?.contextWindow || 4096,
+      historyDepth: 10,
+      extraInstructions: currentGame.llm?.extraInstructions
+    };
+    
+    narrativeController = new NarrativeController(mcpManager, narrativeConfig);
     await narrativeController.initialize();
     
     console.log(`Game loaded: ${currentGame.game.title}`);
@@ -54,9 +63,9 @@ async function initializeGame() {
   }
 }
 
-const db = new DatabaseManager('./data');
+// const db = new DatabaseManager('./data'); // Currently unused
 const git = new GitManager('./game-state');
-const externalMCPManager = new ExternalMCPManager(DEBUG_MODE);
+// const externalMCPManager = new ExternalMCPManager(DEBUG_MODE); // Currently unused
 let mcpManager: MCPServerManager;
 let narrativeController: NarrativeController;
 
@@ -262,7 +271,7 @@ async function handleDialogue(ws: any, data: any) {
 }
 
 // API endpoints
-app.get('/api/games', (req, res) => {
+app.get('/api/games', (_req, res) => {
   const games = gameLoader.listGames();
   res.json(games);
 });

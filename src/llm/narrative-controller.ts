@@ -34,11 +34,12 @@ export interface NarrativeResult {
 }
 
 export class NarrativeController {
-  private llmProvider: LLMProvider;
+  private llmProvider!: LLMProvider;
   private mcpManager: MCPServerManager;
   private config: NarrativeConfig;
   private eventHistory: Event[] = [];
   private conversationStates: Map<string, any> = new Map();
+  private requestCache: Map<string, any> = new Map();
 
   constructor(mcpManager: MCPServerManager, config: Partial<NarrativeConfig> = {}) {
     this.mcpManager = mcpManager;
@@ -60,7 +61,7 @@ export class NarrativeController {
     console.log('[NarrativeController] Initializing...');
     
     try {
-      await this.llmProvider.initialize();
+      await this.llmProvider.initialize('');
       console.log('[NarrativeController] LLM provider ready');
     } catch (error) {
       console.error('[NarrativeController] Failed to initialize LLM provider:', error);
@@ -70,6 +71,9 @@ export class NarrativeController {
 
   async processPlayerAction(action: PlayerAction): Promise<NarrativeResult> {
     console.log(`[NarrativeController] Processing action: ${action.type} - "${action.rawInput}"`);
+
+    // Clear request cache at start of each action
+    this.clearRequestCache();
 
     try {
       // Step 1: Classify and validate action
@@ -120,7 +124,7 @@ export class NarrativeController {
     try {
       // Get NPC and conversation context
       const npcTemplate = await this.mcpManager.executeTool('entity-content', 'getNPCTemplate', { npcId });
-      const worldState = await this.mcpManager.executeTool('state', 'getWorldState', {});
+      // const worldState = await this.mcpManager.executeTool('state', 'getWorldState', {}); // Unused in current implementation
       const relationship = await this.getRelationship(npcId, playerId);
       
       // Build conversation context
@@ -264,7 +268,7 @@ export class NarrativeController {
     return { ...action, type: 'interaction' };
   }
 
-  private async assembleContext(action: PlayerAction): Promise<WorldContext> {
+  private async assembleContext(_action: PlayerAction): Promise<WorldContext> {
     const worldState = await this.mcpManager.executeTool('state', 'getWorldState', {});
     const currentRoom = worldState.currentRoom;
     
@@ -301,6 +305,7 @@ export class NarrativeController {
 
     return {
       currentRoom,
+      currentRoomName: roomContext.data.room?.name || 'Unknown Location',
       roomDescription: roomContext.data.room?.description || 'An unremarkable room.',
       connectedRooms: roomContext.data.connectedRooms || [],
       presentNPCs,
@@ -350,8 +355,18 @@ export class NarrativeController {
   }
 
   private async generateNarrativeResponse(context: WorldContext, action: PlayerAction, mechanicalResults: any): Promise<LLMResponse> {
+    let systemContext = "You are the narrator for an immersive text adventure game. Generate vivid, engaging descriptions that bring the world to life.";
+    
+    // Append extra instructions from game configuration if provided
+    if (this.config.extraInstructions) {
+      systemContext += "\n\nAdditional instructions: " + this.config.extraInstructions;
+      console.log('[NarrativeController] Using extraInstructions:', this.config.extraInstructions.substring(0, 100) + '...');
+    } else {
+      console.log('[NarrativeController] No extraInstructions configured');
+    }
+    
     const prompt: LLMPrompt = {
-      systemContext: "You are the narrator for an immersive text adventure game. Generate vivid, engaging descriptions that bring the world to life.",
+      systemContext,
       worldState: context,
       recentHistory: this.getRecentHistory(this.config.historyDepth),
       availableActions: await this.getAvailableActions(context),
@@ -447,12 +462,16 @@ export class NarrativeController {
       }
     ];
 
-    // Add movement actions
+    // Add movement actions with batched room name lookup
+    const roomNames = await this.batchGetRoomNames(context.connectedRooms);
+    
     for (const roomId of context.connectedRooms) {
+      const roomName = roomNames.get(roomId) || roomId;
+      
       actions.push({
         id: `move_${roomId}`,
-        name: `Go to ${roomId}`,
-        description: `Move to ${roomId}`
+        name: `Go to ${roomName}`,
+        description: `Move to ${roomName}`
       });
     }
 
@@ -555,7 +574,7 @@ export class NarrativeController {
   }
 
   // Dialogue and relationship helpers
-  private async getRelationship(npcId: string, playerId: string): Promise<any> {
+  private async getRelationship(_npcId: string, _playerId: string): Promise<any> {
     try {
       // This would typically call a memory/relationship MCP server
       // For now, return default values
@@ -565,7 +584,7 @@ export class NarrativeController {
     }
   }
 
-  private async assembleDialogueContext(npcId: string, playerId: string): Promise<any> {
+  private async assembleDialogueContext(npcId: string, _playerId: string): Promise<any> {
     const worldState = await this.mcpManager.executeTool('state', 'getWorldState', {});
     const worldContext = await this.assembleContext({ type: 'dialogue', rawInput: '', target: npcId } as PlayerAction);
     
@@ -590,10 +609,15 @@ export class NarrativeController {
     
     prompt += `Stay in character and respond naturally to the conversation.`;
     
+    // Append extra instructions for dialogue as well
+    if (this.config.extraInstructions) {
+      prompt += "\n\nAdditional instructions: " + this.config.extraInstructions;
+    }
+    
     return prompt;
   }
 
-  private async getConversationActions(npcId: string): Promise<Action[]> {
+  private async getConversationActions(_npcId: string): Promise<Action[]> {
     return [
       {
         id: 'continue_conversation',
@@ -608,7 +632,7 @@ export class NarrativeController {
     ];
   }
 
-  private async updateRelationshipFromDialogue(npcId: string, playerId: string, dialogue: string, response: LLMResponse): Promise<void> {
+  private async updateRelationshipFromDialogue(npcId: string, playerId: string, _dialogue: string, _response: LLMResponse): Promise<void> {
     // This would update relationship values based on dialogue content
     // For now, just log the interaction
     console.log(`[NarrativeController] Dialogue interaction: ${playerId} -> ${npcId}`);
@@ -640,7 +664,7 @@ export class NarrativeController {
     return 'evening';
   }
 
-  private generateErrorNarrative(error: string): string {
+  private generateErrorNarrative(_error: string): string {
     const errorNarratives = [
       "Something seems to go wrong as reality flickers for a moment...",
       "The world hesitates, as if unsure how to respond...",
@@ -661,5 +685,58 @@ export class NarrativeController {
     
     this.eventHistory = [];
     this.conversationStates.clear();
+  }
+
+  /**
+   * Batch lookup room names to minimize MCP calls
+   */
+  private async batchGetRoomNames(roomIds: string[]): Promise<Map<string, string>> {
+    const roomNames = new Map<string, string>();
+    
+    // Check cache first
+    const uncachedRoomIds: string[] = [];
+    for (const roomId of roomIds) {
+      const cacheKey = `room_name_${roomId}`;
+      if (this.requestCache.has(cacheKey)) {
+        roomNames.set(roomId, this.requestCache.get(cacheKey));
+      } else {
+        uncachedRoomIds.push(roomId);
+      }
+    }
+    
+    // Batch fetch uncached room names
+    if (uncachedRoomIds.length > 0) {
+      try {
+        const promises = uncachedRoomIds.map(roomId => 
+          this.mcpManager.executeTool('world-content', 'getRoom', { roomId })
+        );
+        
+        const results = await Promise.all(promises);
+        
+        for (let i = 0; i < uncachedRoomIds.length; i++) {
+          const roomId = uncachedRoomIds[i];
+          const roomName = results[i]?.room?.name || roomId;
+          const cacheKey = `room_name_${roomId}`;
+          
+          roomNames.set(roomId, roomName);
+          this.requestCache.set(cacheKey, roomName);
+        }
+      } catch (error) {
+        console.warn(`[NarrativeController] Batch room name lookup failed:`, error);
+        // Fallback to room IDs for failed lookups
+        for (const roomId of uncachedRoomIds) {
+          roomNames.set(roomId, roomId);
+        }
+      }
+    }
+    
+    return roomNames;
+  }
+
+  /**
+   * Clear request cache - called at the start of each action processing
+   */
+  private clearRequestCache(): void {
+    this.requestCache.clear();
   }
 }

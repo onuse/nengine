@@ -1,0 +1,280 @@
+# Classic Quest - World Data
+# A classic Sierra-style text adventure
+
+rooms:
+  # Starting location - Forest Path
+  - id: "forest_path"
+    name: "Forest Path"
+    description: "You are on a winding forest path. Tall pine trees tower above you, their branches blocking most of the sunlight."
+    longDescription: |
+      You stand on a narrow dirt path that winds through an ancient forest. Towering pine trees stretch up on both sides, their thick canopies filtering the sunlight into dappled shadows on the forest floor. The air is crisp and filled with the scent of pine needles and damp earth.
+      
+      To the north, the path leads deeper into the forest toward what looks like a clearing. South, you can see the path continues toward a distant village. East, there appears to be a small wooden cabin partially hidden among the trees.
+    
+    properties:
+      lightLevel: "dim"
+      temperature: "cool"
+      mood: "mysterious"
+      outdoors: true
+      
+    exits:
+      north: "forest_clearing" 
+      south: "village_entrance"
+      east: "woodcutter_cabin"
+        
+    items:
+      - "walking_stick"
+      - "mushrooms"
+      
+    interactions:
+      trees:
+        description: "Ancient pine trees with thick, gnarled bark"
+        actions:
+          examine: "The pine trees are old and tall. Their bark is thick and deeply grooved."
+          climb: "The trees are too tall and the bark too rough to climb safely."
+
+  # Forest Clearing - Ancient Stone Circle
+  - id: "forest_clearing"
+    name: "Forest Clearing"
+    description: "You stand in a circular clearing. Ancient standing stones form a mysterious circle in the center."
+    longDescription: |
+      The forest opens up into a perfect circular clearing. In the center stand five ancient stone monoliths, each about twice your height, arranged in a perfect circle. Strange runes are carved deep into the weathered stone faces. The grass here is unusually green and thick, and wildflowers bloom in impossible colors.
+      
+      The silence is profound - even the forest sounds seem muted here.
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "neutral"
+      mood: "mystical"
+      outdoors: true
+      magical: true
+      
+    exits:
+      south: "forest_path"
+      west: "hidden_cave"
+        
+    items:
+      - "ancient_crystal"
+      - "wildflowers"
+      
+    npcs:
+      - "forest_spirit"
+      
+    interactions:
+      stones:
+        description: "Five ancient monoliths covered in mysterious runes"
+        actions:
+          examine: "The stones are covered in runes you cannot read. They seem to pulse with faint energy."
+          touch: "The stone is surprisingly warm and seems to hum with power."
+
+  # Village Entrance
+  - id: "village_entrance"
+    name: "Village of Millbrook"
+    description: "You stand at the entrance to a small farming village. Thatched-roof cottages line a cobblestone street."
+    longDescription: |
+      Before you lies the quaint village of Millbrook. A dozen thatched-roof cottages line both sides of a narrow cobblestone street. Smoke rises from several chimneys, and you can see villagers going about their daily business. A painted wooden sign reads "Welcome to Millbrook - Population 47."
+      
+      To the east is a small general store, while west leads to what appears to be the village tavern. North takes you back to the forest path.
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "comfortable"
+      mood: "welcoming"
+      outdoors: true
+      civilized: true
+      
+    exits:
+      north: "forest_path"
+      east: "general_store"
+      west: "village_tavern"
+      south: "village_square"
+        
+    items:
+      - "village_sign"
+      
+    npcs:
+      - "village_guard"
+      - "farmer_tom"
+      
+    interactions:
+      sign:
+        description: "A wooden welcome sign for the village"
+        actions:
+          read: "Welcome to Millbrook - Population 47. Founded 1847."
+          examine: "The sign is well-maintained with fresh paint."
+
+  # General Store
+  - id: "general_store"
+    name: "General Store"
+    description: "You are in a cluttered general store. Shelves line the walls, filled with various goods and supplies."
+    longDescription: |
+      This small general store is packed from floor to ceiling with merchandise. Wooden shelves hold everything from farming tools to lamp oil, preserved foods to basic clothing. The wooden floor creaks under your feet, and dust motes dance in the light streaming through the front window.
+      
+      Behind the counter stands the shopkeeper, a middle-aged woman with a friendly but watchful expression.
+    
+    properties:
+      lightLevel: "normal"
+      temperature: "comfortable"
+      mood: "busy"
+      indoors: true
+      
+    exits:
+      west: "village_entrance"
+        
+    items:
+      - "lamp"
+      - "rope"
+      - "dried_food"
+      
+    npcs:
+      - "shopkeeper_mary"
+      
+    interactions:
+      counter:
+        description: "A worn wooden counter with scratches from years of use"
+        actions:
+          examine: "The counter is old but sturdy, with coins scattered on its surface."
+
+  # Village Tavern
+  - id: "village_tavern"
+    name: "The Prancing Pony Tavern"
+    description: "You are in a cozy tavern. A fire crackles in the stone hearth, and the smell of roasted meat fills the air."
+    longDescription: |
+      The Prancing Pony is exactly what a proper tavern should be. Low wooden beams support the ceiling, and a large stone fireplace dominates one wall with a cheerful fire crackling within. Rough wooden tables and benches fill the room, and the walls are decorated with hunting trophies and old paintings.
+      
+      The tavern keeper, a burly man with a graying beard, works behind the bar polishing mugs.
+    
+    properties:
+      lightLevel: "warm"
+      temperature: "warm"
+      mood: "cozy"
+      indoors: true
+      
+    exits:
+      east: "village_entrance"
+      up: "tavern_rooms"
+        
+    items:
+      - "ale_mug"
+      - "tavern_menu"
+      
+    npcs:
+      - "innkeeper_bob"
+      - "traveling_merchant"
+      - "old_wizard"
+      
+    interactions:
+      fireplace:
+        description: "A large stone fireplace with a warm, crackling fire"
+        actions:
+          examine: "The fire burns steadily, casting dancing shadows on the walls."
+
+  # Village Square
+  - id: "village_square"
+    name: "Village Square"
+    description: "You stand in the center of the village square. A stone well sits in the middle, surrounded by market stalls."
+    longDescription: |
+      This is the heart of Millbrook - a cobblestone square with a stone well at its center. Market stalls ring the square, some selling fresh produce, others displaying handmade crafts. Villagers bustle about their shopping, and children play near the well.
+      
+      To the south, a larger building with official-looking architecture must be the town hall.
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "comfortable"
+      mood: "lively"
+      outdoors: true
+      
+    exits:
+      north: "village_entrance"
+      south: "town_hall"
+      east: "blacksmith_shop"
+        
+    items:
+      - "market_goods"
+      - "copper_coin"
+      
+    npcs:
+      - "market_vendor"
+      - "village_children"
+      
+    interactions:
+      well:
+        description: "An old stone well with a wooden bucket hanging from a rope"
+        actions:
+          examine: "The well is deep and dark. You can hear water far below."
+          use: "You lower the bucket and draw up fresh, cool water."
+
+  # Woodcutter's Cabin
+  - id: "woodcutter_cabin"
+    name: "Woodcutter's Cabin"
+    description: "You are outside a small log cabin. Stacks of firewood are piled neatly beside the door."
+    longDescription: |
+      A small but well-built log cabin sits in a clearing among the trees. The logs are chinked with moss and mud, and a thin stream of smoke rises from the stone chimney. Neat stacks of split firewood are piled against the cabin walls, and a large chopping block with an axe embedded in it stands nearby.
+      
+      The cabin door is closed, but you can see warm light glowing through the small windows.
+    
+    properties:
+      lightLevel: "normal"
+      temperature: "comfortable"
+      mood: "rustic"
+      outdoors: true
+      
+    exits:
+      west: "forest_path"
+      inside: "cabin_interior"
+        
+    items:
+      - "firewood"
+      - "chopping_axe"
+      
+    interactions:
+      door:
+        description: "A sturdy wooden door with iron hinges"
+        actions:
+          knock: "You rap on the door. After a moment, heavy footsteps approach from inside."
+          examine: "The door is well-made but shows wear from weather and use."
+
+  # Hidden Cave (accessible from clearing)
+  - id: "hidden_cave"
+    name: "Hidden Cave"
+    description: "You stand at the entrance to a dark cave. The air is cool and damp, and strange symbols glow faintly on the walls."
+    longDescription: |
+      This cave entrance is almost completely hidden by overhanging vines and moss-covered rocks. Inside, the walls are covered with the same mysterious runes you saw on the standing stones, but here they glow with a faint blue light. The cave extends deeper into darkness, and you can hear the distant sound of dripping water.
+      
+      The air carries a strange, metallic scent mixed with something almost... magical.
+    
+    properties:
+      lightLevel: "dark"
+      temperature: "cold"
+      mood: "mysterious"
+      indoors: true
+      magical: true
+      
+    exits:
+      east: "forest_clearing"
+      deeper: "cave_chamber"
+        
+    items:
+      - "glowing_moss"
+      - "crystal_fragment"
+      
+    interactions:
+      runes:
+        description: "Glowing symbols carved into the cave walls"
+        actions:
+          examine: "The runes pulse with blue light. They seem to be some form of ancient writing."
+          touch: "The runes feel warm despite the cool air. They brighten momentarily at your touch."
+
+# Special areas that can be discovered through gameplay
+hidden_areas:
+  - id: "cave_chamber"
+    discoverable: true
+    requirements: ["ancient_crystal", "glowing_moss"]
+    
+  - id: "tavern_rooms" 
+    discoverable: true
+    requirements: ["copper_coin"]
+    
+  - id: "cabin_interior"
+    discoverable: true
+    requirements: ["knock_on_door"]
