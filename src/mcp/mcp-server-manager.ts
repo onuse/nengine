@@ -34,10 +34,12 @@ export class MCPServerManager {
   private gamePath: string;
   private stateRepoPath: string;
   private debugMode: boolean = false;
+  private startingRoom: string;
 
-  constructor(gamePath: string, stateRepoPath?: string) {
+  constructor(gamePath: string, stateRepoPath?: string, startingRoom: string = 'start') {
     this.gamePath = gamePath;
     this.stateRepoPath = stateRepoPath || './game-state';
+    this.startingRoom = startingRoom;
     this.debugMode = process.env.DEBUG_MODE === 'true';
   }
 
@@ -89,7 +91,7 @@ export class MCPServerManager {
     this.servers['mechanics-content'] = mechanicsMCP;
 
     // State MCP (Git-based state management)
-    const stateMCP = new StateMCP(this.stateRepoPath);
+    const stateMCP = new StateMCP(this.stateRepoPath, this.startingRoom);
     await stateMCP.initialize();
     this.servers['state'] = stateMCP;
 

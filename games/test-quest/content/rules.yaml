@@ -1,0 +1,82 @@
+# Test Quest Rules - Testing Game Mechanics Systems
+
+dice_mechanics:
+  default_die: "d20"
+  
+  difficulty_classes:
+    trivial: 5
+    easy: 10
+    medium: 15
+    hard: 20
+    very_hard: 25
+    legendary: 30
+    
+  test_specific:
+    basic_test: 10
+    advanced_test: 15
+    expert_test: 20
+
+skill_system:
+  skills:
+    weapons_melee:
+      name: "Melee Weapons"
+      description: "Training with close combat weapons"
+      base_stat: "strength"
+      
+    combat_tactics:
+      name: "Combat Tactics" 
+      description: "Strategic combat knowledge"
+      base_stat: "intelligence"
+      
+    knowledge_general:
+      name: "General Knowledge"
+      description: "Broad understanding of various topics"
+      base_stat: "intelligence"
+      
+    research:
+      name: "Research"
+      description: "Ability to find and analyze information"
+      base_stat: "intelligence"
+      
+    persuasion:
+      name: "Persuasion"
+      description: "Convincing others through argument"
+      base_stat: "charisma"
+      
+    intimidation:
+      name: "Intimidation"
+      description: "Using fear to influence others"
+      base_stat: "strength"
+      
+    empathy:
+      name: "Empathy"
+      description: "Understanding others' emotions"
+      base_stat: "wisdom"
+
+combat_rules:
+  initiative: "dexterity"
+  
+  actions_per_turn:
+    move: 1
+    standard: 1
+    minor: 1
+    
+  test_combat:
+    safe_mode: true  # No actual death in testing
+    damage_cap: 50   # Prevent excessive damage
+    auto_heal: true  # Heal after combat for continued testing
+
+test_specific_rules:
+  scoring:
+    basic_interaction: 10
+    successful_skill_check: 25
+    complete_conversation: 50
+    discover_secret: 100
+    complete_room_tests: 200
+    
+  validation:
+    require_all_rooms_visited: true
+    require_all_npcs_talked_to: true
+    require_all_items_examined: true
+    require_combat_test: true
+    require_skill_tests: true

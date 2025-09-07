@@ -98,8 +98,10 @@ export class OllamaProvider implements LLMProvider {
     }
 
     const formattedPrompt = this.formatPrompt(prompt);
+    const startTime = Date.now();
     
     try {
+      console.log(`[OllamaProvider] Generating response with ${this.currentModel}...`);
       const response = await this.client.post('/api/generate', {
         model: this.currentModel,
         prompt: formattedPrompt,
@@ -110,10 +112,14 @@ export class OllamaProvider implements LLMProvider {
         }
       });
 
+      const responseTime = Date.now() - startTime;
+      console.log(`[OllamaProvider] Response generated in ${responseTime}ms (${(responseTime/1000).toFixed(1)}s)`);
+
       return this.parseResponse(response.data.response, prompt);
 
     } catch (error: any) {
-      console.error('[OllamaProvider] Generation failed:', error.message);
+      const errorTime = Date.now() - startTime;
+      console.error(`[OllamaProvider] Generation failed after ${errorTime}ms (${(errorTime/1000).toFixed(1)}s):`, error.message);
       
       // Try fallback model if current model fails
       if (this.currentModel !== this.config.fallbackModel) {

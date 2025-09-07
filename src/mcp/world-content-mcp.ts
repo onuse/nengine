@@ -385,6 +385,10 @@ export class WorldContentMCP extends BaseMCPServer {
       const content = fs.readFileSync(worldPath, 'utf-8');
       this.worldData = yaml.parse(content);
       
+      this.log(`Parsed world data:`, this.worldData);
+      this.log(`Type of rooms:`, typeof this.worldData?.rooms);
+      this.log(`Is rooms array?:`, Array.isArray(this.worldData?.rooms));
+      
       // Parse rooms
       if (this.worldData.rooms) {
         for (const roomData of this.worldData.rooms) {

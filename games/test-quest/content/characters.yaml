@@ -1,0 +1,77 @@
+# Test Quest Character Templates
+# Testing character creation and advancement systems
+
+character_templates:
+  test_fighter:
+    name: "Test Fighter"
+    description: "A basic fighter template for testing combat systems"
+    
+    base_stats:
+      health: 15
+      strength: 16
+      dexterity: 14
+      intelligence: 10
+      wisdom: 12
+      charisma: 11
+      
+    skills:
+      - "weapons_melee"
+      - "armor_heavy"
+      - "combat_tactics"
+      
+    starting_equipment:
+      - "practice_sword"
+      - "practice_shield"
+      - "healing_potion"
+      
+    advancement:
+      health_per_level: 8
+      skill_points_per_level: 2
+      
+  test_scholar:
+    name: "Test Scholar"
+    description: "A knowledge-focused template for testing skill systems"
+    
+    base_stats:
+      health: 8
+      strength: 8
+      dexterity: 12
+      intelligence: 16
+      wisdom: 14
+      charisma: 13
+      
+    skills:
+      - "knowledge_general"
+      - "research"
+      - "languages"
+      - "investigation"
+      
+    starting_equipment:
+      - "test_manual"
+      - "notebook_of_observations"
+      
+    advancement:
+      health_per_level: 4
+      skill_points_per_level: 4
+
+  test_social:
+    name: "Test Diplomat"
+    description: "A charisma-based template for testing social interactions"
+    
+    base_stats:
+      health: 10
+      strength: 10
+      dexterity: 12
+      intelligence: 14
+      wisdom: 13
+      charisma: 16
+      
+    skills:
+      - "persuasion"
+      - "intimidation"
+      - "deception"
+      - "empathy"
+      
+    starting_equipment:
+      - "conversation_guide"
+      - "emotional_analyzer"

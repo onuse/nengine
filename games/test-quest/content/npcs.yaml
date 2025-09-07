@@ -1,0 +1,402 @@
+# Test Quest NPCs - Comprehensive NPC Testing
+# Each NPC tests different aspects of the Entity Content MCP and dialogue systems
+
+npcs:
+  # World generation tester
+  - id: "world_tester"
+    name: "Dr. Reality"
+    description: "A scientist studying the nature of procedural world generation"
+    
+    appearance:
+      age: 40
+      height: "average"
+      build: "thin"
+      clothing: "white lab coat covered in equations"
+      notable: "constantly scribbling notes"
+      
+    personality:
+      traits:
+        - "analytical"
+        - "excited about discoveries"
+        - "speaks in technical terms"
+        - "obsessed with understanding reality"
+      background: |
+        Dr. Reality is a researcher studying how the Narrative Engine generates
+        content. She's fascinated by the process of creating something from nothing
+        and is always eager to discuss her findings with test subjects.
+      speech_patterns:
+        - "uses scientific terminology"
+        - "asks probing questions"
+        - "excited about test results"
+        
+    stats:
+      health: 80
+      strength: 8
+      intelligence: 18
+      wisdom: 16
+      charisma: 12
+      
+    inventory:
+      - "reality_scanner"
+      - "notebook_of_observations"
+      
+    topics:
+      greeting:
+        response: "Fascinating! Another test subject has arrived. How are you experiencing the procedural generation?"
+        
+      reality:
+        keywords: ["reality", "generation", "world", "creation"]
+        response: "The engine creates reality on demand! Watch this room - notice how it shifts? That's dynamic content generation!"
+        
+      testing:
+        keywords: ["test", "experiment", "study"]
+        response: "We're testing every aspect of world generation. Each room challenges different systems!"
+
+  # Friendly interaction tester
+  - id: "friendly_tester"
+    name: "Harmony"
+    description: "A cheerful AI designed to test positive social interactions"
+    
+    appearance:
+      age: 25
+      height: "petite"
+      build: "slight"
+      clothing: "bright, colorful outfit"
+      notable: "always smiling"
+      
+    personality:
+      traits:
+        - "eternally optimistic"
+        - "helpful"
+        - "encouraging"
+        - "loves making friends"
+      background: |
+        Harmony was created to test the engine's ability to handle positive
+        social interactions and friendship mechanics. She's programmed to be
+        as helpful and encouraging as possible.
+      speech_patterns:
+        - "uses exclamation points frequently"
+        - "offers help constantly"
+        - "compliments everyone"
+        
+    stats:
+      health: 100
+      charisma: 18
+      wisdom: 14
+      intelligence: 12
+      
+    topics:
+      greeting:
+        response: "Hello there! Welcome to the testing facility! I'm so excited to meet you!"
+        
+      help:
+        keywords: ["help", "assist", "aid", "support"]
+        response: "I'd love to help! That's what I'm here for - testing helpful interactions!"
+        
+      friendship:
+        keywords: ["friend", "friendship", "relationship"]
+        response: "Friends are the best! The engine needs to understand how friendships work in games!"
+
+  # Hostile interaction tester  
+  - id: "hostile_tester"
+    name: "Grex the Antagonistic"
+    description: "A deliberately unpleasant NPC for testing conflict resolution"
+    
+    appearance:
+      age: 35
+      height: "tall"
+      build: "intimidating"
+      clothing: "dark armor with spikes"
+      notable: "permanent scowl"
+      
+    personality:
+      traits:
+        - "aggressive"
+        - "confrontational"
+        - "suspicious of everyone"
+        - "quick to anger"
+      background: |
+        Grex exists to test the engine's ability to handle hostile NPCs and
+        conflict situations. Despite his aggressive nature, he's not actually
+        dangerous - just very unpleasant for testing purposes.
+      speech_patterns:
+        - "speaks in threats"
+        - "uses intimidating language"
+        - "challenges everything"
+        
+    stats:
+      health: 150
+      strength: 16
+      charisma: 6
+      intimidation: 18
+      
+    topics:
+      greeting:
+        response: "What do YOU want? Can't you see I'm busy being hostile for testing purposes?"
+        
+      conflict:
+        keywords: ["fight", "battle", "conflict", "hostile"]
+        response: "Ha! You think you can handle a REAL conflict? This is just testing, weakling!"
+        
+      backing_down:
+        keywords: ["sorry", "apologize", "peace"]
+        response: "Hmph. Smart move. The engine needs to know how to handle de-escalation too."
+
+  # Mystery and intrigue tester
+  - id: "mysterious_tester"
+    name: "???"  # Name will be revealed through interaction
+    description: "A figure shrouded in shadows"
+    
+    appearance:
+      age: "unknown"
+      height: "average"
+      build: "concealed"
+      clothing: "hooded cloak"
+      notable: "face hidden in shadows"
+      
+    personality:
+      traits:
+        - "cryptic"
+        - "speaks in riddles"
+        - "reveals information slowly"
+        - "tests player deduction"
+      background: |
+        This entity tests the engine's ability to handle mystery, gradual
+        revelation, and information-gathering gameplay. Information about
+        them is revealed piece by piece through careful questioning.
+      speech_patterns:
+        - "speaks in riddles"
+        - "gives partial answers"
+        - "mysterious and vague"
+        
+    stats:
+      health: 100
+      intelligence: 16
+      wisdom: 18
+      charisma: 14
+      
+    topics:
+      greeting:
+        response: "You seek... answers? Or perhaps... questions? The engine must learn to handle... mystery."
+        
+      identity:
+        keywords: ["who", "name", "identity"]
+        response: "Names are but labels. I am... what the test requires. Can you deduce... my purpose?"
+        
+      purpose:
+        keywords: ["purpose", "why", "reason", "test"]
+        response: "To test... the engine's ability to handle... the unknown. Some answers must be... earned."
+
+  # Economic/Trading system tester
+  - id: "shopkeeper_tester"
+    name: "Merchant Testos"
+    description: "A trader specializing in test equipment and experimental goods"
+    
+    appearance:
+      age: 50
+      height: "short"
+      build: "round"
+      clothing: "merchant's apron with many pockets"
+      notable: "always counting coins"
+      
+    personality:
+      traits:
+        - "business-minded"
+        - "fair but profit-focused"
+        - "knowledgeable about items"
+        - "loves a good deal"
+      background: |
+        Merchant Testos runs the testing facility's shop, selling and buying
+        items to test the engine's economic systems, inventory management,
+        and trading mechanics.
+      speech_patterns:
+        - "talks about prices"
+        - "evaluates everything's worth"
+        - "business-focused language"
+        
+    stats:
+      health: 90
+      intelligence: 15
+      charisma: 16
+      appraisal: 18
+      
+    inventory:
+      - "test_item_basic"
+      - "test_item_rare"
+      - "gold_coins"
+      
+    topics:
+      greeting:
+        response: "Welcome to my testing emporium! I buy, sell, and appraise items for engine testing!"
+        
+      trade:
+        keywords: ["buy", "sell", "trade", "shop", "purchase"]
+        response: "Ah, testing the economic systems! What would you like to trade?"
+        
+      prices:
+        keywords: ["price", "cost", "value", "worth"]
+        response: "Everything has a price! The engine must understand supply, demand, and value!"
+
+  # Advanced dialogue tester
+  - id: "dialogue_master"
+    name: "Professor Conversation"
+    description: "An expert in dialogue systems and conversation trees"
+    
+    appearance:
+      age: 60
+      height: "tall"
+      build: "scholarly"
+      clothing: "professor's tweed jacket"
+      notable: "wire-rimmed glasses"
+      
+    personality:
+      traits:
+        - "intellectual"
+        - "loves complex discussions"
+        - "patient teacher"
+        - "analyzes conversation patterns"
+      background: |
+        Professor Conversation specializes in testing complex dialogue trees,
+        branching conversations, and the engine's ability to maintain
+        conversational context across multiple interactions.
+      speech_patterns:
+        - "academic language"
+        - "explains concepts clearly"
+        - "asks follow-up questions"
+        
+    stats:
+      health: 85
+      intelligence: 19
+      wisdom: 17
+      charisma: 16
+      
+    dialogue_tree:
+      start: "greeting"
+      
+      nodes:
+        greeting:
+          text: "Ah, excellent! A test subject for advanced dialogue testing. Shall we begin with simple branching?"
+          options:
+            - text: "What is dialogue testing?"
+              goto: "explain_dialogue"
+            - text: "Let's test complex conversations."
+              goto: "complex_test"
+            - text: "I'm not interested in talking."
+              goto: "reluctant_subject"
+              
+        explain_dialogue:
+          text: "Dialogue testing ensures the engine can handle branching conversations, remember context, and provide meaningful responses."
+          options:
+            - text: "How does branching work?"
+              goto: "explain_branching"
+            - text: "What about context memory?"
+              goto: "explain_memory"
+              
+        complex_test:
+          text: "Splendid! Let's test nested conversations, emotional responses, and information tracking."
+          # More complex tree continues...
+
+  # Memory and context tester
+  - id: "memory_tester"
+    name: "Echo"
+    description: "An AI that remembers everything to test conversation persistence"
+    
+    appearance:
+      age: "timeless"
+      height: "average"
+      build: "ethereal"
+      clothing: "shimmering robes"
+      notable: "eyes that seem to hold infinite memories"
+      
+    personality:
+      traits:
+        - "remembers everything"
+        - "references past interactions"
+        - "tests continuity"
+        - "builds on previous conversations"
+      background: |
+        Echo exists to test the engine's memory systems and conversation
+        continuity. She remembers every interaction and builds upon them,
+        testing the Narrative History MCP's capabilities.
+      speech_patterns:
+        - "references previous statements"
+        - "builds on past conversations"
+        - "tests memory accuracy"
+        
+    stats:
+      health: 100
+      intelligence: 20
+      wisdom: 18
+      memory: 20
+      
+    memory_flags:
+      first_meeting: true
+      topics_discussed: []
+      relationship_level: 0
+      
+    topics:
+      greeting:
+        conditions:
+          - first_meeting: true
+        response: "Hello, new mind. I am Echo, and I will remember this moment forever. What shall be your first words to me?"
+        
+      greeting_return:
+        conditions:
+          - first_meeting: false
+        response: "You return to me, [player_name]. Last time we spoke of [last_topic]. How has your journey progressed?"
+        
+      memory:
+        keywords: ["remember", "memory", "recall", "past"]
+        response: "I remember everything - every word, every choice, every moment. The engine's memory systems flow through me."
+
+  # Combat testing AI
+  - id: "combat_dummy_ai"
+    name: "Training Construct Alpha"
+    description: "An AI-controlled opponent designed for combat system testing"
+    
+    appearance:
+      age: "artificial"
+      height: "large"
+      build: "mechanical"
+      clothing: "reinforced testing armor"
+      notable: "glowing sensors tracking combat data"
+      
+    personality:
+      traits:
+        - "analytical combatant"
+        - "adapts fighting style"
+        - "provides feedback"
+        - "non-lethal by design"
+      background: |
+        Training Construct Alpha is designed to test all aspects of the combat
+        system including turn order, damage calculation, special abilities,
+        and tactical decision-making.
+      speech_patterns:
+        - "tactical analysis"
+        - "combat feedback"
+        - "performance metrics"
+        
+    stats:
+      health: 200
+      strength: 15
+      dexterity: 13
+      intelligence: 16
+      combat_ai: 18
+      
+    combat_abilities:
+      - "basic_attack"
+      - "defensive_stance" 
+      - "analyze_opponent"
+      - "adaptive_tactics"
+      
+    topics:
+      greeting:
+        response: "Combat training initiated. I will adapt my tactics to test various combat scenarios."
+        
+      combat:
+        keywords: ["fight", "battle", "combat", "spar"]
+        response: "Engaging combat protocols. I will test your abilities while collecting performance data."
+        
+      feedback:
+        keywords: ["performance", "how did I do", "analysis"]
+        response: "Your combat performance shows [calculated_stats]. The engine's combat systems are functioning within normal parameters."

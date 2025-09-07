@@ -42,10 +42,12 @@ export class StateMCP extends BaseMCPServer {
   private inventories: Map<string, string[]> = new Map();
   private entityStates: Map<string, Record<string, any>> = new Map();
   private roomStates: Map<string, Record<string, any>> = new Map();
+  private startingRoom: string;
 
-  constructor(gitRepoPath: string = './game-state') {
+  constructor(gitRepoPath: string = './game-state', startingRoom: string = 'start') {
     super('state-mcp', '1.0.0', ['state-management', 'git-versioning', 'branching']);
     this.gitManager = new GitManager(gitRepoPath);
+    this.startingRoom = startingRoom;
     this.currentState = this.initializeDefaultState();
   }
 
@@ -568,7 +570,7 @@ export class StateMCP extends BaseMCPServer {
 
   private initializeDefaultState(): WorldState {
     return {
-      currentRoom: 'start',
+      currentRoom: this.startingRoom,
       party: ['player'],
       worldTime: {
         year: 1423,

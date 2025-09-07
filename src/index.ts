@@ -37,8 +37,9 @@ async function initializeGame() {
     const savesPath = gameLoader.getSavesPath();
     git.repoPath = savesPath || './game-state';
     
-    // Initialize MCP server manager with game path
-    mcpManager = new MCPServerManager(gameLoader.getGamePath()!, savesPath || './game-state');
+    // Initialize MCP server manager with game path and starting room
+    const startingRoom = currentGame.game.startingRoom || 'start';
+    mcpManager = new MCPServerManager(gameLoader.getGamePath()!, savesPath || './game-state', startingRoom);
     await mcpManager.initialize();
     
     // Initialize Narrative Controller

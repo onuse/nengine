@@ -1,0 +1,304 @@
+# Test Quest World - Comprehensive Testing Environment
+# Each room tests specific engine functionality
+
+rooms:
+  # Starting area - Basic functionality test
+  - id: "test_lobby"
+    name: "Engine Test Lobby"
+    description: "A sterile white room with testing equipment scattered about."
+    longDescription: |
+      You find yourself in what appears to be a testing facility. The walls are a stark white,
+      and various pieces of testing equipment line the room. A large sign reads "NARRATIVE ENGINE
+      INTEGRATION TEST SUITE - Welcome!" To your north is a door marked "WORLD CONTENT TESTS",
+      east leads to "NPC INTERACTION TESTS", and west shows "MECHANICS TESTING".
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "comfortable"
+      mood: "clinical"
+      canSave: true
+      testRoom: true
+      
+    exits:
+      north: "world_test_room"
+      east: "npc_test_room"
+      west: "mechanics_test_room"
+      south: "state_test_room"
+        
+    items:
+      - "test_manual"
+      - "scoring_device"
+      
+    interactions:
+      sign:
+        description: "A large welcome sign explaining this is a test environment"
+        actions:
+          examine: "The sign details various engine tests available in different rooms."
+          read: "Welcome to the Narrative Engine Test Suite! Each room tests different functionality."
+
+  # World Content MCP Tests
+  - id: "world_test_room"
+    name: "World Content Test Chamber"
+    description: "A room that shifts and changes to test world generation capabilities."
+    longDescription: |
+      This chamber seems to exist in a state of flux. The walls shimmer occasionally,
+      and you sense that this room is designed to test the engine's world content
+      generation capabilities. Strange geometric shapes float in the air, and
+      doorways appear and disappear at random intervals.
+      
+    properties:
+      lightLevel: "shifting"  # Dynamic property for testing
+      temperature: "variable"
+      mood: "otherworldly"
+      testRoom: true
+      dynamicGeneration: true
+      
+    exits:
+      south: "test_lobby"
+      north: "undefined_room_1"  # Will test entity generation
+      east: "environment_test_room"
+        
+    items:
+      - "reality_anchor"  # Prevents room from shifting too much
+      
+    npcs:
+      - "world_tester"  # Will be generated if undefined
+      
+    interactions:
+      floating_shapes:
+        description: "Geometric shapes that defy physics"
+        actions:
+          examine: "The shapes seem to be testing the engine's ability to describe impossible things."
+          touch: "Your hand passes through them - they're just testing constructs."
+
+  # Environmental testing
+  - id: "environment_test_room"
+    name: "Environmental Conditions Lab"
+    description: "A room for testing various environmental conditions and effects."
+    
+    properties:
+      lightLevel: "dim"
+      temperature: "cold"
+      mood: "oppressive"
+      weather: "rain"  # Indoor rain for testing
+      testRoom: true
+      
+    exits:
+      west: "world_test_room"
+        
+    items:
+      - "weather_machine"
+      - "thermometer"
+      
+    interactions:
+      weather_machine:
+        description: "A device that controls the room's environmental conditions"
+        actions:
+          use: "The machine cycles through different weather patterns."
+          examine: "It has dials for temperature, humidity, lighting, and weather."
+
+  # NPC Interaction Tests
+  - id: "npc_test_room"
+    name: "NPC Interaction Laboratory"
+    description: "A comfortable lounge designed for testing conversations with AI entities."
+    longDescription: |
+      This room resembles a comfortable lounge with several chairs arranged in a circle.
+      It's clearly designed for testing conversation systems. Various NPCs stand or sit
+      around the room, each marked with tags indicating what aspect of dialogue they test.
+      The atmosphere is welcoming, encouraging interaction.
+      
+    properties:
+      lightLevel: "warm"
+      temperature: "comfortable"
+      mood: "social"
+      testRoom: true
+      
+    exits:
+      west: "test_lobby"
+      north: "dialogue_test_room"
+        
+    items:
+      - "conversation_guide"
+      - "emotional_analyzer"
+      
+    npcs:
+      - "friendly_tester"
+      - "hostile_tester"  
+      - "mysterious_tester"
+      - "shopkeeper_tester"
+
+  # Advanced Dialogue Testing  
+  - id: "dialogue_test_room"
+    name: "Advanced Dialogue Testing Suite"
+    description: "A sophisticated chamber for testing complex conversation trees."
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "comfortable"
+      mood: "focused"
+      testRoom: true
+      
+    exits:
+      south: "npc_test_room"
+        
+    npcs:
+      - "dialogue_master"  # Complex multi-path conversations
+      - "memory_tester"    # Tests conversation memory
+      
+    items:
+      - "conversation_recorder"
+
+  # Mechanics Testing
+  - id: "mechanics_test_room"
+    name: "Game Mechanics Testing Arena"
+    description: "An arena-like space for testing combat, skills, and dice mechanics."
+    longDescription: |
+      This large arena is equipped with training dummies, skill testing apparatus,
+      and various mechanical devices. The floor is marked with measurement lines,
+      and scoreboards display various statistics. It's clearly designed to test
+      the engine's game mechanics systems including combat, skill checks, and dice rolling.
+      
+    properties:
+      lightLevel: "bright"
+      temperature: "neutral"
+      mood: "competitive"
+      testRoom: true
+      
+    exits:
+      east: "test_lobby"
+      north: "combat_test_room"
+      south: "skill_test_room"
+        
+    items:
+      - "training_dummy"
+      - "dice_set"
+      - "skill_tester"
+      
+    interactions:
+      training_dummy:
+        description: "A reinforced dummy for combat practice"
+        actions:
+          attack: "You strike the dummy. It records the impact force and damage."
+          examine: "The dummy shows signs of extensive testing. Sensors monitor all impacts."
+
+  # Combat Testing
+  - id: "combat_test_room"
+    name: "Combat System Testing Chamber"
+    description: "A padded room designed for safe combat testing."
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "cool"
+      mood: "tense"
+      testRoom: true
+      
+    exits:
+      south: "mechanics_test_room"
+        
+    items:
+      - "practice_sword"
+      - "practice_shield"
+      - "healing_potion"
+      
+    npcs:
+      - "combat_dummy_ai"  # AI-controlled opponent for testing
+
+  # Skill Testing  
+  - id: "skill_test_room"
+    name: "Skill Testing Laboratory"
+    description: "A room filled with various apparatus for testing different skills."
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "comfortable"
+      mood: "academic"
+      testRoom: true
+      
+    exits:
+      north: "mechanics_test_room"
+        
+    items:
+      - "lockpick_practice_kit"
+      - "knowledge_testing_device"
+      - "persuasion_training_mirror"
+      
+    interactions:
+      lockpick_practice_kit:
+        description: "A series of locks of increasing difficulty"
+        actions:
+          use: "You practice your lockpicking skills on the training locks."
+
+  # State Management Testing
+  - id: "state_test_room"
+    name: "State Management Testing Facility"
+    description: "A room designed to test save/load and state persistence functionality."
+    longDescription: |
+      This room contains various interactive elements that change over time, allowing
+      comprehensive testing of the engine's state management capabilities. Time clocks
+      show different states, and various objects can be moved around to test position
+      tracking. Git-like terminals show save states and branching timelines.
+      
+    properties:
+      lightLevel: "soft"
+      temperature: "comfortable"
+      mood: "technical"
+      testRoom: true
+      
+    exits:
+      north: "test_lobby"
+      east: "character_state_room"
+        
+    items:
+      - "moveable_box"
+      - "state_tracker"
+      - "time_device"
+      
+    interactions:
+      time_device:
+        description: "A device that tracks temporal changes in the game state"
+        actions:
+          use: "The device shows how much time has passed and what has changed."
+          examine: "It displays current game time, turn count, and state changes."
+
+  # Character State Testing
+  - id: "character_state_room"
+    name: "Character State Testing Chamber"
+    description: "A room for testing character stats, health, and progression systems."
+    
+    properties:
+      lightLevel: "bright"
+      temperature: "comfortable"
+      mood: "analytical"
+      testRoom: true
+      
+    exits:
+      west: "state_test_room"
+        
+    items:
+      - "stat_modifier"
+      - "experience_orb"
+      - "health_potion"
+      - "damage_dealer"
+      
+    interactions:
+      stat_modifier:
+        description: "A device that can temporarily modify character statistics"
+        actions:
+          use: "Your stats feel different as the device activates."
+      
+      experience_orb:
+        description: "A glowing orb that grants experience when touched"
+        actions:
+          touch: "You feel wiser as experience flows into you."
+
+  # Dynamic Generation Test (undefined room)
+  - id: "undefined_room_1"
+    name: "???"  # Will be generated by the engine
+    description: "???"  # Will be generated
+    generation_hints:
+      mood: "mysterious"
+      theme: "testing the unknown"
+      danger_level: "safe"
+      
+    exits:
+      south: "world_test_room"

@@ -1,0 +1,151 @@
+# Test Quest - Comprehensive Integration Test Game
+# This game serves as both a playable adventure and automated system test
+
+game:
+  title: "Test Quest"
+  version: "1.0.0"
+  author: "Narrative Engine Test Suite"
+  description: "A comprehensive test of all engine features disguised as an adventure"
+  startingRoom: "test_lobby"
+  maxPartySize: 4
+
+  # Test scoring system
+  scoring:
+    enabled: true
+    maxScore: 1000
+    showInStatusBar: true
+
+# UI Configuration - Test all features
+ui:
+  theme: "cyberpunk-test"  # Custom theme for test-quest
+  
+  layout:
+    type: "standard"
+    
+    panels:
+      console:
+        visible: true
+        position: "left"
+        size: "50%"
+        maxLines: 100
+        enableHistory: true
+        typewriterEffect: true
+        typewriterSpeed: 50
+      
+      viewport:
+        visible: true
+        position: "right-top"
+        size: "25%"
+        showRoomName: true
+        showDescription: true
+        showExits: true
+      
+      inventory:
+        visible: true
+        position: "right-bottom"
+        size: "25%"
+        showWeight: true
+        enableDragDrop: false
+      
+      party:
+        visible: true
+        showHealth: true
+        showStats: true
+        showConditions: true
+      
+      actions:
+        visible: true
+        style: "buttons"
+      
+      map:
+        visible: false  # Not implemented yet
+
+  # Custom cyberpunk theme for test-quest
+  themeConfig:
+    name: "Cyberpunk Test"
+    colors:
+      primary: "#00ffff"      # Bright cyan
+      secondary: "#ff00ff"    # Hot pink
+      background: "#0a0a0a"   # Near black
+      backgroundAlt: "#1a1a1a" # Dark gray
+      text: "#00ffff"         # Bright cyan text
+      textAlt: "#ffffff"      # White alt text
+      border: "#00ffff"       # Cyan borders
+      borderActive: "#ff00ff" # Hot pink active borders
+      success: "#00ff00"      # Bright green
+      warning: "#ffff00"      # Bright yellow
+      error: "#ff0000"        # Bright red
+      info: "#00ffff"         # Cyan info
+      accent: "#ff6600"       # Orange accent
+    fonts:
+      main: "'Courier New', 'Consolas', monospace"
+      console: "'Courier New', 'Consolas', monospace"
+      ui: "'Segoe UI', 'Arial', sans-serif"
+    borders:
+      style: "solid"
+      width: "2px"
+      radius: "4px"
+
+  features:
+    enableSound: false
+    enableMusic: false
+    enableAnimations: true
+    typewriterEffect: true
+    accessibilityMode: false
+
+# Test all mechanics systems
+mechanics:
+  combatSystem: "turn-based"
+  
+  commands:
+    movement: ["north", "south", "east", "west", "up", "down", "enter", "exit"]
+    interaction: ["look", "examine", "get", "take", "drop", "use", "open", "close", "unlock", "push", "pull"]
+    conversation: ["talk", "ask", "tell", "give", "show"]
+    combat: ["attack", "defend", "cast", "flee"]
+    meta: ["inventory", "stats", "save", "load", "help", "score"]
+
+  # Enable all systems for testing
+  puzzleSystem:
+    enabled: true
+    hintsAvailable: true
+    
+  difficultyLevels:
+    easy: 10
+    medium: 15
+    hard: 20
+
+# LLM Configuration optimized for testing
+llm:
+  provider: "ollama"
+  model: "gemma2:9b"
+  fallbackModel: "mistral:7b"
+  contextWindow: 8192
+  temperature: 0.7
+  
+  narrativeStyle:
+    tone: "helpful"  # Clear responses for testing
+    verbosity: "detailed"  # Full responses to validate
+    perspective: "second"
+
+# Content paths - all files required for testing
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/npcs.yaml"
+  items: "./content/items.yaml"
+  characters: "./content/characters.yaml"
+  rules: "./content/rules.yaml"
+  skills: "./content/skills.yaml"
+
+# Save settings for testing persistence
+saves:
+  autoSave: true
+  autoSaveInterval: 30  # Fast for testing
+  maxSaves: 10
+  enableBranching: true
+
+# Development mode for detailed logging
+development:
+  debugMode: true
+  showEntityIds: true
+  enableConsoleCommands: true
+  hotReload: false

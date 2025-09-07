@@ -1,0 +1,559 @@
+# Test Quest Items - Comprehensive Item Testing
+# Each item tests different aspects of item system and interactions
+
+items:
+  # Basic testing items (test lobby)
+  - id: "test_manual"
+    name: "Engine Testing Manual"
+    description: "A comprehensive guide to testing the Narrative Engine"
+    
+    properties:
+      weight: 0.5
+      size: "small"
+      material: "paper"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A thick manual detailing all engine testing procedures and expected behaviors."
+      read:
+        description: |
+          The manual explains: "This test suite validates all engine systems including
+          world generation, NPC interaction, combat mechanics, state management,
+          and narrative coherence. Each room tests specific functionality."
+        skill_check:
+          skill: "intelligence"
+          difficulty: 10
+          success: "You understand the testing methodology completely."
+          failure: "Some of the technical details go over your head."
+          
+  - id: "scoring_device"
+    name: "Test Score Tracker"
+    description: "A device that tracks your testing progress and awards points"
+    
+    properties:
+      weight: 0.2
+      size: "tiny"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A small device with a digital display showing your current test score."
+      use:
+        description: "The device shows your current progress through the test suite."
+        result: "show_score"
+
+  # World testing items
+  - id: "reality_anchor"
+    name: "Reality Stabilization Anchor"
+    description: "A device that prevents excessive reality fluctuations"
+    
+    properties:
+      weight: 2.0
+      size: "medium"
+      material: "crystalline"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      magical: true
+      
+    interactions:
+      examine:
+        description: "A crystalline device that hums with stabilizing energy. It keeps reality from shifting too wildly."
+      activate:
+        description: "The anchor glows, stabilizing the local reality matrix."
+        result: "stabilize_reality"
+      use:
+        description: "You activate the reality anchor, reducing environmental chaos."
+
+  # Environmental testing items  
+  - id: "weather_machine"
+    name: "Environmental Control Device"
+    description: "A machine that can alter local weather and atmospheric conditions"
+    
+    properties:
+      weight: 10.0
+      size: "large"
+      material: "metal and electronics"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A complex machine with numerous dials for temperature, humidity, wind, and precipitation."
+      use:
+        description: "You adjust the controls, cycling through different environmental conditions."
+        result: "change_weather"
+      operate:
+        skill_check:
+          skill: "intelligence"
+          difficulty: 15
+          success: "You successfully program specific weather conditions."
+          failure: "The machine produces random weather changes instead."
+          
+  - id: "thermometer"
+    name: "Precision Thermometer"
+    description: "An instrument for measuring temperature with high accuracy"
+    
+    properties:
+      weight: 0.1
+      size: "small"
+      material: "glass and metal"
+      condition: "excellent"
+      valuable: false
+      stackable: true
+      
+    interactions:
+      examine:
+        description: "A precise thermometer that can detect minute temperature variations."
+      use:
+        description: "The thermometer shows the current temperature: [current_temp]°."
+
+  # NPC interaction testing items
+  - id: "conversation_guide"
+    name: "Dialogue Testing Reference"
+    description: "A guide for testing various types of NPC interactions"
+    
+    properties:
+      weight: 0.3
+      size: "small"
+      material: "paper"
+      condition: "good"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A reference guide listing different conversation types to test with NPCs."
+      read:
+        description: |
+          The guide lists: "Test friendly interactions, hostile encounters,
+          mysterious information gathering, trading negotiations, and
+          complex multi-branch dialogues."
+
+  - id: "emotional_analyzer"
+    name: "Emotional Response Analyzer"
+    description: "A device that measures emotional responses during conversations"
+    
+    properties:
+      weight: 0.5
+      size: "small"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A device with sensors that detect emotional undertones in conversations."
+      use:
+        description: "The analyzer shows current emotional states of nearby NPCs."
+        result: "analyze_emotions"
+
+  - id: "conversation_recorder"
+    name: "Dialogue Archive Device"
+    description: "Records and analyzes conversation patterns and responses"
+    
+    properties:
+      weight: 0.4
+      size: "small"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A recording device that captures and analyzes dialogue for testing purposes."
+      activate:
+        description: "The device begins recording all conversations for later analysis."
+        result: "start_recording"
+
+  # Combat and mechanics testing items
+  - id: "training_dummy"
+    name: "Reinforced Training Dummy"
+    description: "A heavily padded dummy for combat practice"
+    
+    properties:
+      weight: 50.0
+      size: "large"
+      material: "padding and sensors"
+      condition: "worn"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A well-used training dummy covered in sensors that measure impact force and accuracy."
+      attack:
+        description: "You strike the dummy. Sensors record: Damage [damage_dealt], Accuracy [accuracy_score]."
+        result: "record_combat_data"
+      practice:
+        skill_check:
+          skill: "combat"
+          difficulty: 10
+          success: "Your training session improves your combat skills."
+          failure: "Your wild swings don't accomplish much."
+
+  - id: "dice_set"
+    name: "Testing Dice Set"
+    description: "A complete set of gaming dice for testing random mechanics"
+    
+    properties:
+      weight: 0.2
+      size: "small"
+      material: "various"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A complete set: d4, d6, d8, d10, d12, d20, and d100. Perfect for testing randomness."
+      roll:
+        description: "You roll the dice. The engine's randomization systems are working correctly."
+        result: "test_randomness"
+      use:
+        description: "Which die do you want to roll? (Specify: d4, d6, d8, d10, d12, d20, d100)"
+
+  - id: "skill_tester"
+    name: "Skill Assessment Device"
+    description: "A device for testing various character skills and abilities"
+    
+    properties:
+      weight: 1.0
+      size: "medium"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A sophisticated device that can test any skill through various challenges."
+      use:
+        description: "Select a skill to test: [list available skills]"
+        result: "skill_test_menu"
+
+  # Combat-specific items
+  - id: "practice_sword"
+    name: "Training Sword"
+    description: "A safe practice sword designed for combat testing"
+    
+    properties:
+      weight: 2.0
+      size: "medium"
+      material: "padded steel"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      
+    combat:
+      damage: "1d6"
+      damage_type: "bludgeoning"
+      magical: false
+      safe_training: true
+      
+    interactions:
+      examine:
+        description: "A practice sword with a padded blade. Perfect for testing combat without real injury."
+      wield:
+        description: "You grip the practice sword. It feels balanced and safe for training."
+        result: "equip_weapon"
+
+  - id: "practice_shield"
+    name: "Training Shield"
+    description: "A lightweight practice shield for defensive training"
+    
+    properties:
+      weight: 3.0
+      size: "medium"
+      material: "padded wood"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      
+    combat:
+      armor_bonus: 2
+      block_chance: 0.3
+      safe_training: true
+      
+    interactions:
+      examine:
+        description: "A practice shield designed for training defensive techniques safely."
+      equip:
+        description: "You strap on the practice shield, feeling more protected."
+        result: "equip_shield"
+
+  - id: "healing_potion"
+    name: "Minor Healing Potion"
+    description: "A small potion that restores health for testing purposes"
+    
+    properties:
+      weight: 0.2
+      size: "tiny"
+      material: "glass and liquid"
+      condition: "excellent"
+      valuable: true
+      stackable: true
+      consumable: true
+      
+    interactions:
+      examine:
+        description: "A small vial of red liquid that glows faintly with healing energy."
+      drink:
+        description: "The potion tastes sweet and you feel your wounds healing."
+        result: "heal_player"
+        heal_amount: "1d8+1"
+      use:
+        description: "You drink the healing potion and feel better."
+
+  # Skill testing items
+  - id: "lockpick_practice_kit"
+    name: "Lockpicking Training Kit"
+    description: "A set of locks of varying difficulty for skill testing"
+    
+    properties:
+      weight: 2.0
+      size: "medium"
+      material: "metal"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A wooden board with various locks mounted on it, from simple to masterwork complexity."
+      practice:
+        skill_check:
+          skill: "lockpicking"
+          difficulty: 15
+          success: "You successfully pick several locks, improving your skill."
+          failure: "You struggle with the locks but learn from your mistakes."
+          
+  - id: "knowledge_testing_device"
+    name: "Knowledge Assessment Terminal"
+    description: "An interactive terminal for testing knowledge skills"
+    
+    properties:
+      weight: 5.0
+      size: "large"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A terminal with a screen showing various knowledge categories for testing."
+      use:
+        description: "The terminal presents knowledge challenges in history, arcane lore, and nature."
+        result: "knowledge_test_menu"
+
+  # State management testing items
+  - id: "moveable_box"
+    name: "State Testing Container"
+    description: "A box that can be moved around to test position tracking"
+    
+    properties:
+      weight: 5.0
+      size: "medium"
+      material: "wood"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      moveable: true
+      
+    interactions:
+      examine:
+        description: "A simple wooden box designed to test the engine's position tracking systems."
+      move:
+        description: "You push the box to a new position. The engine tracks the change."
+        result: "update_position"
+      push:
+        description: "The box slides across the floor to a new location."
+
+  - id: "state_tracker"
+    name: "Game State Monitor"
+    description: "A device that displays current game state information"
+    
+    properties:
+      weight: 1.0
+      size: "small"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A device showing real-time game state data including entity positions and flags."
+      use:
+        description: "Current state: [display_current_state]"
+        result: "show_state"
+
+  - id: "time_device"
+    name: "Temporal Measurement Device"
+    description: "A device that tracks game time and state changes over time"
+    
+    properties:
+      weight: 0.5
+      size: "small"
+      material: "crystalline"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      magical: true
+      
+    interactions:
+      examine:
+        description: "A crystalline device that measures the flow of game time and temporal state changes."
+      use:
+        description: "Game time: [current_time]. Turn count: [turn_count]. Time since last save: [save_time]."
+
+  # Character state testing items
+  - id: "stat_modifier"
+    name: "Attribute Enhancement Device"
+    description: "A device that can temporarily modify character statistics"
+    
+    properties:
+      weight: 1.0
+      size: "small"
+      material: "electronic"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A device with dials for each character attribute. Changes are temporary."
+      use:
+        description: "Select an attribute to modify: Strength, Dexterity, Intelligence, Wisdom, Charisma."
+        result: "stat_modification_menu"
+      activate:
+        description: "The device hums and you feel your abilities shift temporarily."
+
+  - id: "experience_orb"
+    name: "Experience Testing Orb"
+    description: "A magical orb that grants experience points for testing character advancement"
+    
+    properties:
+      weight: 0.1
+      size: "tiny"
+      material: "magical crystal"
+      condition: "excellent"
+      valuable: true
+      stackable: true
+      magical: true
+      consumable: true
+      
+    interactions:
+      examine:
+        description: "A glowing orb filled with pure experience energy."
+      touch:
+        description: "Knowledge and wisdom flow into you as you touch the orb."
+        result: "grant_experience"
+        experience_amount: 100
+      absorb:
+        description: "You absorb the orb's energy, gaining valuable experience."
+
+  - id: "damage_dealer"
+    name: "Controlled Damage Source"
+    description: "A device that inflicts precise, safe damage for testing healing systems"
+    
+    properties:
+      weight: 1.0
+      size: "small"
+      material: "electronic"
+      condition: "excellent"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A device that can inflict controlled, non-lethal damage for testing purposes."
+      use:
+        description: "The device inflicts exactly 5 points of safe testing damage."
+        result: "deal_test_damage"
+        damage_amount: 5
+      activate:
+        description: "You feel a brief, harmless shock as the device tests damage systems."
+
+  # Special testing items
+  - id: "reality_scanner"
+    name: "Reality Analysis Scanner"  
+    description: "Dr. Reality's device for analyzing procedural generation"
+    
+    properties:
+      weight: 0.8
+      size: "small"
+      material: "advanced electronics"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A sophisticated scanner that analyzes how the engine generates content."
+      scan:
+        description: "The scanner reveals: [current_room] was generated using [generation_method]."
+        result: "analyze_generation"
+
+  - id: "notebook_of_observations"
+    name: "Research Notebook"
+    description: "Dr. Reality's notebook filled with observations about engine behavior"
+    
+    properties:
+      weight: 0.3
+      size: "small"
+      material: "paper"
+      condition: "worn"
+      valuable: false
+      stackable: false
+      
+    interactions:
+      examine:
+        description: "A notebook filled with observations about procedural generation and content creation."
+      read:
+        description: "The notes detail various engine behaviors and generation patterns observed during testing."
+
+  # Generic test items for trading
+  - id: "test_item_basic"
+    name: "Basic Test Item"
+    description: "A simple item for testing basic inventory and trading systems"
+    
+    properties:
+      weight: 1.0
+      size: "small" 
+      material: "generic"
+      condition: "average"
+      valuable: false
+      stackable: true
+      base_value: 10
+      
+    interactions:
+      examine:
+        description: "A simple, unremarkable item designed for basic system testing."
+
+  - id: "test_item_rare"
+    name: "Rare Test Artifact"
+    description: "A valuable item for testing high-value trading and inventory management"
+    
+    properties:
+      weight: 0.5
+      size: "small"
+      material: "precious"
+      condition: "excellent"
+      valuable: true
+      stackable: false
+      base_value: 1000
+      
+    interactions:
+      examine:
+        description: "An intricately crafted item of obvious value, perfect for testing rare item systems."

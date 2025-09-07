@@ -1,0 +1,138 @@
+# Test Quest Skills - Detailed skill system for testing
+
+skills:
+  # Combat Skills
+  weapons_melee:
+    name: "Melee Weapons"
+    description: "Proficiency with close-combat weapons"
+    category: "combat"
+    base_attribute: "strength"
+    
+    test_scenarios:
+      - "Attack training dummy"
+      - "Spar with combat AI"
+      - "Weapon accuracy test"
+      
+  combat_tactics:
+    name: "Combat Tactics"
+    description: "Strategic combat planning and execution"
+    category: "combat"
+    base_attribute: "intelligence"
+    
+    test_scenarios:
+      - "Analyze opponent weaknesses"
+      - "Plan multi-turn strategies"
+      - "Adapt to changing combat conditions"
+
+  # Knowledge Skills
+  knowledge_general:
+    name: "General Knowledge"
+    description: "Broad understanding of world information"
+    category: "knowledge"
+    base_attribute: "intelligence"
+    
+    test_scenarios:
+      - "Answer trivia questions"
+      - "Recognize historical references"
+      - "Understand scientific principles"
+      
+  research:
+    name: "Research"
+    description: "Finding and analyzing information efficiently"
+    category: "knowledge"  
+    base_attribute: "intelligence"
+    
+    test_scenarios:
+      - "Find specific information quickly"
+      - "Cross-reference multiple sources"
+      - "Deduce conclusions from partial data"
+
+  # Social Skills
+  persuasion:
+    name: "Persuasion"
+    description: "Convincing others through logical argument"
+    category: "social"
+    base_attribute: "charisma"
+    
+    test_scenarios:
+      - "Change NPC's mind about topic"
+      - "Negotiate better deal with merchant"
+      - "Convince hostile NPC to be friendly"
+      
+  intimidation:
+    name: "Intimidation"
+    description: "Using fear to influence behavior"
+    category: "social"
+    base_attribute: "strength"
+    
+    test_scenarios:
+      - "Make aggressive NPC back down"
+      - "Extract information through threats"
+      - "Control crowd through presence"
+      
+  deception:
+    name: "Deception"
+    description: "Convincing others of false information"
+    category: "social"
+    base_attribute: "charisma"
+    
+    test_scenarios:
+      - "Tell convincing lie to NPC"
+      - "Maintain false identity"
+      - "Hide true intentions"
+      
+  empathy:
+    name: "Empathy"
+    description: "Understanding and responding to emotions"
+    category: "social"
+    base_attribute: "wisdom"
+    
+    test_scenarios:
+      - "Comfort distressed NPC"
+      - "Read emotional subtext in conversation"
+      - "Respond appropriately to mood changes"
+
+  # Practical Skills
+  lockpicking:
+    name: "Lockpicking"
+    description: "Opening locks without proper keys"
+    category: "practical"
+    base_attribute: "dexterity"
+    tools_required: ["lockpick_practice_kit"]
+    
+    test_scenarios:
+      - "Pick simple practice lock"
+      - "Open complex mechanism"
+      - "Work under time pressure"
+      
+  investigation:
+    name: "Investigation"
+    description: "Gathering clues and solving mysteries"
+    category: "practical"
+    base_attribute: "intelligence"
+    
+    test_scenarios:
+      - "Find hidden clues in room"
+      - "Piece together mystery from evidence"
+      - "Notice important details others miss"
+
+# Skill progression system
+progression:
+  experience_costs:
+    novice: 100      # 0-25 skill
+    apprentice: 200  # 26-50 skill
+    journeyman: 400  # 51-75 skill
+    expert: 800      # 76-90 skill
+    master: 1600     # 91-100 skill
+    
+  training_modifiers:
+    has_teacher: 0.5      # 50% cost reduction with teacher
+    has_manual: 0.75      # 25% cost reduction with training manual
+    practice_facility: 0.8 # 20% cost reduction with proper tools
+    
+# Testing validation
+test_requirements:
+  minimum_tests_per_skill: 3
+  require_success_and_failure: true
+  test_edge_cases: true
+  validate_stat_bonuses: true

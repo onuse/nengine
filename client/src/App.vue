@@ -159,6 +159,19 @@ function connectWebSocket() {
   
   ws.onopen = () => {
     console.log('Connected to server');
+    addMessage('Connected to game server');
+    
+    // Send initial "look" command to get the game state
+    setTimeout(() => {
+      ws?.send(JSON.stringify({
+        type: 'player_action',
+        id: 'initial_look',
+        action: { 
+          type: 'look'
+        },
+        rawInput: 'look'
+      }));
+    }, 500);
   };
   
   ws.onmessage = (event) => {
@@ -174,10 +187,21 @@ function connectWebSocket() {
 }
 
 function handleServerMessage(data: any) {
-  if (data.type === 'narrative') {
-    addMessage(data.text);
+  console.log('Received message:', data);
+  
+  if (data.type === 'narrative_response' || data.type === 'response') {
+    // Handle narrative responses from the server
+    if (data.result && data.result.narrative) {
+      addMessage(data.result.narrative);
+    } else if (data.result && data.result.error) {
+      addMessage(`Error: ${data.result.error}`);
+    } else if (data.error) {
+      addMessage(`Error: ${data.error}`);
+    }
   } else if (data.type === 'state') {
     Object.assign(gameState, data.state);
+  } else if (data.type === 'narrative') {
+    addMessage(data.text);
   }
 }
 
@@ -187,9 +211,15 @@ function handleCommand() {
   addMessage(`> ${inputCommand.value}`);
   
   if (ws && ws.readyState === WebSocket.OPEN) {
+    // Send as player_action message for the narrative engine
     ws.send(JSON.stringify({
-      type: 'command',
-      command: inputCommand.value
+      type: 'player_action',
+      id: Date.now().toString(),
+      action: { 
+        type: 'interaction',
+        description: inputCommand.value 
+      },
+      rawInput: inputCommand.value
     }));
   }
   
@@ -200,9 +230,15 @@ function handleAction(action: string) {
   addMessage(`[Action: ${action}]`);
   
   if (ws && ws.readyState === WebSocket.OPEN) {
+    // Send as player_action message for the narrative engine
     ws.send(JSON.stringify({
-      type: 'action',
-      action: action
+      type: 'player_action',
+      id: Date.now().toString(),
+      action: { 
+        type: 'interaction',
+        description: action.toLowerCase()
+      },
+      rawInput: action.toLowerCase()
     }));
   }
 }
