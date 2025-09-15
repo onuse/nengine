@@ -401,16 +401,22 @@ export class OllamaProvider implements LLMProvider {
     }
 
     // World state
-    parts.push(`\nCURRENT SITUATION:`);
-    parts.push(`Location: ${prompt.worldState.currentRoomName}`);
-    parts.push(`Description: ${prompt.worldState.roomDescription}`);
-    
-    if (prompt.worldState.presentNPCs.length > 0) {
-      parts.push(`Present NPCs: ${prompt.worldState.presentNPCs.map(npc => npc.name).join(', ')}`);
-    }
-    
-    if (prompt.worldState.visibleItems.length > 0) {
-      parts.push(`Visible items: ${prompt.worldState.visibleItems.join(', ')}`);
+    if (prompt.worldState) {
+      parts.push(`\nCURRENT SITUATION:`);
+      parts.push(`Location: ${prompt.worldState.currentRoomName || 'Unknown Location'}`);
+      parts.push(`Description: ${prompt.worldState.roomDescription || 'An unremarkable location.'}`);
+      
+      if (prompt.worldState.presentNPCs?.length > 0) {
+        parts.push(`Present NPCs: ${prompt.worldState.presentNPCs.map(npc => npc.name).join(', ')}`);
+      }
+      
+      if (prompt.worldState.visibleItems?.length > 0) {
+        parts.push(`Visible items: ${prompt.worldState.visibleItems.join(', ')}`);
+      }
+    } else {
+      parts.push(`\nCURRENT SITUATION:`);
+      parts.push(`Location: Unknown`);
+      parts.push(`Description: The world around you is unclear.`);
     }
 
     // Recent history

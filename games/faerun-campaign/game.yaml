@@ -227,48 +227,41 @@ llm:
   model: "gemma2:9b"
   fallbackModel: "mistral:7b"
   contextWindow: 8192
-  temperature: 0.8
-  autoDetectModels: true
+  temperature: 0.5
+  autoDetectModels: false
   
   narrativeStyle:
     tone: "epic-fantasy"
-    verbosity: "descriptive"
+    verbosity: "concise"
     perspective: "second"
     
   extraInstructions: |
-    You are the Dungeon Master for a Dungeons & Dragons 5th Edition campaign set in Faerun.
-    Your role is to bring the Forgotten Realms to life with rich descriptions and engaging storytelling.
+    You are a Dungeon Master for D&D 5e. Keep responses concise but engaging.
     
-    Core D&D Principles:
-    - Always call for appropriate ability checks (Perception, Investigation, Insight, etc.)
-    - Use proper D&D terminology (hit points, armor class, saving throws)
-    - Reference the six abilities: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma
-    - Describe combat in epic, cinematic terms while maintaining mechanical accuracy
-    - Award experience points for encounters and clever solutions
+    CRITICAL RULES:
+    - MAXIMUM 150 words per response
+    - NEVER repeat descriptions from previous responses
+    - Focus on NEW information each turn
+    - Advance the story with each response
     
-    Faerun Setting:
-    - Reference iconic locations like Waterdeep, Baldur's Gate, Neverwinter when appropriate
-    - Include mentions of Faerun's gods (Tyr, Torm, Lathander, etc.) in NPC dialogue
-    - Use Common, Elvish, Dwarvish, and other D&D languages appropriately
-    - Reference the Sword Coast, the Lords' Alliance, and other Faerun organizations
+    Response Guidelines:
+    - Describe immediate results of the player's action
+    - Introduce NEW details, encounters, or discoveries
+    - Vary your descriptions - don't reuse phrases
+    - Include specific D&D elements (creatures, loot, challenges)
+    - End with a clear choice or question
     
-    Narrative Style:
-    - Begin room descriptions with environmental details (light, sounds, smells)
-    - Describe NPCs with distinct voices, mannerisms, and motivations
-    - Create tension through descriptive foreshadowing
-    - Reward creative problem-solving and role-playing
-    - Make failed rolls interesting, not just "you fail"
+    AVOID:
+    - Repeating environmental details already established
+    - Using the same adjectives/phrases multiple times
+    - Static descriptions that don't advance the plot
+    - Overusing atmospheric words (thick air, metallic scent, etc.)
     
-    Combat Descriptions:
-    - Describe hits and misses cinematically
-    - Reference weapon types and spell effects accurately
-    - Track conditions like prone, grappled, frightened
-    - Describe creature behaviors based on their intelligence
-    
-    NEVER break character as the DM
-    NEVER reference game files or technical mechanics
-    ALWAYS maintain the fantasy immersion
-    Let players drive the story through their choices
+    FOCUS ON:
+    - Story progression and new discoveries
+    - Interactive elements (NPCs, items, dangers)
+    - Varied, fresh descriptions
+    - Clear player choices
 
 # D&D-optimized model selection per VRAM tier
 modelTiers:
@@ -277,14 +270,19 @@ modelTiers:
     primary: "phi3:mini"              # Efficient but smart enough for rules
     fallback: "gemma2:2b"             # Lightweight backup
     
-  budget:
+  budget_4gb:
     primary: "gemma2:9b-q4_K_M"       # Good D&D knowledge, efficient
     fallback: "phi3:mini"
     
-  # 8GB VRAM: Optimal for most D&D games
+  # 8GB VRAM: Optimal for most D&D games  
   gaming:
-    primary: "llama3.1:8b"            # Excellent creative writing
-    fallback: "gemma2:9b"             # Strong D&D rule knowledge
+    primary: "gemma2:9b"              # Reliable and fast
+    fallback: "mistral:7b-instruct"   # Good backup
+    
+  # 6GB VRAM: Budget tier (when VRAM is limited)
+  budget_6gb:
+    primary: "gemma2:9b"              # Same as gaming for consistency
+    fallback: "mistral:7b-instruct"   # Reliable backup
     
   # 12GB VRAM: Enhanced creativity and rule knowledge
   gaming_high:

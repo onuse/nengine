@@ -608,7 +608,33 @@ export class MechanicsContentMCP extends BaseMCPServer {
       const content = fs.readFileSync(skillsPath, 'utf-8');
       const skillsData = yaml.parse(content);
       
-      if (skillsData.skills) {
+      // Handle the nested structure: skills.skill_definitions
+      const skillDefinitions = skillsData?.skills?.skill_definitions;
+      
+      if (skillDefinitions) {
+        for (const [skillKey, skillData] of Object.entries(skillDefinitions)) {
+          const skill = skillData as any;
+          
+          // Convert the YAML structure to our expected SkillDefinition format
+          const skillDefinition: SkillDefinition = {
+            name: skill.name || skillKey,
+            attribute: skill.ability || skill.attribute || 'wisdom', // Handle both 'ability' and 'attribute'
+            description: skill.description || 'No description available',
+            difficulty: {
+              trivial: 5,
+              easy: 10,
+              medium: 15,
+              hard: 20,
+              extreme: 25
+            }
+          };
+          
+          this.skills.set(skillKey, skillDefinition);
+        }
+      }
+      
+      // If no skills found in the expected structure, try the old format for backwards compatibility
+      if (this.skills.size === 0 && skillsData.skills && Array.isArray(skillsData.skills)) {
         for (const skill of skillsData.skills) {
           this.skills.set(skill.name, skill);
         }
@@ -618,7 +644,7 @@ export class MechanicsContentMCP extends BaseMCPServer {
       this.log(`Loaded skills: ${skillCount} skills`);
       
     } catch (error) {
-      this.warn('Failed to load skills, using defaults');
+      this.warn(`Failed to load skills: ${error instanceof Error ? error.message : 'Unknown error'}, using defaults`);
       this.loadDefaultSkills();
     }
   }

@@ -194,7 +194,13 @@ function connectWebSocket() {
 function handleServerMessage(data: any) {
   console.log('Received message:', data);
   
-  // Clear processing state
+  // Handle status updates without clearing processing state
+  if (data.type === 'status_update') {
+    processingMessage.value = data.status;
+    return;
+  }
+  
+  // Clear processing state for final responses
   isProcessing.value = false;
   processingMessage.value = '';
   

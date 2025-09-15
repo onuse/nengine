@@ -1,0 +1,27 @@
+# Agent System Configuration
+# Phase 1: Minimal Viable Agent System
+
+agents:
+  enabled: true
+  fallbackOnError: true
+  timeoutMs: 15000
+  
+  # Variation Agent Configuration
+  variation:
+    model: "gemma2:3b"
+    temperature: 0.9
+    variationCount: 3
+    
+  # Evaluation Agent Configuration
+  evaluation:
+    model: "gemma2:9b" 
+    temperature: 0.2
+    minScore: 6.0
+    noveltyWeight: 0.6
+    qualityWeight: 0.4
+
+# Development Settings
+debug:
+  logAgentDecisions: true
+  showGenerationTiming: true
+  trackRepetitionPatterns: true

@@ -77,7 +77,14 @@ async function initializeGame() {
       temperature: currentGame.llm?.temperature || 0.7,
       maxContextTokens: currentGame.llm?.contextWindow || 4096,
       historyDepth: 10,
-      extraInstructions: currentGame.llm?.extraInstructions
+      extraInstructions: currentGame.llm?.extraInstructions,
+      useAgents: true,
+      agentConfig: {
+        enabled: true,
+        variationModel: 'gemma2:3b',
+        evaluationModel: 'gemma2:9b',
+        timeoutMs: 15000
+      }
     };
     
     narrativeController = new NarrativeController(mcpManager, narrativeConfig);
@@ -97,8 +104,47 @@ const git = new GitManager('./game-state');
 let mcpManager: MCPServerManager;
 let narrativeController: NarrativeController;
 
+// Status Broadcasting System
+class StatusBroadcaster {
+  private connections = new Set<any>();
+  
+  addConnection(ws: any) {
+    this.connections.add(ws);
+  }
+  
+  removeConnection(ws: any) {
+    this.connections.delete(ws);
+  }
+  
+  broadcast(status: string, details?: any) {
+    const message = JSON.stringify({
+      type: 'status_update',
+      status,
+      details,
+      timestamp: Date.now()
+    });
+    
+    for (const ws of this.connections) {
+      if (ws.readyState === 1) { // OPEN
+        try {
+          ws.send(message);
+        } catch (error) {
+          console.warn('Failed to send status to client:', error);
+          this.connections.delete(ws);
+        }
+      }
+    }
+  }
+}
+
+const statusBroadcaster = new StatusBroadcaster();
+
+// Make status broadcaster globally available for agents  
+global.statusBroadcaster = statusBroadcaster;
+
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection');
+  statusBroadcaster.addConnection(ws);
   
   ws.on('message', async (message) => {
     try {
@@ -134,6 +180,7 @@ wss.on('connection', (ws) => {
   
   ws.on('close', () => {
     console.log('WebSocket connection closed');
+    statusBroadcaster.removeConnection(ws);
   });
 });
 

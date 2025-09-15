@@ -6,6 +6,7 @@
 import { MCPServerManager } from '../mcp/mcp-server-manager';
 import { LLMProvider, LLMPrompt, LLMResponse, WorldContext, Event, Action, NPCContext } from './types';
 import { OllamaProvider } from './ollama-provider';
+import { AgentOrchestrator } from '../agents/agent-orchestrator';
 
 export interface NarrativeConfig {
   llmProvider: 'ollama';
@@ -15,6 +16,13 @@ export interface NarrativeConfig {
   maxContextTokens: number;
   historyDepth: number;
   extraInstructions?: string;
+  useAgents?: boolean;
+  agentConfig?: {
+    enabled: boolean;
+    variationModel?: string;
+    evaluationModel?: string;
+    timeoutMs?: number;
+  };
 }
 
 export interface PlayerAction {
@@ -40,6 +48,7 @@ export class NarrativeController {
   private eventHistory: Event[] = [];
   private conversationStates: Map<string, any> = new Map();
   private requestCache: Map<string, any> = new Map();
+  private agentOrchestrator?: AgentOrchestrator;
 
   constructor(mcpManager: MCPServerManager, config: Partial<NarrativeConfig> = {}) {
     this.mcpManager = mcpManager;
@@ -55,6 +64,14 @@ export class NarrativeController {
 
     // Initialize LLM provider
     this.initializeLLMProvider();
+    
+    // Initialize agent system if configured
+    if (this.config.useAgents) {
+      this.agentOrchestrator = new AgentOrchestrator(
+        (action, context, mechanicalResults) => this.generateDirectResponse(action, context, mechanicalResults),
+        this.config.agentConfig
+      );
+    }
   }
 
   async initialize(): Promise<void> {
@@ -63,8 +80,14 @@ export class NarrativeController {
     try {
       await this.llmProvider.initialize('');
       console.log('[NarrativeController] LLM provider ready');
+      
+      // Initialize agent system if enabled
+      if (this.agentOrchestrator) {
+        await this.agentOrchestrator.initialize();
+        console.log('[NarrativeController] Agent system ready');
+      }
     } catch (error) {
-      console.error('[NarrativeController] Failed to initialize LLM provider:', error);
+      console.error('[NarrativeController] Failed to initialize:', error);
       throw error;
     }
   }
@@ -355,25 +378,25 @@ export class NarrativeController {
   }
 
   private async generateNarrativeResponse(context: WorldContext, action: PlayerAction, mechanicalResults: any): Promise<LLMResponse> {
-    let systemContext = "You are the narrator for an immersive text adventure game. Generate vivid, engaging descriptions that bring the world to life.";
-    
-    // Append extra instructions from game configuration if provided
-    if (this.config.extraInstructions) {
-      systemContext += "\n\nAdditional instructions: " + this.config.extraInstructions;
-      console.log('[NarrativeController] Using extraInstructions:', this.config.extraInstructions.substring(0, 100) + '...');
-    } else {
-      console.log('[NarrativeController] No extraInstructions configured');
+    // Try agent system first if available
+    if (this.agentOrchestrator && this.agentOrchestrator.isEnabled()) {
+      try {
+        const agentResult = await this.agentOrchestrator.processAction(action, context, mechanicalResults);
+        
+        if (agentResult.success) {
+          return {
+            narrative: agentResult.narrative,
+            dialogue: agentResult.dialogue || '',
+            stateChanges: {}
+          };
+        }
+      } catch (error) {
+        console.warn('[NarrativeController] Agent system failed, falling back to direct generation:', error);
+      }
     }
-    
-    const prompt: LLMPrompt = {
-      systemContext,
-      worldState: context,
-      recentHistory: this.getRecentHistory(this.config.historyDepth),
-      availableActions: await this.getAvailableActions(context),
-      query: this.buildActionQuery(action, mechanicalResults)
-    };
 
-    return await this.llmProvider.complete(prompt);
+    // Fallback to direct generation
+    return this.generateDirectResponse(action, context, mechanicalResults);
   }
 
   private buildActionQuery(action: PlayerAction, mechanicalResults: any): string {
@@ -675,12 +698,55 @@ export class NarrativeController {
     return errorNarratives[Math.floor(Math.random() * errorNarratives.length)];
   }
 
+  // Direct response generation (original method)
+  private async generateDirectResponse(action: PlayerAction, context: WorldContext, mechanicalResults?: any): Promise<LLMResponse> {
+    let systemContext = "You are the narrator for an immersive text adventure game. Generate vivid, engaging descriptions that bring the world to life.";
+    
+    // Append extra instructions from game configuration if provided
+    if (this.config.extraInstructions) {
+      systemContext += "\n\nAdditional instructions: " + this.config.extraInstructions;
+      console.log('[NarrativeController] Using extraInstructions:', this.config.extraInstructions.substring(0, 100) + '...');
+    } else {
+      console.log('[NarrativeController] No extraInstructions configured');
+    }
+    
+    const prompt: LLMPrompt = {
+      systemContext,
+      worldState: context,
+      recentHistory: this.getRecentHistory(this.config.historyDepth),
+      availableActions: await this.getAvailableActions(context),
+      query: this.buildActionQuery(action, mechanicalResults || {})
+    };
+
+    return await this.llmProvider.complete(prompt);
+  }
+
+  // Agent control methods
+  enableAgents(enabled: boolean): void {
+    if (this.agentOrchestrator) {
+      this.agentOrchestrator.setEnabled(enabled);
+      console.log(`[NarrativeController] Agent system ${enabled ? 'enabled' : 'disabled'}`);
+    }
+  }
+
+  getAgentMetrics(): any {
+    return this.agentOrchestrator?.getMetrics() || null;
+  }
+
+  getNoveltyHistory(): any {
+    return this.agentOrchestrator?.getNoveltyHistory() || null;
+  }
+
   // Cleanup
   async shutdown(): Promise<void> {
     console.log('[NarrativeController] Shutting down...');
     
     if (this.llmProvider) {
       await this.llmProvider.shutdown();
+    }
+    
+    if (this.agentOrchestrator) {
+      await this.agentOrchestrator.shutdown();
     }
     
     this.eventHistory = [];
