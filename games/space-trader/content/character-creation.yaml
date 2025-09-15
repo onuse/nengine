@@ -1,0 +1,236 @@
+# Character Creation for Space Trader Game
+# Demonstrates a completely different character system from D&D
+
+character_creation:
+  system: "space_trader"
+  version: "1.0.0"
+  
+  creation_flow:
+    - step: "background"
+      title: "Choose Your Origin"
+      description: "Where did you come from?"
+      optional: false
+      
+    - step: "profession"
+      title: "Select Your Profession"
+      description: "What's your specialty in the void?"
+      optional: false
+      
+    - step: "ship"
+      title: "Choose Your Starting Ship"
+      description: "Your home among the stars"
+      optional: false
+      
+    - step: "resources"
+      title: "Starting Resources"
+      description: "Credits, contacts, and cargo"
+      optional: false
+      
+    - step: "reputation"
+      title: "Initial Reputation"
+      description: "How are you known in the sector?"
+      optional: false
+      
+    - step: "details"
+      title: "Personal Details"
+      description: "Name, appearance, and motivations"
+      optional: false
+
+  backgrounds:
+    colony_born:
+      name: "Colony Born"
+      description: "Raised on a frontier colony"
+      bonuses:
+        repair_skill: 10
+        survival_skill: 15
+        starting_credits: 3000
+      contacts: ["colony_administrator", "supply_runner"]
+      
+    corporate:
+      name: "Corporate"
+      description: "Former employee of a megacorp"
+      bonuses:
+        negotiation_skill: 20
+        bureaucracy_skill: 15
+        starting_credits: 8000
+      contacts: ["corporate_exec", "insider_trader"]
+      licenses: ["basic_trade_permit"]
+      
+    military:
+      name: "Military Veteran"
+      description: "Ex-fleet officer or marine"
+      bonuses:
+        combat_skill: 20
+        tactics_skill: 15
+        starting_credits: 5000
+      contacts: ["fleet_quartermaster", "old_squad_mate"]
+      licenses: ["weapons_permit", "military_surplus_access"]
+      
+    pirate:
+      name: "Reformed Pirate"
+      description: "Former member of a pirate crew"
+      bonuses:
+        combat_skill: 15
+        intimidation_skill: 20
+        starting_credits: 2000
+      contacts: ["fence", "pirate_informant"]
+      reputation_modifier: { law_enforcement: -20, underworld: 20 }
+      
+    academic:
+      name: "Academic"
+      description: "Scientist or researcher"
+      bonuses:
+        research_skill: 25
+        tech_skill: 15
+        starting_credits: 4000
+      contacts: ["university_professor", "research_lab"]
+      licenses: ["research_permit", "hazmat_license"]
+
+  professions:
+    trader:
+      name: "Trader"
+      primary_skills: ["negotiation", "market_analysis", "logistics"]
+      starting_cargo: 20
+      credit_multiplier: 1.5
+      
+    smuggler:
+      name: "Smuggler"
+      primary_skills: ["stealth_systems", "fast_talk", "hidden_compartments"]
+      starting_cargo: 10
+      ship_upgrade: "smuggling_compartment"
+      
+    bounty_hunter:
+      name: "Bounty Hunter"
+      primary_skills: ["tracking", "combat", "interrogation"]
+      starting_equipment: ["stun_weapons", "holding_cells"]
+      licenses: ["bounty_license"]
+      
+    explorer:
+      name: "Explorer"
+      primary_skills: ["navigation", "xenobiology", "survival"]
+      starting_equipment: ["advanced_sensors", "survey_gear"]
+      map_data: "uncharted_systems"
+      
+    mercenary:
+      name: "Mercenary"
+      primary_skills: ["combat", "tactics", "ship_weapons"]
+      starting_equipment: ["weapon_upgrades", "armor_plating"]
+      contacts: ["arms_dealer"]
+
+  starting_ships:
+    rust_bucket:
+      name: "Rust Bucket"
+      class: "light_freighter"
+      cost: 0
+      cargo_capacity: 50
+      speed: "slow"
+      armor: "minimal"
+      weapons: "none"
+      condition: "poor"
+      notes: "Cheap but unreliable"
+      
+    star_runner:
+      name: "Star Runner"
+      class: "courier"
+      cost: 5000
+      cargo_capacity: 20
+      speed: "fast"
+      armor: "light"
+      weapons: "light_laser"
+      condition: "good"
+      notes: "Built for speed"
+      
+    heavy_hauler:
+      name: "Heavy Hauler"
+      class: "bulk_freighter"
+      cost: 3000
+      cargo_capacity: 100
+      speed: "very_slow"
+      armor: "medium"
+      weapons: "none"
+      condition: "fair"
+      notes: "Maximum cargo space"
+      
+    patrol_craft:
+      name: "Patrol Craft"
+      class: "light_military"
+      cost: 8000
+      cargo_capacity: 30
+      speed: "medium"
+      armor: "medium"
+      weapons: "dual_lasers"
+      condition: "good"
+      notes: "Ex-military vessel"
+
+  reputation_standings:
+    law_enforcement:
+      ranges:
+        criminal: [-100, -50]
+        suspected: [-49, -20]
+        neutral: [-19, 19]
+        trusted: [20, 49]
+        exemplary: [50, 100]
+        
+    trade_guild:
+      ranges:
+        blacklisted: [-100, -50]
+        unreliable: [-49, -20]
+        neutral: [-19, 19]
+        reliable: [20, 49]
+        elite: [50, 100]
+        
+    underworld:
+      ranges:
+        marked: [-100, -50]
+        outsider: [-49, -20]
+        neutral: [-19, 19]
+        connected: [20, 49]
+        kingpin: [50, 100]
+
+character_schema:
+  version: "1.0.0"
+  
+  identity:
+    name: { type: "string", required: true }
+    callsign: { type: "string", required: false }
+    background: { type: "string", required: true }
+    profession: { type: "string", required: true }
+    age: { type: "number", required: false }
+    homeworld: { type: "string", required: false }
+    
+  ship:
+    name: { type: "string", required: true }
+    model: { type: "string", required: true }
+    registration: { type: "string", generated: true }
+    cargo_capacity: { type: "number", required: true }
+    cargo_current: { type: "array", items: "cargo_item" }
+    fuel: { type: "number", max: 100, default: 75 }
+    condition: { type: "number", max: 100, default: 100 }
+    upgrades: { type: "array", items: "upgrade" }
+    
+  resources:
+    credits: { type: "number", default: 5000 }
+    licenses: { type: "array", items: "string" }
+    contracts: { type: "array", items: "contract" }
+    
+  skills:
+    combat: { type: "number", min: 0, max: 100 }
+    negotiation: { type: "number", min: 0, max: 100 }
+    piloting: { type: "number", min: 0, max: 100 }
+    repair: { type: "number", min: 0, max: 100 }
+    hacking: { type: "number", min: 0, max: 100 }
+    navigation: { type: "number", min: 0, max: 100 }
+    
+  reputation:
+    law_enforcement: { type: "number", min: -100, max: 100, default: 0 }
+    trade_guild: { type: "number", min: -100, max: 100, default: 0 }
+    underworld: { type: "number", min: -100, max: 100, default: 0 }
+    corporations: { type: "object", properties: "reputation_score" }
+    
+  contacts:
+    list: { type: "array", items: "contact" }
+    
+  history:
+    completed_missions: { type: "array", items: "mission" }
+    visited_systems: { type: "array", items: "string" }
+    criminal_record: { type: "array", items: "offense" }

@@ -1,0 +1,243 @@
+# Red Lantern Detective - World Locations
+# 1920s speakeasy/brothel and surrounding noir cityscape
+
+rooms:
+  - id: "red_lantern_entrance"
+    name: "The Red Lantern - Front Door"
+    description: |-
+      Rain slicks the cobblestones outside the Red Lantern, the city's most notorious establishment. 
+      A discreet red lantern hangs beside an unmarked door, casting crimson shadows on the wet street.
+      The muffled sound of jazz music and laughter drifts from within, along with the sweet scent of gin and perfume.
+      Two burly doormen eye you suspiciously - this isn't the kind of place that welcomes uninvited guests.
+    
+    connections:
+      - target: "main_speakeasy"
+        direction: "enter"
+        requirements: ["password", "invitation", "badge"]
+      - target: "alley_entrance" 
+        direction: "around back"
+      - target: "rainy_street"
+        direction: "leave"
+    
+    npcs: ["bouncer_tony", "doorman_frank"]
+    items: ["wet_newspaper", "cigarette_butts"]
+    atmosphere: "tense_anticipation"
+
+  - id: "main_speakeasy"
+    name: "The Red Lantern - Main Floor"
+    description: |-
+      Smoke hangs thick in the air of the main speakeasy, lit by dim amber lights and the glow of cigarettes.
+      A jazz quartet plays in the corner while well-dressed patrons sip illegal cocktails at small round tables.
+      The bar dominates one wall, staffed by a sharp-eyed bartender who sees everything.
+      A grand staircase leads upstairs where the 'private rooms' are located - the establishment's other business.
+      Tonight feels different though... there's tension beneath the usual revelry.
+    
+    connections:
+      - target: "red_lantern_entrance"
+        direction: "exit"
+      - target: "private_stairs"
+        direction: "upstairs"
+        requirements: ["client_status", "employee_access", "investigation_badge"]
+      - target: "back_office"
+        direction: "office"
+        requirements: ["manager_permission", "investigation_warrant"]
+      - target: "basement_storage"
+        direction: "downstairs"
+        requirements: ["employee_key", "investigation_access"]
+    
+    npcs: ["madame_rouge", "bartender_joe", "jazz_singer_ruby", "wealthy_patron_morrison"]
+    items: ["gin_bottle", "jazz_program", "lipstick_stain", "business_cards"]
+    clues: ["overheard_argument", "suspicious_patron", "missing_girl_photo"]
+    atmosphere: "smoky_jazz_tension"
+
+  - id: "private_stairs"
+    name: "Private Staircase"
+    description: |-
+      A carpeted staircase leads to the establishment's upper floor, where the Red Lantern's more intimate services are offered.
+      Velvet wallpaper and soft lighting create an atmosphere of luxury and discretion.
+      Muffled voices and occasional laughter drift from behind closed doors.
+      A stern-looking woman in expensive dress watches who comes and goes - nothing happens here without Madame Rouge's knowledge.
+    
+    connections:
+      - target: "main_speakeasy"
+        direction: "downstairs"
+      - target: "private_hallway"
+        direction: "forward"
+      - target: "madame_office"
+        direction: "office"
+        requirements: ["appointment", "emergency", "investigation_badge"]
+    
+    npcs: ["madame_rouge", "house_security"]
+    items: ["appointment_book", "expensive_perfume"]
+    atmosphere: "discreet_luxury"
+
+  - id: "private_hallway"
+    name: "Upstairs Hallway"
+    description: |-
+      A long hallway lined with numbered doors, each leading to a private room.
+      Rich carpet muffles footsteps while ornate light fixtures cast warm, intimate lighting.
+      The air carries mixed scents of perfume, cigarettes, and something else... something metallic.
+      Room 7's door stands slightly ajar - unusual for this establishment's reputation for discretion.
+    
+    connections:
+      - target: "private_stairs"
+        direction: "back to stairs"
+      - target: "room_7"
+        direction: "room 7"
+      - target: "room_3"
+        direction: "room 3"
+      - target: "room_12"
+        direction: "room 12"
+      - target: "employees_quarters"
+        direction: "employees' area"
+        requirements: ["employee_access", "investigation_warrant"]
+    
+    npcs: ["working_girl_violet", "nervous_client"]
+    items: ["room_keys", "dropped_earring"]
+    clues: ["blood_drops", "torn_fabric", "witnesses_testimony"]
+    atmosphere: "ominous_discovery"
+
+  - id: "room_7"
+    name: "Private Room 7 - Crime Scene"
+    description: |-
+      The scene that greets you is grim. What should have been an intimate private room has become a crime scene.
+      Expensive furnishings are in disarray - an overturned lamp, scattered clothing, a mirror cracked by impact.
+      Dark stains on the Persian rug tell a story of violence in a place meant for pleasure.
+      The window stands open, curtains billowing in the night breeze - an escape route or invitation to disaster?
+    
+    connections:
+      - target: "private_hallway"
+        direction: "hallway"
+      - target: "fire_escape"
+        direction: "window"
+        requirements: ["investigate_escape_route"]
+    
+    npcs: []
+    items: ["bloodstained_rug", "broken_mirror", "torn_dress", "expensive_watch", "love_letter"]
+    clues: ["murder_weapon", "struggle_evidence", "time_of_death", "mysterious_letter", "hidden_safe"]
+    atmosphere: "crime_scene_investigation"
+    investigation_priority: "primary_scene"
+
+  - id: "madame_office"
+    name: "Madame Rouge's Office"
+    description: |-
+      The business heart of the Red Lantern, where Madame Rouge manages both the speakeasy and the more intimate services.
+      An imposing mahogany desk dominates the room, covered with ledgers, photographs, and correspondence.
+      Filing cabinets line the walls - records of clients, employees, and business arrangements.
+      A hidden safe behind a painting suggests even more sensitive information is kept here.
+      Madame Rouge sits behind her desk like a spider in her web, watching your every move.
+    
+    connections:
+      - target: "private_stairs"
+        direction: "leave office"
+    
+    npcs: ["madame_rouge"]
+    items: ["client_ledgers", "employee_files", "business_correspondence", "safe_behind_painting"]
+    clues: ["victim_employment_record", "client_list", "blackmail_material", "financial_records"]
+    atmosphere: "power_and_secrets"
+
+  - id: "alley_entrance"
+    name: "Back Alley"
+    description: |-
+      A narrow alley behind the Red Lantern, reeking of garbage and broken dreams.
+      Fire escapes zigzag up the building's back wall, providing discrete exits for those who prefer not to be seen.
+      Empty bottles and discarded items litter the ground - evidence of the establishment's hidden activities.
+      A homeless veteran warming himself by a trash fire might have seen more than anyone realizes.
+    
+    connections:
+      - target: "red_lantern_entrance"
+        direction: "around front"
+      - target: "fire_escape"
+        direction: "fire escape"
+      - target: "rainy_street"
+        direction: "street"
+    
+    npcs: ["homeless_veteran_eddie", "alley_cat_informant"]
+    items: ["discarded_bottles", "bloodstained_handkerchief", "expensive_cufflink"]
+    clues: ["witness_testimony", "escape_route_evidence", "discarded_weapon"]
+    atmosphere: "gritty_investigation"
+
+  - id: "basement_storage"
+    name: "Basement Storage"
+    description: |-
+      Beneath the glamour of the Red Lantern lies a more practical space - storage for liquor, supplies, and secrets.
+      Crates of illegal alcohol line the walls alongside more mysterious containers.
+      The air is thick with the smell of gin and something else... something that suggests the Red Lantern's business extends beyond pleasure.
+      A locked door at the far end bears no marking but seems heavily reinforced.
+    
+    connections:
+      - target: "main_speakeasy"
+        direction: "upstairs"
+      - target: "tunnel_entrance"
+        direction: "locked door"
+        requirements: ["master_key", "investigation_warrant", "explosive_entry"]
+    
+    npcs: ["storage_keeper_hans"]
+    items: ["illegal_liquor", "mysterious_crates", "shipping_manifests", "hidden_documents"]
+    clues: ["smuggling_operation", "client_blackmail_files", "missing_persons_evidence"]
+    atmosphere: "hidden_secrets"
+
+  - id: "police_station"
+    name: "Metropolitan Police Station"
+    description: |-
+      The city's main police station buzzes with activity even at this late hour.
+      Detectives work at cluttered desks while suspects and witnesses wait on hard wooden benches.
+      The corruption of prohibition-era law enforcement is evident - some officers seem suspiciously well-dressed for their salaries.
+      Your captain's office door is always open, but his loyalty to justice versus political pressure remains an open question.
+    
+    connections:
+      - target: "rainy_street"
+        direction: "exit to street"
+      - target: "evidence_room"
+        direction: "evidence room"
+        requirements: ["proper_authorization"]
+      - target: "interrogation_room"
+        direction: "interrogation"
+        requirements: ["suspect_in_custody"]
+    
+    npcs: ["captain_murphy", "desk_sergeant_o_malley", "corrupt_detective_blake"]
+    items: ["case_files", "evidence_bags", "police_reports", "wanted_posters"]
+    atmosphere: "law_enforcement_tension"
+
+  - id: "rainy_street"
+    name: "Rain-Soaked City Street"
+    description: |-
+      The city street gleams with rain under the glow of street lamps and neon signs.
+      1920s automobiles navigate between horse-drawn carts - a city caught between old and new.
+      The Red Lantern's crimson glow competes with other establishments' lights in this district known for its loose morals and looser laws.
+      Every shadow could hide a witness, a criminal, or a corrupt official - in this city, they're often the same person.
+    
+    connections:
+      - target: "red_lantern_entrance"
+        direction: "red lantern"
+      - target: "police_station"
+        direction: "police station"
+      - target: "newspaper_office"
+        direction: "daily herald"
+      - target: "hotel_carlton"
+        direction: "hotel carlton"
+      - target: "docks_district"
+        direction: "to the docks"
+    
+    npcs: ["street_vendor", "taxi_driver", "mysterious_woman_in_black"]
+    items: ["daily_newspaper", "discarded_evidence", "witness_clues"]
+    atmosphere: "noir_city_night"
+
+investigation_mechanics:
+  clue_system:
+    type: "accumulation_based"
+    required_clues_for_solution: 8
+    red_herrings: 3
+    
+  reputation_tracking:
+    factions:
+      - "police_force"
+      - "criminal_underworld" 
+      - "red_lantern_staff"
+      - "high_society_clients"
+    
+  difficulty_scaling:
+    - "Evidence disappears if investigation takes too long"
+    - "Witnesses can be intimidated or killed"
+    - "Corrupt officials may interfere"
+    - "Player reputation affects NPC cooperation"

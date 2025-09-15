@@ -1,0 +1,80 @@
+# MCP Server Configuration for Detective Noir Game
+# Investigation-focused servers for mystery solving
+
+mcp_configuration:
+  version: "1.0.0" 
+  game_system: "detective_noir"
+  description: "MCP servers for detective investigation and noir storytelling"
+
+  required_servers:
+    - name: "city-districts-mcp"
+      description: "Urban environments and locations"
+      config:
+        districts_path: "./content/city-districts.yaml"
+        location_types: ["office", "bar", "warehouse", "mansion", "alley"]
+        
+    - name: "case-management-mcp"
+      description: "Active cases, evidence, and leads"
+      config:
+        case_templates: "./content/case-types.yaml"
+        evidence_tracking: true
+        timeline_reconstruction: true
+        
+    - name: "npc-network-mcp"
+      description: "Contacts, suspects, and witnesses"
+      config:
+        character_types: "./content/character-archetypes.yaml"
+        relationship_web: true
+        motivation_tracking: true
+        
+    - name: "investigation-mechanics-mcp"
+      description: "Skill checks, deduction, and interrogation"
+      config:
+        skill_system: "./content/investigation-skills.yaml"
+        difficulty_scaling: "story_driven"
+        clue_revelation: "progressive"
+        
+    - name: "reputation-consequences-mcp"
+      description: "Police/underworld/public reputation effects"
+      config:
+        reputation_system: "./content/reputation-effects.yaml"
+        consequence_chains: true
+        
+    - name: "state-mcp"
+      description: "Case files and character progression"
+      config:
+        state_path: "./game-state/"
+        case_archives: true
+        character_development: true
+
+  optional_servers:
+    - name: "crime-scene-mcp"
+      description: "Detailed forensic investigation"
+      condition: "forensics_focus"
+      config:
+        crime_scenes: "./content/crime-scene-templates.yaml"
+        evidence_types: "./content/evidence-catalog.yaml"
+        
+    - name: "underworld-mcp"
+      description: "Criminal organizations and black market"
+      condition: "crime_focus"
+      config:
+        crime_families: "./content/criminal-organizations.yaml"
+        illegal_activities: "./content/crimes.yaml"
+
+  startup_order:
+    1: ["state-mcp"]
+    2: ["city-districts-mcp", "npc-network-mcp"]  
+    3: ["case-management-mcp", "investigation-mechanics-mcp"]
+    4: ["reputation-consequences-mcp"]
+    5: ["crime-scene-mcp", "underworld-mcp"]
+
+  communication:
+    batching_rules:
+      - pattern: "location + npcs + current_cases"
+        description: "When entering an area, get full investigative context"
+        
+    shared_context:
+      active_cases: "case-management-mcp, npc-network-mcp, crime-scene-mcp"
+      reputation_status: "reputation-consequences-mcp, npc-network-mcp"
+      current_district: "city-districts-mcp, underworld-mcp"

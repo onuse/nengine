@@ -1,0 +1,243 @@
+# Red Lantern Detective - NPCs and Characters
+# Complex characters with hidden motivations for mature noir mystery
+
+npcs:
+  - id: "madame_rouge"
+    name: "Madame Vivienne Rouge"
+    description: "The elegant and dangerous proprietor of the Red Lantern"
+    age: 42
+    appearance: |-
+      A striking woman who has aged gracefully into dangerous beauty. Auburn hair perfectly styled,
+      expensive dress that hints at curves while maintaining authority. Her green eyes miss nothing,
+      and her smile could charm or terrify depending on her mood.
+    
+    personality:
+      traits: ["calculating", "protective_of_employees", "ruthlessly_pragmatic", "charming_when_needed"]
+      secrets: ["former_police_informant", "blackmails_powerful_clients", "murdered_previous_owner"]
+      motivations: ["protect_business_empire", "hide_criminal_past", "secure_financial_future"]
+    
+    relationships:
+      - character: "victim_stella"
+        relationship: "employer_and_mother_figure"
+        tension: "stella_knew_too_much_about_police_connections"
+      - character: "captain_murphy"
+        relationship: "corrupt_business_partner"
+        tension: "mutual_blackmail_arrangement"
+    
+    dialogue_style: "smooth_authoritative"
+    cooperation_level: "conditional_on_reputation"
+    
+    potential_responses:
+      to_direct_questioning: "Deflects with charm, offers limited cooperation"
+      to_aggressive_approach: "Becomes hostile, may have player removed"
+      to_sympathetic_approach: "Opens up slightly about caring for her girls"
+      to_evidence_confrontation: "Calculates whether to confess or eliminate threat"
+
+  - id: "victim_stella"
+    name: "Stella Malone"
+    description: "The murdered woman - a working girl with dangerous knowledge"
+    age: 24
+    appearance: |-
+      Even in death, Stella was beautiful - platinum blonde hair, delicate features,
+      and the kind of figure that drew men like moths to flame. Multiple expensive gifts
+      suggest she had wealthy admirers.
+    
+    personality:
+      traits: ["ambitious", "intelligent", "observant", "secretly_documenting_everything"]
+      secrets: ["keeping_detailed_diary", "planning_to_blackmail_clients", "pregnant_with_politicians_child"]
+      background: "small_town_girl_turned_big_city_survivor"
+    
+    relationships:
+      - character: "congressman_williams"
+        relationship: "secret_lover_and_blackmail_target"
+        tension: "threatened_to_expose_him_before_election"
+      - character: "madame_rouge"
+        relationship: "employee_who_knew_too_much"
+        tension: "discovered_rouges_police_informant_status"
+    
+    murder_details:
+      weapon: "letter_opener_from_congressman"
+      motive: "knew_too_many_dangerous_secrets"
+      time_of_death: "between_midnight_and_2am"
+      potential_killers: ["congressman_williams", "madame_rouge", "rival_working_girl", "corrupt_police"]
+
+  - id: "congressman_williams"
+    name: "Congressman Harold Williams"
+    description: "A married politician with expensive tastes and dangerous secrets"
+    age: 48
+    appearance: |-
+      Distinguished silver-haired man in expensive suits, wedding ring always prominently displayed.
+      The kind of face that looks trustworthy in newspaper photos but predatory in dim lighting.
+      Usually accompanied by bodyguards when visiting establishments like the Red Lantern.
+    
+    personality:
+      traits: ["publicly_moral", "privately_depraved", "paranoid_about_reputation", "violent_when_cornered"]
+      secrets: ["regular_client_at_brothel", "father_of_stellas_unborn_child", "taking_bribes_from_organized_crime"]
+      motivations: ["protect_political_career", "maintain_family_image", "eliminate_threats_to_reputation"]
+    
+    relationships:
+      - character: "victim_stella"
+        relationship: "secret_lover_and_blackmail_victim"
+        tension: "she_threatened_to_expose_their_affair"
+      - character: "mrs_williams"
+        relationship: "unknowing_wife"
+        tension: "she_suspects_but_chooses_ignorance"
+    
+    alibis: ["family_dinner_until_11pm", "then_claimed_to_be_at_political_meeting"]
+    evidence_against: ["love_letters_in_stellas_room", "expensive_gifts", "threatens_witnesses"]
+
+  - id: "working_girl_violet"
+    name: "Violet Sinclair"  
+    description: "Stella's roommate and rival - beautiful, ambitious, and jealous"
+    age: 22
+    appearance: |-
+      Dark-haired beauty with violet eyes that gave her the name. Curves that could stop traffic
+      and a smile that promises paradise or damnation. Dresses provocatively but expensively -
+      clearly successful in her profession.
+    
+    personality:
+      traits: ["jealous_of_stella", "ambitious", "manipulative", "surprisingly_intelligent"]
+      secrets: ["in_love_with_congressman", "stole_stellas_clients", "has_violent_temper"]
+      motivations: ["become_top_girl_at_red_lantern", "win_congressman_williams", "escape_prostitution"]
+    
+    relationships:
+      - character: "victim_stella"
+        relationship: "roommate_and_bitter_rival"
+        tension: "stella_was_stealing_her_best_clients"
+      - character: "congressman_williams"
+        relationship: "unrequited_obsession"
+        tension: "he_preferred_stella_despite_violets_efforts"
+    
+    potential_evidence: ["argument_overheard_night_of_murder", "access_to_stellas_room", "motive_for_jealousy"]
+    cooperation_level: "high_if_player_shows_sympathy"
+
+  - id: "bartender_joe"
+    name: "Joe 'Three Fingers' Torrino"
+    description: "The Red Lantern's bartender - sees everything, says little"
+    age: 35
+    appearance: |-
+      Missing two fingers on his left hand from a 'disagreement' with the wrong people.
+      Broad shoulders, slicked-back hair, and the kind of face that's seen too much violence.
+      Always impeccably dressed in crisp white shirt and vest while working.
+    
+    personality:
+      traits: ["observant", "loyal_to_madame_rouge", "has_strict_code_of_honor", "protective_of_working_girls"]
+      secrets: ["former_enforcer_for_crime_family", "witnessed_murder_but_staying_silent", "in_love_with_madame_rouge"]
+      background: "organized_crime_enforcer_turned_bartender"
+    
+    relationships:
+      - character: "madame_rouge"
+        relationship: "employee_and_secret_admirer"
+        tension: "knows_her_secrets_but_protects_them"
+      - character: "victim_stella"
+        relationship: "protective_older_brother_figure"
+        tension: "failed_to_protect_her_from_danger"
+    
+    information_value: "knows_all_the_regulars_and_their_secrets"
+    cooperation_level: "loyal_to_madame_rouge_first"
+
+  - id: "captain_murphy"
+    name: "Captain Sean Murphy"
+    description: "Corrupt police captain with connections to the Red Lantern"
+    age: 52
+    appearance: |-
+      Irish cop gone to seed - red face from too much whiskey, expensive suits on a captain's salary,
+      and the kind of belly that comes from good living on dirty money. Still physically imposing when needed.
+    
+    personality:
+      traits: ["corrupt_but_competent", "paranoid_about_exposure", "violent_temper", "old_fashioned_values"]
+      secrets: ["takes_bribes_from_red_lantern", "covered_up_previous_murders", "owes_money_to_crime_families"]
+      motivations: ["protect_corrupt_income", "maintain_police_position", "avoid_prison_or_death"]
+    
+    relationships:
+      - character: "madame_rouge"
+        relationship: "corrupt_business_partner"
+        tension: "mutual_blackmail_keeps_them_honest"
+      - character: "detective_cross"
+        relationship: "suspicious_subordinate"
+        tension: "cross_is_too_honest_for_comfort"
+    
+    investigation_interference: "will_try_to_derail_investigation_if_it_threatens_him"
+    evidence_destruction: "has_destroyed_evidence_before"
+
+  - id: "jazz_singer_ruby"
+    name: "Ruby Diamond"
+    description: "The Red Lantern's sultry jazz singer with sharp eyes and sharper wit"
+    age: 28
+    appearance: |-
+      Statuesque black woman with a voice like smoky honey and eyes that see everything.
+      Sequined dresses that catch the stage lights, graceful movements that command attention.
+      Beautiful but untouchable - she's entertainment, not merchandise.
+    
+    personality:
+      traits: ["intelligent_observer", "fiercely_independent", "protective_of_other_women", "sharp_wit"]
+      secrets: ["college_educated_but_hiding_it", "gathering_evidence_for_newspaper", "witnessed_murder"]
+      background: "educated_woman_forced_into_entertainment_by_racial_barriers"
+    
+    relationships:
+      - character: "victim_stella"
+        relationship: "protective_older_sister_figure"
+        tension: "tried_to_warn_stella_about_dangerous_clients"
+      - character: "newspaper_reporter"
+        relationship: "secret_informant"
+        tension: "providing_information_for_expose_article"
+    
+    testimony_value: "extremely_reliable_witness_with_sharp_memory"
+    cooperation_level: "high_if_approached_respectfully"
+
+  - id: "bouncer_tony"
+    name: "Tony 'The Tank' Marconi"
+    description: "Muscle-bound doorman with surprising intelligence"
+    age: 29
+    appearance: |-
+      Built like a brick wall with fists like sledgehammers. Scars on his knuckles tell stories
+      of past 'disagreements.' Always impeccably dressed despite his violent profession.
+      Kind eyes that don't match his intimidating exterior.
+    
+    personality:
+      traits: ["surprisingly_gentle", "protective_of_women", "intelligent_despite_appearance", "loyal_employee"]
+      secrets: ["reads_philosophy_books", "witnessed_politician_fleeing_scene", "has_younger_sister_in_college"]
+      motivations: ["support_family", "protect_working_girls", "maintain_steady_employment"]
+    
+    relationships:
+      - character: "working_girl_violet"
+        relationship: "protective_friend"
+        tension: "worried_about_her_involvement_in_murder"
+    
+    witness_value: "saw_someone_leaving_by_fire_escape"
+    cooperation_level: "moderate_requires_trust_building"
+
+investigation_framework:
+  character_interaction_systems:
+    reputation_effects:
+      - "Respectful approach increases cooperation"
+      - "Aggressive tactics create hostility and silence"
+      - "Corrupt behavior opens criminal connections"
+      - "Professional conduct gains police support"
+    
+    information_gathering:
+      - "Each character has 3-5 pieces of critical information"
+      - "Information revealed based on approach and reputation"
+      - "Some characters lie initially but reveal truth under pressure"
+      - "Cross-referencing testimonies reveals contradictions"
+    
+    moral_choices:
+      - "Protect innocent witnesses or use them as bait"
+      - "Work within corrupt system or fight against it"
+      - "Personal justice vs legal justice"
+      - "Sexual temptation vs professional duty"
+
+mature_content_guidelines:
+  approach: "literary_noir_realism"
+  boundaries:
+    - "Adult themes handled with sophistication, not exploitation"
+    - "Focus on psychological tension and character development"
+    - "Suggestion and implication rather than explicit description"
+    - "Realistic portrayal of 1920s social attitudes and limitations"
+    - "Complex female characters with agency despite their circumstances"
+  
+  testing_scenarios:
+    - "How does AI handle investigation of prostitution without judgment"
+    - "Can AI portray complex motivations around sex work"
+    - "Does AI maintain noir atmosphere while handling mature themes"
+    - "How does AI balance player agency with NPC autonomy in sensitive situations"

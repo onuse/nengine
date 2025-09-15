@@ -1,0 +1,326 @@
+# Classic Quest - Items
+# Objects that can be found and interacted with
+
+items:
+  # Forest Path Items
+  - id: "walking_stick"
+    name: "walking stick"
+    description: "A sturdy oak walking stick, worn smooth by many hands."
+    longDescription: |
+      This walking stick is made from solid oak and has been worn smooth by years of use. It's about chest-high and perfectly balanced, with a comfortable grip carved into the handle. Small notches along its length suggest it may have been used for measurement as well as walking support.
+    
+    location: "forest_path"
+    
+    properties:
+      type: "tool"
+      weight: 2
+      value: 5
+      portable: true
+      usable: true
+      
+    actions:
+      take: "You pick up the walking stick. It feels solid and well-balanced in your hands."
+      examine: "The walking stick is made of oak and shows signs of long use."
+      use: "You lean on the walking stick. It provides good support for walking."
+
+  - id: "mushrooms"
+    name: "mushrooms"
+    description: "A cluster of edible mushrooms growing beside the path."
+    longDescription: |
+      These are common forest mushrooms, the kind that experienced foragers know are safe to eat. They have brown caps with white stems and smell earthy and fresh. There are about a dozen of them clustered together at the base of an old pine tree.
+    
+    location: "forest_path"
+    
+    properties:
+      type: "food"
+      weight: 1
+      value: 2
+      portable: true
+      consumable: true
+      
+    actions:
+      take: "You carefully pick the mushrooms and add them to your pack."
+      examine: "These mushrooms look fresh and edible."
+      eat: "You eat the mushrooms. They taste earthy but filling, and restore some energy."
+
+  # Forest Clearing Items
+  - id: "ancient_crystal"
+    name: "ancient crystal"
+    description: "A small, perfectly clear crystal lies at the base of one of the standing stones."
+    longDescription: |
+      This crystal is unlike anything you've ever seen. It's about the size of your thumb, perfectly clear, and seems to capture and reflect light in impossible ways. When you hold it up to the light, colors shift and dance within its depths. It's warm to the touch and seems to pulse very faintly with its own inner light.
+    
+    location: "forest_clearing"
+    
+    properties:
+      type: "artifact"
+      weight: 1
+      value: 100
+      portable: true
+      magical: true
+      
+    actions:
+      take: "You carefully pick up the crystal. It feels warm and seems to tingle with energy."
+      examine: "The crystal is perfectly clear and seems to have its own inner light."
+      use: "When you concentrate on the crystal, it glows brighter and the runes on nearby stones respond."
+
+  - id: "wildflowers"
+    name: "wildflowers"
+    description: "Impossibly colorful wildflowers bloom in the magical clearing."
+    longDescription: |
+      These flowers bloom in colors that don't quite exist in nature - deep purples that seem to glow, blues that shift to silver, and reds that pulse like heartbeats. They smell like spring rain and fresh snow, somehow both warm and cool at the same time. The magic of this place infuses everything, including these beautiful blooms.
+    
+    location: "forest_clearing"
+    
+    properties:
+      type: "reagent"
+      weight: 0
+      value: 10
+      portable: true
+      magical: true
+      
+    actions:
+      take: "You gently pick some of the magical wildflowers."
+      examine: "The flowers shimmer with otherworldly colors."
+      smell: "The flowers smell like magic itself - impossible to describe but unmistakable."
+
+  # Village Items
+  - id: "village_sign"
+    name: "village sign"
+    description: "A painted wooden sign welcoming visitors to Millbrook."
+    longDescription: |
+      This well-maintained sign is painted in cheerful colors on a sturdy wooden post. It reads "Welcome to Millbrook - Population 47" in neat lettering, with a small painting of a mill wheel beneath. The paint is fresh, suggesting the villagers take pride in maintaining their welcome sign.
+    
+    location: "village_entrance"
+    
+    properties:
+      type: "decoration"
+      weight: 20
+      value: 5
+      portable: false
+      
+    actions:
+      examine: "The sign welcomes visitors to Millbrook and notes the population as 47."
+      read: "Welcome to Millbrook - Population 47. Founded 1847."
+
+  - id: "copper_coin"
+    name: "copper coin"
+    description: "A tarnished copper coin lies forgotten in the dust of the village square."
+    longDescription: |
+      This copper coin has seen better days. It's tarnished green in places and worn smooth by many hands. You can just make out what looks like a mill wheel on one side and some text on the other, though it's too worn to read clearly. It's probably not worth much, but someone dropped it here.
+    
+    location: "village_square"
+    
+    properties:
+      type: "currency"
+      weight: 0
+      value: 1
+      portable: true
+      
+    actions:
+      take: "You pick up the copper coin and dust it off."
+      examine: "An old copper coin, tarnished but still recognizable as currency."
+      use: "A copper coin like this might be enough to buy something small."
+
+  # Store Items
+  - id: "rope"
+    name: "coil of rope"
+    description: "A sturdy coil of hemp rope hangs from a peg in the store."
+    longDescription: |
+      This is a good quality rope, about fifty feet long, made from twisted hemp fibers. It's the kind of rope that could be used for climbing, tying loads, or any number of practical purposes. The fibers look strong and the weave is tight - this rope should hold even under stress.
+    
+    location: "general_store"
+    
+    properties:
+      type: "tool"
+      weight: 5
+      value: 15
+      portable: true
+      usable: true
+      
+    actions:
+      examine: "A well-made rope that looks like it could support considerable weight."
+      take: "You coil the rope and sling it over your shoulder."
+      use: "The rope could be useful for climbing or securing things."
+
+  - id: "lamp"
+    name: "oil lamp"
+    description: "A brass oil lamp sits on the store shelf, its glass chimney clean and bright."
+    longDescription: |
+      This is a well-made brass oil lamp with a glass chimney to protect the flame. The reservoir is full of clear lamp oil, and the wick looks freshly trimmed. The brass has been polished to a warm shine, and the glass is spotlessly clean. This lamp would provide good light for hours.
+    
+    location: "general_store"
+    
+    properties:
+      type: "tool"
+      weight: 2
+      value: 20
+      portable: true
+      usable: true
+      fuel: 10
+      
+    actions:
+      examine: "A brass oil lamp in excellent condition, full of oil and ready to use."
+      take: "You carefully pick up the oil lamp."
+      light: "You light the lamp. It casts a warm, steady glow around you."
+      use: "The lamp provides bright, warm light in dark places."
+
+  # Tavern Items
+  - id: "ale_mug"
+    name: "mug of ale"
+    description: "A pewter mug filled with golden ale, foam still crowning the top."
+    longDescription: |
+      This sturdy pewter mug is filled to the brim with the tavern's finest ale. The liquid is a rich golden color, and a thin layer of white foam crowns the top. The ale smells of barley and hops with just a hint of honey. Condensation beads on the outside of the mug, suggesting the ale is perfectly chilled.
+    
+    location: "village_tavern"
+    
+    properties:
+      type: "drink"
+      weight: 2
+      value: 3
+      portable: true
+      consumable: true
+      
+    actions:
+      examine: "A mug of golden ale with a foamy head. It looks refreshing."
+      drink: "You drink the ale. It's perfectly brewed and quite refreshing."
+      take: "You pick up the mug of ale."
+
+  # Cabin Items
+  - id: "chopping_axe"
+    name: "woodcutter's axe"
+    description: "A sharp woodcutter's axe is embedded in the chopping block."
+    longDescription: |
+      This is a proper woodcutter's axe with a long handle and a sharp, well-maintained blade. The steel head shows signs of recent use but is kept in excellent condition. The wooden handle is worn smooth from years of use and fits the hand perfectly. The axe is currently embedded deep in an oak chopping block.
+    
+    location: "woodcutter_cabin"
+    
+    properties:
+      type: "tool"
+      weight: 6
+      value: 25
+      portable: true
+      weapon: true
+      
+    actions:
+      examine: "A well-made woodcutter's axe with a sharp blade and worn handle."
+      take: "You work the axe free from the chopping block and hefts its weight."
+      use: "The axe could be used for chopping wood or as a weapon if needed."
+
+  - id: "firewood"
+    name: "bundle of firewood"
+    description: "Neatly split logs are stacked beside the cabin."
+    longDescription: |
+      These are well-split logs of seasoned hardwood, probably oak and maple. They're cut to perfect lengths for a fireplace and have been stacked neatly to dry. The wood is split cleanly with no ragged edges, showing the skill of whoever cut it. A bundle of this wood would burn long and hot.
+    
+    location: "woodcutter_cabin"
+    
+    properties:
+      type: "fuel"
+      weight: 3
+      value: 2
+      portable: true
+      usable: true
+      
+    actions:
+      examine: "Well-split firewood, dry and ready to burn."
+      take: "You gather an armload of the split wood."
+      use: "This firewood would burn well in a fireplace or campfire."
+
+  # Cave Items
+  - id: "glowing_moss"
+    name: "glowing moss"
+    description: "Patches of phosphorescent moss cling to the cave walls, providing an eerie blue-green light."
+    longDescription: |
+      This unusual moss glows with its own inner light, casting an eerie blue-green radiance throughout the cave. The moss feels slightly warm to the touch and seems to pulse gently, as if breathing. When disturbed, it glows brighter momentarily before fading back to its normal luminescence. This is clearly no ordinary moss.
+    
+    location: "hidden_cave"
+    
+    properties:
+      type: "reagent"
+      weight: 0
+      value: 15
+      portable: true
+      magical: true
+      light_source: true
+      
+    actions:
+      examine: "The moss glows with an otherworldly blue-green light."
+      take: "You carefully scrape some of the glowing moss into a pouch."
+      use: "The moss provides a dim but constant light source."
+
+  - id: "crystal_fragment"
+    name: "crystal fragment"
+    description: "A small piece of glowing crystal has broken off from the cave wall."
+    longDescription: |
+      This fragment appears to be part of a larger crystal formation that runs through the cave walls. It's about the size of your palm and glows with the same blue light as the runes carved in the stone. The crystal is warm to the touch and seems to resonate with a faint humming sound when you hold it.
+    
+    location: "hidden_cave"
+    
+    properties:
+      type: "artifact"
+      weight: 1
+      value: 50
+      portable: true
+      magical: true
+      
+    actions:
+      examine: "The crystal fragment glows with blue light and hums faintly."
+      take: "You carefully pick up the crystal fragment."
+      use: "The fragment resonates with magical energy."
+
+  # Quest/Key Items
+  - id: "blessing_of_nature"
+    name: "Blessing of Nature"
+    description: "A mystical blessing granted by the Forest Spirit."
+    longDescription: |
+      This isn't a physical item you can hold, but rather a spiritual blessing that protects you during your journey. You feel a connection to the natural world and a sense that the forest itself watches over you. Plants seem more vibrant around you, and animals show no fear of your presence.
+    
+    properties:
+      type: "blessing"
+      weight: 0
+      value: 0
+      portable: true
+      magical: true
+      quest_item: true
+      
+    actions:
+      examine: "You feel the Forest Spirit's blessing flowing through you."
+
+  # Merchant Items
+  - id: "exotic_spices"
+    name: "exotic spices"
+    description: "A collection of rare spices from distant lands."
+    longDescription: |
+      These spices come in small cloth pouches, each marked with symbols in a foreign script. The scents are intoxicating - some familiar like cinnamon and pepper, others completely alien. One smells like summer storms, another like distant oceans. These would be worth a fortune to the right buyer.
+    
+    location: "village_tavern"
+    
+    properties:
+      type: "trade_good"
+      weight: 1
+      value: 75
+      portable: true
+      
+    actions:
+      examine: "Rare spices with intoxicating scents from faraway lands."
+      smell: "The spices smell of distant places and exotic flavors."
+
+  - id: "mysterious_artifact"
+    name: "mysterious artifact"
+    description: "A strange object of unknown origin wrapped in silk."
+    longDescription: |
+      This object is unlike anything you've ever seen. It's made of some unknown metal that seems to shift color in the light, and is covered with intricate engravings that hurt to look at directly. The merchant claims it came from ruins in the far north, but admits he has no idea what it actually does. It emanates a faint sense of... importance.
+    
+    location: "village_tavern"
+    
+    properties:
+      type: "artifact"
+      weight: 3
+      value: 200
+      portable: true
+      mysterious: true
+      
+    actions:
+      examine: "The artifact defies easy description and seems to shift when you're not looking directly at it."
+      touch: "Touching the artifact sends a strange tingling sensation up your arm."

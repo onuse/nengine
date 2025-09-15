@@ -1,0 +1,44 @@
+# Red Lantern Detective - NPCs
+# Non-player characters for the noir mystery
+
+npcs:
+  - id: "madame_rouge"
+    name: "Madame Vivienne Rouge"
+    description: "The elegant and dangerous proprietor of the Red Lantern"
+    location: "madame_office"
+    
+  - id: "victim_stella"
+    name: "Stella Malone"
+    description: "The murdered woman - a working girl with dangerous knowledge"
+    location: "room_7"
+    status: "deceased"
+    
+  - id: "congressman_williams"
+    name: "Congressman Harold Williams"
+    description: "A married politician with expensive tastes and dangerous secrets"
+    location: "variable"
+    
+  - id: "working_girl_violet"
+    name: "Violet Sinclair"
+    description: "Stella's roommate and rival - beautiful, ambitious, and jealous"
+    location: "private_hallway"
+    
+  - id: "bartender_joe"
+    name: "Joe 'Three Fingers' Torrino"
+    description: "The Red Lantern's bartender - sees everything, says little"
+    location: "main_speakeasy"
+    
+  - id: "captain_murphy"
+    name: "Captain Sean Murphy"
+    description: "Corrupt police captain with connections to the Red Lantern"
+    location: "police_station"
+    
+  - id: "jazz_singer_ruby"
+    name: "Ruby Diamond"
+    description: "The Red Lantern's sultry jazz singer with sharp eyes"
+    location: "main_speakeasy"
+    
+  - id: "bouncer_tony"
+    name: "Tony 'The Tank' Marconi"
+    description: "Muscle-bound doorman with surprising intelligence"
+    location: "red_lantern_entrance"

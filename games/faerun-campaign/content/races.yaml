@@ -1,0 +1,520 @@
+# D&D 5e Character Races for Faerun Campaign
+
+races:
+  human:
+    name: "Human"
+    description: "The most adaptable and ambitious people among the common races"
+    size: "medium"
+    speed: 30
+    languages: ["common", "one_extra_of_choice"]
+    
+    ability_scores:
+      variant_1:
+        all: +1
+      variant_2:
+        two_different: +1
+        feat: true
+        skill: 1
+        
+    traits:
+      - name: "Versatile"
+        description: "Humans are the most adaptable of all races"
+        
+    subraces:
+      calishite:
+        name: "Calishite"
+        description: "From the southern lands of Calimshan"
+      chondathan:
+        name: "Chondathan"
+        description: "Most common humans in western Faerun"
+      damaran:
+        name: "Damaran"
+        description: "From the eastern lands around the Moonsea"
+      illuskan:
+        name: "Illuskan"
+        description: "Tall, fair-skinned folk from the Sword Coast North"
+      mulan:
+        name: "Mulan"
+        description: "From the eastern and southeastern shores of the Inner Sea"
+      rashemi:
+        name: "Rashemi"
+        description: "From the cold lands of Rashemen"
+      shou:
+        name: "Shou"
+        description: "From the far eastern empire of Shou Lung"
+      tethyrian:
+        name: "Tethyrian"
+        description: "Widespread across the Sword Coast"
+      turami:
+        name: "Turami"
+        description: "Native to the southern shore of the Inner Sea"
+
+  elf:
+    name: "Elf"
+    description: "A magical people of otherworldly grace, living in the world but not entirely part of it"
+    size: "medium"
+    speed: 30
+    languages: ["common", "elvish"]
+    
+    ability_scores:
+      dexterity: +2
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Keen Senses"
+        description: "Proficiency in Perception"
+      - name: "Fey Ancestry"
+        description: "Advantage against charm, immune to magical sleep"
+      - name: "Trance"
+        description: "Meditate for 4 hours instead of sleeping"
+        
+    subraces:
+      high_elf:
+        name: "High Elf (Sun/Moon Elf)"
+        description: "Masters of magic and lore"
+        ability_scores:
+          intelligence: +1
+        traits:
+          - name: "Cantrip"
+            description: "Know one wizard cantrip"
+          - name: "Extra Language"
+            description: "Speak one additional language"
+      wood_elf:
+        name: "Wood Elf"
+        description: "Stealthy and swift guardians of the forest"
+        ability_scores:
+          wisdom: +1
+        speed: 35
+        traits:
+          - name: "Elf Weapon Training"
+            description: "Proficiency with longsword, shortsword, shortbow, longbow"
+          - name: "Mask of the Wild"
+            description: "Can hide in natural phenomena"
+      dark_elf:
+        name: "Dark Elf (Drow)"
+        description: "Descendants of elves banished to the Underdark"
+        ability_scores:
+          charisma: +1
+        darkvision: 120
+        traits:
+          - name: "Sunlight Sensitivity"
+            description: "Disadvantage in direct sunlight"
+          - name: "Drow Magic"
+            description: "Know dancing lights cantrip, faerie fire at 3rd, darkness at 5th"
+          - name: "Drow Weapon Training"
+            description: "Proficiency with rapiers, shortswords, hand crossbows"
+
+  dwarf:
+    name: "Dwarf"
+    description: "Bold and hardy, dwelling in mountains and forging mighty works"
+    size: "medium"
+    speed: 25
+    languages: ["common", "dwarvish"]
+    
+    ability_scores:
+      constitution: +2
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Dwarven Resilience"
+        description: "Advantage on saves against poison, resistance to poison damage"
+      - name: "Dwarven Combat Training"
+        description: "Proficiency with battleaxe, handaxe, light hammer, warhammer"
+      - name: "Tool Proficiency"
+        description: "Proficiency with smith's, brewer's, or mason's tools"
+      - name: "Stonecunning"
+        description: "Double proficiency on History checks about stonework"
+      - name: "Speed"
+        description: "Speed not reduced by heavy armor"
+        
+    subraces:
+      mountain_dwarf:
+        name: "Mountain Dwarf (Shield Dwarf)"
+        description: "Strong and hardy, accustomed to difficult terrain"
+        ability_scores:
+          strength: +2
+        traits:
+          - name: "Dwarven Armor Training"
+            description: "Proficiency with light and medium armor"
+      hill_dwarf:
+        name: "Hill Dwarf (Gold Dwarf)"
+        description: "Keen senses and remarkable resilience"
+        ability_scores:
+          wisdom: +1
+        traits:
+          - name: "Dwarven Toughness"
+            description: "+1 hit point per level"
+      gray_dwarf:
+        name: "Gray Dwarf (Duergar)"
+        description: "Dwarves of the Underdark with psionic abilities"
+        ability_scores:
+          strength: +1
+        darkvision: 120
+        traits:
+          - name: "Duergar Resilience"
+            description: "Advantage against illusions, charm, paralysis"
+          - name: "Duergar Magic"
+            description: "Enlarge/reduce at 3rd level, invisibility at 5th"
+          - name: "Sunlight Sensitivity"
+            description: "Disadvantage in direct sunlight"
+
+  halfling:
+    name: "Halfling"
+    description: "Small folk who enjoy comfort and peace, yet possess surprising courage"
+    size: "small"
+    speed: 25
+    languages: ["common", "halfling"]
+    
+    ability_scores:
+      dexterity: +2
+      
+    traits:
+      - name: "Lucky"
+        description: "Reroll natural 1s on d20 rolls"
+      - name: "Brave"
+        description: "Advantage on saves against being frightened"
+      - name: "Halfling Nimbleness"
+        description: "Move through space of larger creatures"
+        
+    subraces:
+      lightfoot:
+        name: "Lightfoot Halfling"
+        description: "Can easily hide and are naturally inclined to get along with others"
+        ability_scores:
+          charisma: +1
+        traits:
+          - name: "Naturally Stealthy"
+            description: "Can hide behind creatures one size larger"
+      stout:
+        name: "Stout Halfling (Strongheart)"
+        description: "Hardier than average and resistant to poison"
+        ability_scores:
+          constitution: +1
+        traits:
+          - name: "Stout Resilience"
+            description: "Advantage on saves against poison, resistance to poison damage"
+      ghostwise:
+        name: "Ghostwise Halfling"
+        description: "Reclusive halflings with telepathic abilities"
+        ability_scores:
+          wisdom: +1
+        traits:
+          - name: "Silent Speech"
+            description: "Telepathically speak to one creature within 30 feet"
+
+  dragonborn:
+    name: "Dragonborn"
+    description: "Proud dragon-kin who value honor and excellence"
+    size: "medium"
+    speed: 30
+    languages: ["common", "draconic"]
+    
+    ability_scores:
+      strength: +2
+      charisma: +1
+      
+    traits:
+      - name: "Draconic Ancestry"
+        description: "Choose a dragon type for resistance and breath weapon"
+      - name: "Breath Weapon"
+        description: "Exhale destructive energy based on ancestry"
+      - name: "Damage Resistance"
+        description: "Resistance to damage type of draconic ancestry"
+        
+    ancestry_options:
+      black:
+        damage_type: "acid"
+        breath_weapon: "5x30 ft. line (Dex save)"
+      blue:
+        damage_type: "lightning"
+        breath_weapon: "5x30 ft. line (Dex save)"
+      brass:
+        damage_type: "fire"
+        breath_weapon: "5x30 ft. line (Dex save)"
+      bronze:
+        damage_type: "lightning"
+        breath_weapon: "5x30 ft. line (Dex save)"
+      copper:
+        damage_type: "acid"
+        breath_weapon: "5x30 ft. line (Dex save)"
+      gold:
+        damage_type: "fire"
+        breath_weapon: "15 ft. cone (Dex save)"
+      green:
+        damage_type: "poison"
+        breath_weapon: "15 ft. cone (Con save)"
+      red:
+        damage_type: "fire"
+        breath_weapon: "15 ft. cone (Dex save)"
+      silver:
+        damage_type: "cold"
+        breath_weapon: "15 ft. cone (Con save)"
+      white:
+        damage_type: "cold"
+        breath_weapon: "15 ft. cone (Con save)"
+
+  gnome:
+    name: "Gnome"
+    description: "Small humanoids with a knack for illusion and invention"
+    size: "small"
+    speed: 25
+    languages: ["common", "gnomish"]
+    
+    ability_scores:
+      intelligence: +2
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Gnome Cunning"
+        description: "Advantage on Int, Wis, Cha saves against magic"
+        
+    subraces:
+      forest_gnome:
+        name: "Forest Gnome"
+        description: "Natural illusionists who love nature"
+        ability_scores:
+          dexterity: +1
+        traits:
+          - name: "Natural Illusionist"
+            description: "Know minor illusion cantrip"
+          - name: "Speak with Small Beasts"
+            description: "Communicate simple ideas with small animals"
+      rock_gnome:
+        name: "Rock Gnome"
+        description: "Inventive tinkers and mechanics"
+        ability_scores:
+          constitution: +1
+        traits:
+          - name: "Artificer's Lore"
+            description: "Double proficiency on History checks for magic items"
+          - name: "Tinker"
+            description: "Create small mechanical devices"
+      deep_gnome:
+        name: "Deep Gnome (Svirfneblin)"
+        description: "Gnomes of the Underdark"
+        ability_scores:
+          dexterity: +1
+        darkvision: 120
+        traits:
+          - name: "Stone Camouflage"
+            description: "Advantage on stealth in rocky terrain"
+
+  half_elf:
+    name: "Half-Elf"
+    description: "Walking between two worlds but belonging to neither"
+    size: "medium"
+    speed: 30
+    languages: ["common", "elvish", "one_extra_of_choice"]
+    
+    ability_scores:
+      charisma: +2
+      two_others_of_choice: +1
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Fey Ancestry"
+        description: "Advantage against charm, immune to magical sleep"
+      - name: "Skill Versatility"
+        description: "Proficiency in two skills of choice"
+        
+    variants:
+      half_sun_elf:
+        name: "Half Sun/Moon Elf"
+        description: "Descended from high elves"
+      half_wood_elf:
+        name: "Half Wood Elf"
+        description: "Descended from wood elves"
+        traits:
+          - "Replace Skill Versatility with Elf Weapon Training or Fleet of Foot"
+      half_drow:
+        name: "Half Drow"
+        description: "Descended from dark elves"
+        traits:
+          - "Replace Skill Versatility with Drow Magic"
+
+  half_orc:
+    name: "Half-Orc"
+    description: "Combining human ambition with orcish strength"
+    size: "medium"
+    speed: 30
+    languages: ["common", "orc"]
+    
+    ability_scores:
+      strength: +2
+      constitution: +1
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Menacing"
+        description: "Proficiency in Intimidation"
+      - name: "Relentless Endurance"
+        description: "Drop to 1 HP instead of 0, once per long rest"
+      - name: "Savage Attacks"
+        description: "Roll one additional damage die on critical hits"
+
+  tiefling:
+    name: "Tiefling"
+    description: "Bearing the curse of infernal heritage"
+    size: "medium"
+    speed: 30
+    languages: ["common", "infernal"]
+    
+    ability_scores:
+      charisma: +2
+      intelligence: +1
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Hellish Resistance"
+        description: "Resistance to fire damage"
+      - name: "Infernal Legacy"
+        description: "Know thaumaturgy cantrip, hellish rebuke at 3rd, darkness at 5th"
+        
+    variants:
+      asmodeus:
+        name: "Tiefling of Asmodeus"
+        description: "Standard tiefling heritage"
+      baalzebul:
+        name: "Tiefling of Baalzebul"
+        description: "Legacy of the Lord of Flies"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Maladomini"
+      dispater:
+        name: "Tiefling of Dispater"
+        description: "Legacy of the Iron Lord"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Dis"
+      fierna:
+        name: "Tiefling of Fierna"
+        description: "Legacy of the Lord of Pleasure"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Phlegethos"
+      glasya:
+        name: "Tiefling of Glasya"
+        description: "Legacy of the Princess of Hell"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Malbolge"
+      levistus:
+        name: "Tiefling of Levistus"
+        description: "Legacy of the Lord of Stygia"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Stygia"
+      mammon:
+        name: "Tiefling of Mammon"
+        description: "Legacy of the Lord of Greed"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Minauros"
+      mephistopheles:
+        name: "Tiefling of Mephistopheles"
+        description: "Legacy of the Lord of Cania"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Cania"
+      zariel:
+        name: "Tiefling of Zariel"
+        description: "Legacy of the Fallen Angel"
+        traits:
+          - "Replace Infernal Legacy with Legacy of Avernus"
+
+  aasimar:
+    name: "Aasimar"
+    description: "Beings with celestial heritage, born to serve as champions of the gods"
+    size: "medium"
+    speed: 30
+    languages: ["common", "celestial"]
+    
+    ability_scores:
+      charisma: +2
+      wisdom: +1
+      
+    traits:
+      - name: "Darkvision"
+        description: "See in darkness up to 60 feet"
+      - name: "Celestial Resistance"
+        description: "Resistance to necrotic and radiant damage"
+      - name: "Healing Hands"
+        description: "Heal living creature for HP equal to level"
+      - name: "Light Bearer"
+        description: "Know the light cantrip"
+        
+    subraces:
+      protector:
+        name: "Protector Aasimar"
+        description: "Charged with guarding the weak"
+        traits:
+          - name: "Radiant Soul"
+            description: "Sprout luminous wings and fly"
+      scourge:
+        name: "Scourge Aasimar"
+        description: "Charged with destroying evil"
+        traits:
+          - name: "Radiant Consumption"
+            description: "Unleash divine energy that damages nearby enemies"
+      fallen:
+        name: "Fallen Aasimar"
+        description: "Touched by dark powers"
+        traits:
+          - name: "Necrotic Shroud"
+            description: "Unleash divine dark energy, sprout skeletal wings"
+
+  genasi:
+    name: "Genasi"
+    description: "Humanoids infused with elemental power"
+    size: "medium"
+    speed: 30
+    languages: ["common", "primordial"]
+    
+    ability_scores:
+      constitution: +2
+      
+    subraces:
+      air:
+        name: "Air Genasi"
+        description: "Descended from djinn"
+        ability_scores:
+          dexterity: +1
+        traits:
+          - name: "Unending Breath"
+            description: "Hold breath indefinitely"
+          - name: "Mingle with the Wind"
+            description: "Cast levitate once per long rest"
+      earth:
+        name: "Earth Genasi"
+        description: "Descended from dao"
+        ability_scores:
+          strength: +1
+        traits:
+          - name: "Earth Walk"
+            description: "Move across difficult terrain without penalty"
+          - name: "Merge with Stone"
+            description: "Cast pass without trace once per long rest"
+      fire:
+        name: "Fire Genasi"
+        description: "Descended from efreet"
+        ability_scores:
+          intelligence: +1
+        darkvision: 60
+        traits:
+          - name: "Fire Resistance"
+            description: "Resistance to fire damage"
+          - name: "Reach to the Blaze"
+            description: "Know produce flame cantrip, cast burning hands at 3rd"
+      water:
+        name: "Water Genasi"
+        description: "Descended from marid"
+        ability_scores:
+          wisdom: +1
+        traits:
+          - name: "Acid Resistance"
+            description: "Resistance to acid damage"
+          - name: "Amphibious"
+            description: "Breathe air and water"
+          - name: "Swim"
+            description: "30 foot swim speed"
+          - name: "Call to the Wave"
+            description: "Know shape water cantrip, cast create/destroy water at 3rd"

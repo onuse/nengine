@@ -1,0 +1,56 @@
+# Example: Game-Specific Model Tier Configuration
+# This shows how a game can override default model selections
+
+# Add this to your game.yaml to customize model selection per VRAM tier:
+
+llm:
+  model: "nous-hermes2:7b-dpo-q4_K_M"  # Will be overridden by auto-detection
+  fallbackModel: "dolphin-mixtral:8x7b"
+  temperature: 0.8
+  contextWindow: 8192
+  autoDetectModels: true     # Set to false to disable auto-detection
+  preferUncensored: true     # Request uncensored models (for adult content games)
+
+game:
+  maturity_rating: "adult"   # Also triggers uncensored model selection
+  content_warnings: ["adult_themes", "violence"]  # Presence of warnings triggers uncensored
+
+# Custom model preferences by VRAM tier
+modelTiers:
+  # For 8GB VRAM systems (RTX 4060 Ti, RTX 3070)
+  gaming:
+    primary: "wizardlm-uncensored:7b"        # Game prefers this for primary
+    fallback: "nous-hermes2:7b-dpo-q4_K_M"  # Custom fallback
+    uncensored: "openchat:7b-q4_K_M"        # Different uncensored choice
+    
+  # For 16GB VRAM systems (RTX 4080, RTX A4000)
+  enthusiast:
+    primary: "nous-hermes2:13b-uncensored"
+    fallback: "mixtral:8x7b-q4_K_M" 
+    uncensored: "wizard-vicuna:13b-uncensored"
+    
+  # For 24GB VRAM systems (RTX 4090, RTX A6000)
+  prosumer:
+    primary: "nous-hermes2:34b-uncensored-q4_K_M"
+    fallback: "llama3.1:32b"
+    uncensored: "goliath:30b-uncensored"
+    
+  # For 64GB+ VRAM workstations
+  workstation:
+    primary: "llama3.1:70b-q4_K_M"
+    fallback: "mixtral:8x22b-q4_K_M"
+    uncensored: "goliath:120b-uncensored-q2_K"
+
+# How it works:
+# 1. System detects 8GB VRAM → selects "gaming" tier
+# 2. Game has custom modelTiers.gaming config
+# 3. System uses wizardlm-uncensored:7b instead of default
+# 4. For adult games, system picks "uncensored" model: openchat:7b-q4_K_M
+# 5. Fallback becomes nous-hermes2:7b-dpo-q4_K_M
+
+# Benefits:
+# - Each game can optimize for its specific needs
+# - Adult games get truly uncensored models
+# - Technical games can prefer coding-focused models  
+# - RPG games can prefer creative writing models
+# - Always falls back to system defaults if not specified

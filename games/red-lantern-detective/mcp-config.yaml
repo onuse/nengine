@@ -1,0 +1,43 @@
+# Red Lantern Detective MCP Server Configuration
+# Auto-discovery configuration for noir detective mechanics
+
+mcp_servers:
+  version: "1.0.0"
+  game_type: "detective_noir"
+  
+  required_servers:
+    - name: "world-content-mcp"
+      description: "Game world and location management"
+      content_path: "./content/world.yaml"
+      server_type: "content"
+      
+    - name: "character-content-mcp"
+      description: "NPC and character data management"
+      content_path: "./content/characters.yaml"
+      server_type: "content"
+      
+    - name: "evidence-content-mcp"
+      description: "Physical evidence and clue tracking"
+      content_path: "./content/evidence.yaml"
+      server_type: "content"
+      
+    - name: "investigation-mcp"
+      description: "Investigation mechanics and progression"
+      content_path: "./content/investigation.yaml"
+      server_type: "mechanics"
+  
+  optional_servers:
+    - name: "reputation-mcp"
+      description: "Faction reputation tracking"
+      content_path: "./content/reputation.yaml"
+      server_type: "state"
+      
+    - name: "noir-items-mcp"
+      description: "Game-specific items and tools"
+      content_path: "./content/items.yaml"
+      server_type: "content"
+
+  auto_discovery_rules:
+    content_loading: "lazy_on_demand"
+    caching_strategy: "memory_efficient"
+    error_handling: "graceful_degradation"

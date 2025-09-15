@@ -1,0 +1,85 @@
+# Red Lantern Detective - Items and Tools
+# 1920s noir investigation equipment and clues
+
+investigation_tools:
+  detective_badge:
+    name: "Police Detective Badge"
+    type: "tool"
+    description: "Official badge granting legal authority to investigate crimes"
+    effects: ["grants_official_access", "intimidates_civilians", "alerts_corrupt_officials"]
+    
+  notepad_and_pencil:
+    name: "Detective's Notepad"
+    type: "tool"
+    description: "Well-worn notebook for recording observations and witness statements"
+    effects: ["records_clues", "organizes_evidence", "builds_case_timeline"]
+    
+  magnifying_glass:
+    name: "Magnifying Glass"
+    type: "tool"
+    description: "Essential tool for examining physical evidence in detail"
+    effects: ["reveals_hidden_clues", "analyzes_handwriting", "examines_trace_evidence"]
+    
+  camera_kit:
+    name: "Police Camera Equipment"
+    type: "tool"
+    description: "Bulky but essential for documenting crime scenes"
+    effects: ["preserves_evidence", "creates_court_admissible_photos", "intimidates_suspects"]
+
+evidence_items:
+  murder_weapon_letter_opener:
+    name: "Ornate Letter Opener"
+    type: "evidence"
+    description: "Silver letter opener with 'H.W.' monogram, traces of blood"
+    significance: "primary_murder_weapon"
+    location: "hidden_under_bed_room_7"
+    
+  love_letters_bundle:
+    name: "Passionate Love Letters"
+    type: "evidence"
+    description: "Explicit correspondence revealing dangerous affair"
+    significance: "establishes_motive_and_relationship"
+    location: "stellas_jewelry_box"
+    content_warning: "mature_sexual_content"
+    
+  blackmail_photographs:
+    name: "Compromising Photographs"
+    type: "evidence"
+    description: "Professional photos of prominent citizens in intimate situations"
+    significance: "reveals_broader_conspiracy"
+    location: "madame_rouge_safe"
+    
+  stellas_diary:
+    name: "Stella's Personal Journal"
+    type: "evidence"
+    description: "Detailed diary documenting clients, secrets, and blackmail plans"
+    significance: "victim_motivations_and_evidence"
+    location: "hidden_vanity_compartment"
+
+weapons:
+  police_revolver:
+    name: ".38 Special Revolver"
+    type: "weapon"
+    description: "Standard police sidearm for dangerous situations"
+    damage: "2d6"
+    effects: ["provides_protection", "intimidates_suspects", "escalates_situations"]
+    
+  brass_knuckles:
+    name: "Brass Knuckles"
+    type: "weapon"
+    description: "Illegal but effective for close-quarters persuasion"
+    damage: "1d4+1"
+    effects: ["increases_intimidation", "illegal_possession", "causes_serious_injury"]
+
+consumables:
+  whiskey_flask:
+    name: "Hip Flask"
+    type: "consumable"
+    description: "Liquid courage for dangerous investigations"
+    effects: ["reduces_fear", "impairs_judgment", "social_lubricant"]
+    
+  cigarettes:
+    name: "Lucky Strike Cigarettes"
+    type: "consumable"
+    description: "Social currency in 1920s society"
+    effects: ["builds_rapport", "provides_thinking_time", "health_consequences"]

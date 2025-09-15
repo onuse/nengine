@@ -1,0 +1,290 @@
+# Classic Quest - NPCs
+# Characters that populate the world
+
+npcs:
+  # Forest Spirit - Mystical guide
+  - id: "forest_spirit"
+    name: "Forest Spirit"
+    description: "A translucent figure shimmers among the standing stones, ancient wisdom in her ethereal eyes."
+    longDescription: |
+      The Forest Spirit appears as a tall, graceful woman with long flowing hair that seems to be made of mist and starlight. Her form is translucent, shifting between solid and ethereal. She wears robes that look like they're woven from moonbeams and shadow. Her eyes are deep green, like the heart of the forest itself, and hold the wisdom of countless ages.
+    
+    location: "forest_clearing"
+    
+    properties:
+      type: "mystical"
+      alignment: "neutral_good"
+      hostility: 0
+      intelligence: 18
+      wisdom: 20
+      magical: true
+      
+    personality:
+      - "wise"
+      - "mysterious" 
+      - "helpful"
+      - "ancient"
+      
+    dialogue:
+      greeting: "Welcome, traveler. The stones have been waiting for one such as you."
+      default: "The ancient magic stirs. Something important approaches."
+      topics:
+        stones: "These stones are older than the village, older than memory. They guard secrets."
+        magic: "Magic flows through all things, but few can see it anymore."
+        quest: "You seek something, I can sense it. The path will reveal itself to those who are worthy."
+        
+    inventory:
+      - "blessing_of_nature"
+
+  # Village Guard - Law and order
+  - id: "village_guard" 
+    name: "Guard Captain"
+    description: "A sturdy man in leather armor stands watch, a sword at his side and a watchful expression."
+    longDescription: |
+      Captain Willem is a veteran guardsman in his forties, with graying hair and weathered features that speak of years of service. He wears well-maintained leather armor with the village crest embroidered on the chest. His sword, while not fancy, is clearly well-cared for and functional. Despite his serious demeanor, there's kindness in his eyes.
+    
+    location: "village_entrance"
+    
+    properties:
+      type: "guard"
+      alignment: "lawful_good"
+      hostility: 0
+      strength: 16
+      constitution: 15
+      
+    personality:
+      - "dutiful"
+      - "protective"
+      - "stern_but_fair"
+      - "experienced"
+      
+    dialogue:
+      greeting: "Welcome to Millbrook, stranger. Keep your weapons sheathed and your intentions honest."
+      default: "All's quiet in the village today, thankfully."
+      topics:
+        village: "Millbrook's a peaceful place. We aim to keep it that way."
+        forest: "Strange things in the forest lately. Best stick to the paths."
+        trouble: "No trouble here, and I intend to keep it that way."
+        
+    inventory:
+      - "guard_sword"
+      - "village_key"
+
+  # Shopkeeper Mary - Commerce and gossip
+  - id: "shopkeeper_mary"
+    name: "Mary the Shopkeeper"
+    description: "A middle-aged woman with shrewd eyes and a merchant's smile tends the store counter."
+    longDescription: |
+      Mary Henderson has run the general store for over twenty years and knows everyone's business. She's a practical woman in her fifties with graying brown hair tied back in a sensible bun. Her dress is simple but clean, with an apron that bears the stains of her trade. Her eyes miss nothing, and she has a memory for faces and debts alike.
+    
+    location: "general_store"
+    
+    properties:
+      type: "merchant"
+      alignment: "true_neutral"
+      hostility: 0
+      intelligence: 14
+      charisma: 13
+      
+    personality:
+      - "shrewd"
+      - "gossipy"
+      - "practical"
+      - "fair_dealer"
+      
+    dialogue:
+      greeting: "Welcome to my store! What can I help you find today?"
+      default: "I've got most anything you might need, at fair prices."
+      topics:
+        goods: "I stock everything from rope to lamp oil. What do you need?"
+        village: "Everyone comes through here eventually. I hear all the news."
+        forest: "Folks say there's something strange happening up in the clearing."
+        prices: "My prices are fair - I've got to make a living, you understand."
+        
+    inventory:
+      - "rope"
+      - "lamp_oil" 
+      - "dried_food"
+      - "merchant_ledger"
+
+  # Innkeeper Bob - Food, drink, and rumors
+  - id: "innkeeper_bob"
+    name: "Bob the Innkeeper"
+    description: "A large, jovial man with a graying beard wipes down mugs behind the tavern bar."
+    longDescription: |
+      Robert "Bob" Ironbelly is exactly what you'd expect from a proper innkeeper. He's a large, barrel-chested man with massive forearms from years of hauling barrels and kegs. His gray-streaked beard is always impeccably groomed, and his laugh can be heard throughout the tavern. Despite his size, he moves with surprising grace behind the bar.
+    
+    location: "village_tavern"
+    
+    properties:
+      type: "innkeeper"
+      alignment: "neutral_good"
+      hostility: 0
+      strength: 15
+      constitution: 16
+      charisma: 14
+      
+    personality:
+      - "jovial"
+      - "welcoming"
+      - "storyteller"
+      - "protective_of_patrons"
+      
+    dialogue:
+      greeting: "Welcome to the Prancing Pony! What'll you have - ale, food, or a room for the night?"
+      default: "Nothing like good ale and warm company on a day like this!"
+      topics:
+        ale: "I brew the finest ale in three villages! Made from the clearest spring water."
+        food: "My wife makes a stew that'll warm your bones and fill your belly."
+        room: "Got clean rooms upstairs if you need a place to rest."
+        rumors: "Travelers bring all sorts of tales. Some even turn out to be true!"
+        
+    inventory:
+      - "tavern_ale"
+      - "hearty_stew"
+      - "room_key"
+
+  # Old Wizard - Mystery and magic
+  - id: "old_wizard"
+    name: "Wise Gandalf"
+    description: "An elderly man in weathered robes sits in the corner, a gnarled staff leaning against his chair."
+    longDescription: |
+      This ancient wizard appears to be in his seventies, with a long white beard that reaches nearly to his knees and piercing blue eyes that seem to see far more than they should. His robes are travel-stained and patched, suggesting long journeys and hard living. The wooden staff beside him is carved with intricate runes and topped with a crystal that occasionally glows faintly.
+    
+    location: "village_tavern"
+    
+    properties:
+      type: "wizard"
+      alignment: "chaotic_good"
+      hostility: 0
+      intelligence: 19
+      wisdom: 17
+      magical: true
+      
+    personality:
+      - "wise"
+      - "eccentric"
+      - "mysterious"
+      - "cryptic"
+      
+    dialogue:
+      greeting: "Ah, a new face. The patterns of fate shift when strangers arrive."
+      default: "Magic is in the air tonight. Can you feel it, young one?"
+      topics:
+        magic: "Magic is not gone from this world, merely sleeping. But something stirs..."
+        forest: "The old places remember. The stones in the clearing are... significant."
+        quest: "Every journey begins with a single step, but the destination chooses itself."
+        runes: "Ancient writing, older than the village, older than memory."
+        
+    inventory:
+      - "wizard_staff"
+      - "spell_components"
+      - "ancient_tome"
+
+  # Farmer Tom - Local color and information
+  - id: "farmer_tom"
+    name: "Farmer Tom"
+    description: "A weathered farmer in work clothes stands nearby, dirt under his fingernails from honest labor."
+    longDescription: |
+      Tom Miller has worked the fields around Millbrook his entire life, and it shows in every line of his face and callus on his hands. He's a man in his sixties with sun-weathered skin and the permanent squint of someone who spends his days outdoors. His clothes are simple and practical - wool trousers, a linen shirt, and sturdy boots caked with soil.
+    
+    location: "village_entrance"
+    
+    properties:
+      type: "commoner"
+      alignment: "neutral_good"
+      hostility: 0
+      strength: 14
+      constitution: 15
+      
+    personality:
+      - "hardworking"
+      - "practical"
+      - "friendly"
+      - "simple"
+      
+    dialogue:
+      greeting: "Good day to you! Don't see many strangers 'round these parts."
+      default: "Been farming these fields for nigh on forty years."
+      topics:
+        farming: "Soil's good here, and the weather's been kind. Can't complain."
+        village: "Millbrook's a good place. Quiet folk, honest work."
+        forest: "Used to gather mushrooms up in the forest, but lately... feels different somehow."
+        weather: "Sky looks clear today. Good for the crops."
+        
+    inventory:
+      - "farming_tools"
+      - "grain_sack"
+
+  # Market Vendor - Commerce and local goods
+  - id: "market_vendor"
+    name: "Sarah the Vendor"
+    description: "A cheerful woman arranges fresh produce and handmade goods on her market stall."
+    longDescription: |
+      Sarah Greenthumb is a woman in her thirties who runs the most popular stall in the village square. Her auburn hair is braided practically out of the way, and her dress is colorful but sensible. She has the weathered hands of someone who works with plants and soil, and her smile is genuine and infectious. Her stall displays the finest vegetables and fruits the village has to offer.
+    
+    location: "village_square"
+    
+    properties:
+      type: "merchant"
+      alignment: "neutral_good"
+      hostility: 0
+      dexterity: 13
+      charisma: 15
+      
+    personality:
+      - "cheerful"
+      - "hardworking"
+      - "friendly"
+      - "proud_of_craft"
+      
+    dialogue:
+      greeting: "Fresh vegetables and finest crafts! Everything grown or made right here in Millbrook!"
+      default: "Best produce in the valley, if I do say so myself!"
+      topics:
+        produce: "Everything's fresh from the gardens. Picked this morning!"
+        crafts: "The pottery and woven goods are made by village artisans."
+        prices: "Fair prices for honest goods. I guarantee the quality!"
+        village: "Millbrook's a wonderful place to live and work."
+        
+    inventory:
+      - "fresh_vegetables"
+      - "handmade_pottery"
+      - "woven_goods"
+
+  # Traveling Merchant - Adventure hooks and exotic goods
+  - id: "traveling_merchant"
+    name: "Magnus the Trader"
+    description: "A well-dressed merchant with exotic goods spread before him studies you with calculating eyes."
+    longDescription: |
+      Magnus Goldweaver is clearly not from around here. His clothes are of fine fabric and cut in a foreign style, and his dark hair is oiled and combed back precisely. Several rings adorn his fingers, and a jeweled pin holds his cloak. His wagon, parked outside, is loaded with goods from distant lands. His manner is smooth and professional, but there's a hint of something more interesting beneath the surface.
+    
+    location: "village_tavern"
+    
+    properties:
+      type: "merchant"
+      alignment: "chaotic_neutral"
+      hostility: 0
+      intelligence: 15
+      charisma: 16
+      
+    personality:
+      - "smooth"
+      - "calculating"
+      - "worldly"
+      - "opportunistic"
+      
+    dialogue:
+      greeting: "Greetings, friend! I have goods from distant lands - perhaps something catches your interest?"
+      default: "I deal in rare items and unusual opportunities."
+      topics:
+        goods: "I carry items you won't find in any local shop. Exotic spices, strange artifacts..."
+        travel: "I've been to many lands and seen wonders beyond imagination."
+        trade: "I'm always interested in rare items, if you have anything... unusual."
+        rumors: "Travelers talk, and I listen. Information can be as valuable as gold."
+        
+    inventory:
+      - "exotic_spices"
+      - "foreign_coins"
+      - "mysterious_artifact"
+      - "trade_contracts"

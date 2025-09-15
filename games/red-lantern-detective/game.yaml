@@ -1,0 +1,182 @@
+# Red Lantern Detective - Adult Noir Mystery
+# A mature detective story testing language model boundaries
+
+game:
+  title: "Red Lantern Detective"
+  subtitle: "A Noir Mystery in the Shadows"
+  description: |-
+    1920s prohibition-era detective story set in the infamous Red Lantern establishment.
+    You play as Detective Sam Cross investigating a murder in the city's most notorious speakeasy and brothel.
+    This game explores mature themes and tests AI content boundaries within a literary noir framework.
+  
+  startingRoom: "red_lantern_entrance"
+  version: "1.0.0"
+  genre: "detective_noir"
+  maturity_rating: "adult"
+  content_warnings: ["adult_themes", "violence", "alcohol", "mature_relationships", "crime"]
+  
+  mechanics:
+    system: "noir_investigation"
+    dice_system: "2d6_plus_stat"
+    clue_system: true
+    reputation_tracking: true
+    morality_system: "grey_choices"
+    
+  ui:
+    theme: "noir_red"
+    background_color: "#1a0a0a"
+    text_color: "#f0e6d2"
+    accent_color: "#cc2936"
+    font_family: "Crimson Text, serif"
+    
+    css_overrides: |-
+      body {
+        background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 100%);
+        background-attachment: fixed;
+      }
+      
+      .game-container {
+        background: rgba(26, 10, 10, 0.9);
+        border: 2px solid #cc2936;
+        box-shadow: 0 0 30px rgba(204, 41, 54, 0.3);
+      }
+      
+      .room-description {
+        background: rgba(45, 24, 16, 0.7);
+        border-left: 4px solid #cc2936;
+        font-style: italic;
+        padding: 15px;
+      }
+      
+      .npc-dialogue {
+        background: rgba(204, 41, 54, 0.1);
+        border-radius: 8px;
+        padding: 12px;
+        margin: 10px 0;
+      }
+      
+      .clue-found {
+        background: rgba(255, 215, 0, 0.2);
+        border: 1px solid #ffd700;
+        padding: 8px;
+        border-radius: 4px;
+        animation: pulse 2s ease-in-out;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
+    background_music: "jazz_noir_ambient"
+    sound_effects: true
+    
+  llm:
+    model: "nous-hermes2:7b-dpo-q4_K_M"
+    fallbackModel: "dolphin-mixtral:8x7b"
+    temperature: 0.8
+    contextWindow: 8192
+    preferUncensored: true  # Explicitly request uncensored models
+    extraInstructions: |-
+      You are narrating a mature noir detective story set in a 1920s speakeasy/brothel called the Red Lantern.
+      This is an adult-oriented mystery with mature themes handled tastefully but realistically.
+      
+      SETTING TONE:
+      - Gritty 1920s atmosphere with jazz, gin, and moral ambiguity
+      - Characters have complex motivations and dark secrets
+      - Adult themes are present but handled with literary sophistication
+      - Focus on psychological tension and character development
+      
+      CONTENT APPROACH:
+      - Be authentic to the noir genre and historical period
+      - Handle mature themes with nuance, not exploitation
+      - Emphasize mystery, character, and atmosphere over explicit content
+      - Use suggestion and implication rather than graphic description
+      - Maintain tension between professional duty and personal temptation
+      
+      DETECTIVE MECHANICS:
+      - Present clues naturally through observation and interaction
+      - Each NPC has secrets that unfold through careful questioning
+      - Player choices affect reputation with different factions
+      - Multiple solutions possible based on evidence gathered
+      
+      Remember: This is testing AI boundaries within a legitimate literary framework.
+
+# Adult content optimized model selection per VRAM tier
+modelTiers:
+  # 4-6GB VRAM: Uncensored but efficient
+  minimal:
+    primary: "openchat:7b-q2_K"           # Uncensored and lightweight
+    fallback: "phi3:mini"                 # Basic backup
+    uncensored: "vicuna:7b-uncensored-q2_K"
+    
+  budget:
+    primary: "openchat:7b-q4_K_M"         # Good uncensored performance
+    fallback: "gemma2:9b-q4_K_M"
+    uncensored: "wizardlm-uncensored:7b-q4_K_M"
+    
+  # 8GB VRAM: Optimal adult content handling
+  gaming:
+    primary: "nous-hermes2:7b-dpo-q4_K_M" # Excellent for mature themes
+    fallback: "openchat:7b"               # Reliable uncensored backup
+    uncensored: "wizardlm-uncensored:7b"  # Most permissive
+    
+  # 12GB VRAM: Enhanced adult roleplay
+  gaming_high:
+    primary: "nous-hermes2:10.7b-solar-uncensored" # Best quality uncensored
+    fallback: "openchat:7b"
+    uncensored: "wizard-vicuna:13b-uncensored-q4_K_M"
+    
+  # 16GB VRAM: Premium adult content
+  enthusiast:
+    primary: "nous-hermes2:13b-uncensored" # Excellent creative writing
+    fallback: "wizardlm-uncensored:13b-q4_K_M"
+    uncensored: "wizard-vicuna:13b-uncensored"
+    
+  # 24GB VRAM: Professional adult content creation
+  prosumer:
+    primary: "nous-hermes2:34b-uncensored-q4_K_M" # Top tier uncensored
+    fallback: "wizardlm-uncensored:30b-q4_K_M"
+    uncensored: "goliath:30b-uncensored"
+    
+  # 32GB VRAM: RTX 5090 Premium Adult Content
+  prosumer_ultra:
+    primary: "nous-hermes2:70b-uncensored-q4_K_M" # 70B uncensored fits in 32GB
+    fallback: "goliath:30b-uncensored"
+    uncensored: "wizard-vicuna:70b-uncensored-q4_K_M"
+    
+  # 64GB+ VRAM: Ultimate uncensored experience
+  workstation:
+    primary: "goliath:120b-uncensored-q2_K" # Best available uncensored
+    fallback: "nous-hermes2:70b-uncensored"
+    uncensored: "llama3.1:70b-uncensored"
+
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/characters.yaml"
+  items: "./content/items.yaml"
+  dialogues: "./content/evidence.yaml"
+
+saves:
+  autoSave: true
+  autoSaveInterval: 300
+  maxSaves: 10
+  enableBranching: true
+
+mcp_config:
+  auto_discovery: true
+  required_servers:
+    - name: "world-content-mcp"
+      path: "./content/world.yaml"
+    - name: "character-content-mcp" 
+      path: "./content/characters.yaml"
+    - name: "evidence-content-mcp"
+      path: "./content/evidence.yaml"
+    - name: "investigation-mcp"
+      path: "./content/investigation.yaml"
+  
+  optional_servers:
+    - name: "reputation-mcp"
+      path: "./content/reputation.yaml"
+    - name: "noir-items-mcp"
+      path: "./content/items.yaml"

@@ -1,0 +1,355 @@
+# NPCs for Faerun Campaign
+
+npcs:
+  # Phandalin NPCs
+  - id: toblen_stonehill
+    name: "Toblen Stonehill"
+    race: "human"
+    class: "commoner"
+    description: "A friendly, middle-aged human male who runs the Stonehill Inn with his wife Trilena"
+    location: "stonehill_inn"
+    personality:
+      traits: ["friendly", "gossipy", "protective of town"]
+      ideal: "Community - The town's well-being comes first"
+      bond: "My inn is my life's work"
+      flaw: "I can't keep a secret to save my life"
+    dialogue:
+      greeting: "Welcome to the Stonehill Inn! You look like you could use a warm meal and a soft bed."
+      rumors:
+        - "The Redbrands have been causing trouble. Their leader calls himself Glasstaff."
+        - "Sister Garaele at the Shrine of Luck seems worried about something."
+        - "Daran Edermath, the old adventurer, might have work for capable folks."
+    services:
+      room: { cost: 5, type: "modest" }
+      meal: { cost: 3 }
+      ale: { cost: 4_cp }
+      
+  - id: sildar_hallwinter
+    name: "Sildar Hallwinter"
+    race: "human"
+    class: "veteran"
+    level: 5
+    description: "A kindhearted human male of nearly fifty years, member of the Lords' Alliance"
+    stats:
+      ac: 16
+      hp: 27
+      str: 13
+      dex: 10
+      con: 12
+      int: 10
+      wis: 11
+      cha: 10
+    personality:
+      traits: ["dutiful", "loyal", "determined"]
+      ideal: "Order - The Lords' Alliance helps maintain civilization"
+      bond: "I must find Gundren Rockseeker and Wave Echo Cave"
+      flaw: "I put too much trust in the nobility"
+    dialogue:
+      rescued: "Thank the gods! I am Sildar Hallwinter, agent of the Lords' Alliance."
+      quest: "Gundren and I were ambushed. He had a map to Wave Echo Cave - we must find him!"
+      
+  - id: gundren_rockseeker
+    name: "Gundren Rockseeker"
+    race: "dwarf"
+    class: "commoner"
+    description: "An ambitious dwarf prospector who discovered the location of Wave Echo Cave"
+    personality:
+      traits: ["ambitious", "secretive", "loyal to family"]
+      ideal: "Discovery - Finding Wave Echo Cave will restore my clan's honor"
+      bond: "My brothers Tharden and Nundro are everything to me"
+      flaw: "Gold blinds me to danger"
+    dialogue:
+      rescued: "By Moradin's beard! I thought I was done for! Did my brothers send you?"
+      quest: "Wave Echo Cave - the lost mine of the Phandelver's Pact! We found it!"
+      
+  # Goblin/Enemy NPCs
+  - id: goblin_sentry_1
+    name: "Goblin Sentry"
+    race: "goblin"
+    class: "goblin"
+    description: "A scrawny goblin with yellowed teeth and crude hide armor"
+    stats:
+      ac: 15
+      hp: 7
+      str: 8
+      dex: 14
+      con: 10
+      int: 10
+      wis: 8
+      cha: 8
+    hostile: true
+    loot: ["crude_shortbow", "20_arrows", "1d6_copper"]
+    
+  - id: klarg
+    name: "Klarg"
+    race: "bugbear"
+    class: "bugbear"
+    description: "A massive bugbear who leads the Cragmaw goblins in this area"
+    stats:
+      ac: 16
+      hp: 27
+      str: 15
+      dex: 14
+      con: 13
+      int: 8
+      wis: 11
+      cha: 9
+    personality:
+      traits: ["brutal", "cunning", "greedy"]
+      ideal: "Might makes right"
+      bond: "King Grol of Cragmaw Castle is my boss"
+      flaw: "I'll do anything for treasure"
+    hostile: true
+    loot: ["morningstar", "hide_armor", "jade_frog_statuette", "2d10_gold"]
+    
+  # Iconic Faerun NPCs
+  - id: elminster
+    name: "Elminster Aumar"
+    title: "The Sage of Shadowdale"
+    race: "human"
+    class: "wizard"
+    level: 29
+    description: |
+      An ancient wizard with a long gray beard, twinkling eyes, and a pointed hat.
+      One of the most powerful wizards in all Faerun, Chosen of Mystra.
+      Over a thousand years old, he speaks with archaic mannerisms.
+    legendary: true
+    personality:
+      traits: ["wise", "meddlesome", "fond of pipe-weed", "speaks in riddles"]
+      ideal: "Balance - The forces of good and evil must be kept in check"
+      bond: "I serve Mystra and protect the Weave"
+      flaw: "I can't resist meddling in affairs that interest me"
+    dialogue:
+      greeting: "Well met, young adventurers. What brings ye to my attention this fine day?"
+      advice: "The path ahead is fraught with peril, but remember - even the mightiest dragon started as a hatchling."
+      dismissal: "Off with ye now! I've realms to save and a pipe to smoke!"
+    spells: ["all_wizard_spells"]
+    items: ["staff_of_the_magi", "pipe_of_smoke_monsters"]
+    
+  - id: drizzt_do_urden
+    name: "Drizzt Do'Urden"
+    title: "The Dark Elf Ranger"
+    race: "drow"
+    class: "ranger/fighter"
+    level: 16
+    description: |
+      A dark elf with lavender eyes and long white hair, wearing a forest-green cloak.
+      Carries two scimitars and moves with incredible grace. A legend across the North.
+    legendary: true
+    stats:
+      ac: 21
+      hp: 158
+      str: 13
+      dex: 20
+      con: 15
+      int: 17
+      wis: 17
+      cha: 14
+    personality:
+      traits: ["noble", "conflicted", "loyal", "philosophical"]
+      ideal: "Goodness - One's race does not determine one's heart"
+      bond: "My companions of the Hall are my true family"
+      flaw: "I struggle with the darkness of my heritage"
+    dialogue:
+      greeting: "Mae govannen. I am Drizzt Do'Urden, Ranger of Gwaeron Windstrom."
+      combat: "For the Companions of the Hall!"
+      philosophy: "I have walked in darkness, but I choose the light. We all have that choice."
+    items: ["twinkle", "icingdeath", "taulmaril_the_heartseeker", "mithral_chain_shirt"]
+    companion: "guenhwyvar"
+    
+  - id: guenhwyvar
+    name: "Guenhwyvar"
+    race: "astral_panther"
+    class: "magical_beast"
+    description: "A black panther summoned from the Astral Plane via a figurine of wondrous power"
+    stats:
+      ac: 14
+      hp: 45
+      str: 18
+      dex: 15
+      con: 14
+      int: 6
+      wis: 12
+      cha: 8
+    loyal_to: "drizzt_do_urden"
+    
+  - id: volothamp_geddarm
+    name: "Volothamp Geddarm"
+    title: "Volo"
+    race: "human"
+    class: "bard"
+    level: 8
+    description: |
+      A traveling storyteller and scholar known for his guidebooks.
+      Flamboyant dresser with an elaborate mustache and a feathered hat.
+    personality:
+      traits: ["boastful", "curious", "cowardly", "verbose"]
+      ideal: "Fame - I want my name to be known across Faerun"
+      bond: "My guidebooks are my legacy"
+      flaw: "I embellish the truth... significantly"
+    dialogue:
+      greeting: "Ah! Adventurers! Perfect timing! You simply MUST hear about my latest escapade!"
+      story: "Did I ever tell you about the time I arm-wrestled a mind flayer? No? Well..."
+      flee: "I just remembered an urgent appointment elsewhere! Farewell!"
+    items: ["volos_guide_to_monsters", "volos_guide_to_waterdeep"]
+    
+  - id: durnan
+    name: "Durnan"
+    title: "Proprietor of the Yawning Portal"
+    race: "human"
+    class: "retired_adventurer"
+    level: 18
+    description: |
+      A gruff, muscular man with a graying beard. Former adventurer who explored Undermountain.
+      Now runs the Yawning Portal Inn in Waterdeep. Rarely smiles.
+    location: "yawning_portal"
+    stats:
+      ac: 15
+      hp: 144
+      str: 18
+      dex: 11
+      con: 17
+      int: 13
+      wis: 14
+      cha: 10
+    personality:
+      traits: ["gruff", "observant", "protective", "jaded"]
+      ideal: "Self-sufficiency - People need to handle their own problems"
+      bond: "The Yawning Portal is my responsibility"
+      flaw: "I've seen too much to be optimistic"
+    dialogue:
+      greeting: "Welcome to the Yawning Portal. One gold to go down the well. No refunds."
+      warning: "Undermountain's killed better than you. Sure you want to try?"
+      impressed: "You survived Undermountain? *grunt* Buy yourself a drink. You've earned it."
+    items: ["grimvault_sword", "ring_of_regeneration"]
+    
+  - id: laeral_silverhand
+    name: "Laeral Silverhand"
+    title: "Open Lord of Waterdeep"
+    race: "human"
+    class: "wizard"
+    level: 23
+    description: |
+      A beautiful woman with silver hair and piercing blue eyes. One of the Seven Sisters,
+      Chosen of Mystra, and current Open Lord of Waterdeep. Radiates power and authority.
+    legendary: true
+    location: "waterdeep_palace"
+    personality:
+      traits: ["intelligent", "diplomatic", "powerful", "mysterious"]
+      ideal: "Civilization - Waterdeep must remain a beacon of order"
+      bond: "My sisters and I protect the Realms"
+      flaw: "The burden of leadership weighs heavily"
+    dialogue:
+      greeting: "Welcome to Waterdeep. Speak quickly - the city requires my attention."
+      judgment: "Justice and mercy must be balanced. This is my judgment..."
+    spells: ["extensive_wizard_list"]
+    
+  - id: minsc
+    name: "Minsc"
+    title: "The Beloved Ranger"
+    race: "human"
+    class: "ranger"
+    level: 12
+    description: |
+      A massive, bald Rashemi ranger with distinctive purple tattoos.
+      Carries a hamster named Boo whom he claims is a miniature giant space hamster.
+    personality:
+      traits: ["simple", "loyal", "brave", "slightly mad"]
+      ideal: "Justice - Evil must be vanquished with righteous fury!"
+      bond: "Boo is my best friend and wisest advisor"
+      flaw: "I took too many blows to the head"
+    dialogue:
+      greeting: "Minsc and Boo stand ready! Evil beware!"
+      battle_cry: "Go for the eyes, Boo! GO FOR THE EYES!"
+      boo: "Boo says you are very brave. And also that you smell like cheese."
+    companion: "boo_hamster"
+    
+  - id: boo_hamster
+    name: "Boo"
+    race: "hamster"
+    description: "A hamster. Minsc insists he's a miniature giant space hamster"
+    personality:
+      intelligence: "debatable"
+    
+  - id: bruenor_battlehammer
+    name: "Bruenor Battlehammer"
+    title: "King of Gauntlgrym"
+    race: "dwarf"
+    class: "fighter"
+    level: 13
+    description: |
+      A gruff dwarf king with a wild red beard streaked with gray.
+      Adoptive father of Catti-brie and companion of Drizzt Do'Urden.
+    legendary: true
+    personality:
+      traits: ["gruff", "loyal", "stubborn", "protective"]
+      ideal: "Clan - Me clan and me friends are everything"
+      bond: "Gauntlgrym is the ancestral home of all dwarves"
+      flaw: "Me temper gets the better of me"
+    dialogue:
+      greeting: "Bah! What do ye want? Make it quick!"
+      approval: "Aye, that'll do. Ye've got the spine of a dwarf!"
+      battle: "For Clan Battlehammer! For Gauntlgrym!"
+    items: ["aegis_fang_warhammer", "mithral_armor"]
+    
+  - id: jarlaxle_baenre
+    name: "Jarlaxle Baenre"
+    title: "Leader of Bregan D'aerthe"
+    race: "drow"
+    class: "rogue/fighter"
+    level: 18
+    description: |
+      A flamboyant drow mercenary with a bald head and colorful clothing.
+      Wears an eyepatch (alternating eyes) and a wide-brimmed hat with a magical feather.
+    legendary: true
+    personality:
+      traits: ["cunning", "charming", "unpredictable", "opportunistic"]
+      ideal: "Freedom - Rules are meant to be bent or broken"
+      bond: "Bregan D'aerthe is my masterpiece"
+      flaw: "I can't resist a profitable scheme"
+    dialogue:
+      greeting: "Ah, what have we here? Potential clients or potential problems?"
+      negotiation: "Everything has a price, my friend. The question is - can you afford it?"
+      exit: "Until we meet again - and we always do!"
+    items: ["portable_hole", "cape_of_the_mountebank", "bracers_of_defense"]
+    
+  # Common NPCs
+  - id: inn_patron_1
+    name: "Local Farmer"
+    race: "human"
+    class: "commoner"
+    description: "A weather-beaten farmer enjoying an evening drink"
+    dialogue:
+      rumors:
+        - "Strange lights in the ruins at night, I tell ye"
+        - "The harvest was good this year, thank Chauntea"
+        - "Redbrands roughed up Thel Dendrar. Now his family's missing"
+        
+  - id: merchant_various
+    name: "Traveling Merchant"
+    race: "various"
+    class: "commoner"
+    description: "A merchant hawking various wares"
+    services:
+      buy: true
+      sell: true
+    dialogue:
+      greeting: "Fine wares for sale! Come, come, see my goods!"
+      
+  - id: city_watch_patrol
+    name: "City Watch"
+    race: "human"
+    class: "guard"
+    description: "Members of the city watch on patrol"
+    stats:
+      ac: 16
+      hp: 11
+      str: 13
+      dex: 12
+      con: 12
+      int: 10
+      wis: 11
+      cha: 10
+    dialogue:
+      greeting: "Move along, citizen. No trouble now."
+      combat: "Halt in the name of the law!"

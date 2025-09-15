@@ -1,0 +1,82 @@
+# MCP Server Configuration for Space Trader Game
+# Completely different servers for a space trading/exploration game
+
+mcp_configuration:
+  version: "1.0.0"
+  game_system: "space_trader"
+  description: "MCP servers for space trading and exploration"
+
+  required_servers:
+    - name: "star-system-mcp"
+      description: "Star systems, planets, and space travel"
+      config:
+        systems_path: "./content/star-systems.yaml"
+        generate_systems: true
+        jump_routes: "./content/jump-routes.yaml"
+        
+    - name: "ship-management-mcp"
+      description: "Player ship status, cargo, and upgrades"
+      config:
+        ship_types_path: "./content/ship-types.yaml"
+        upgrade_catalog: "./content/ship-upgrades.yaml"
+        fuel_consumption: true
+        
+    - name: "trade-economy-mcp"
+      description: "Market prices, trade routes, supply/demand"
+      config:
+        commodities_path: "./content/commodities.yaml" 
+        market_fluctuation: true
+        trade_events: "./content/trade-events.yaml"
+        
+    - name: "faction-reputation-mcp"
+      description: "Faction standings and political consequences"
+      config:
+        factions_path: "./content/factions.yaml"
+        reputation_effects: true
+        diplomatic_missions: true
+        
+    - name: "character-skills-mcp"
+      description: "Pilot skills, licenses, and progression"
+      config:
+        skill_system: "./content/skills.yaml"
+        license_tracking: true
+        skill_checks: "percentile"
+        
+    - name: "state-mcp"
+      description: "Game state with save/load"
+      config:
+        state_path: "./game-state/"
+        git_enabled: false  # Space games use traditional saves
+        auto_save: true
+
+  optional_servers:
+    - name: "piracy-combat-mcp"
+      description: "Space combat and piracy mechanics"
+      condition: "combat_enabled"
+      config:
+        combat_system: "./content/space-combat.yaml"
+        weapon_types: "./content/ship-weapons.yaml"
+        
+    - name: "exploration-mcp"
+      description: "Planet surveys and alien artifacts"
+      condition: "exploration_focus"
+      config:
+        planet_generation: true
+        artifact_catalog: "./content/alien-artifacts.yaml"
+
+  startup_order:
+    1: ["state-mcp"]
+    2: ["star-system-mcp", "ship-management-mcp", "trade-economy-mcp"]
+    3: ["faction-reputation-mcp", "character-skills-mcp"]
+    4: ["piracy-combat-mcp", "exploration-mcp"]
+
+  # Space-specific communication patterns  
+  communication:
+    batching_rules:
+      - pattern: "system + markets + factions"
+        description: "When jumping to a system, get full context"
+        
+    shared_context:
+      current_system: "star-system-mcp, trade-economy-mcp, faction-reputation-mcp"
+      ship_status: "ship-management-mcp, piracy-combat-mcp"
+      reputation: "faction-reputation-mcp, trade-economy-mcp"

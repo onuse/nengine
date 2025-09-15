@@ -121,6 +121,7 @@ llm:
   fallbackModel: "mistral:7b"
   contextWindow: 8192
   temperature: 0.7
+  autoDetectModels: true
   
   narrativeStyle:
     tone: "helpful"  # Clear responses for testing
@@ -148,6 +149,42 @@ llm:
     Do NOT make the player do actions they did not explicitly request.
     Avoid repeating phrases from previous responses, try to use different wording.
     If you cannot find a fresh way to describe something, rephrase or simplify the sentence instead of repeating.
+
+# Testing-optimized model selection per VRAM tier
+modelTiers:
+  # 4-6GB VRAM: Fast, efficient models for testing
+  minimal:
+    primary: "phi3:mini"              # Fast inference for test iterations
+    fallback: "tinyllama:1.1b"        # Ultra-fast backup
+    
+  budget:
+    primary: "gemma2:9b-q4_K_M"       # Good balance for testing
+    fallback: "phi3:mini"
+    
+  # 8GB VRAM: Standard testing configuration
+  gaming:
+    primary: "llama3.1:8b-q4_K_M"     # Reliable and consistent
+    fallback: "gemma2:9b"             # Solid backup
+    
+  # 12GB VRAM: Enhanced testing with larger context
+  gaming_high:
+    primary: "llama3.1:8b"            # Full precision for better testing
+    fallback: "mistral:7b-instruct"   # Consistent logical responses
+    
+  # 16GB VRAM: Comprehensive testing capabilities
+  enthusiast:
+    primary: "llama3.1:13b-q4_K_M"    # Better reasoning for complex tests
+    fallback: "mixtral:8x7b-q4_K_M"   # Multi-expert reasoning
+    
+  # 24GB VRAM: Professional testing environment
+  prosumer:
+    primary: "llama3.1:13b"           # Full precision for detailed testing
+    fallback: "mixtral:8x7b"          # Advanced reasoning
+    
+  # 64GB+ VRAM: Ultimate testing setup
+  workstation:
+    primary: "llama3.1:70b-q4_K_M"    # Best model for thorough testing
+    fallback: "mixtral:8x22b-q4_K_M"  # Exceptional backup reasoning
 
 # Content paths - all files required for testing
 content:

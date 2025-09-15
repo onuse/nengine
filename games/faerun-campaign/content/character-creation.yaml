@@ -1,0 +1,492 @@
+# Character Creation Configuration for D&D 5e Faerun Campaign
+# This defines the character creation flow and options
+
+character_creation:
+  system: "dnd_5e"
+  version: "1.0.0"
+  
+  # Define the creation flow - steps in order
+  creation_flow:
+    - step: "concept"
+      title: "Character Concept"
+      description: "Who is your character?"
+      optional: false
+      
+    - step: "race"
+      title: "Choose Your Race"
+      description: "Your character's ancestry determines certain traits"
+      optional: false
+      
+    - step: "class"
+      title: "Choose Your Class"
+      description: "Your class shapes what your character can do"
+      optional: false
+      
+    - step: "ability_scores"
+      title: "Determine Ability Scores"
+      description: "Your six core abilities define your character's capabilities"
+      optional: false
+      
+    - step: "background"
+      title: "Choose Your Background"
+      description: "What did you do before becoming an adventurer?"
+      optional: false
+      
+    - step: "equipment"
+      title: "Starting Equipment"
+      description: "Choose your starting gear"
+      optional: false
+      
+    - step: "details"
+      title: "Character Details"
+      description: "Name, appearance, and personality"
+      optional: false
+      
+    - step: "backstory"
+      title: "Backstory"
+      description: "Your character's history and motivations"
+      optional: true
+
+  # Methods for generating ability scores
+  ability_score_methods:
+    standard_array:
+      name: "Standard Array"
+      description: "Use the standard set: 15, 14, 13, 12, 10, 8"
+      values: [15, 14, 13, 12, 10, 8]
+      
+    point_buy:
+      name: "Point Buy"
+      description: "27 points to spend on abilities"
+      points: 27
+      min_score: 8
+      max_score: 15
+      costs:
+        8: 0
+        9: 1
+        10: 2
+        11: 3
+        12: 4
+        13: 5
+        14: 7
+        15: 9
+        
+    roll_dice:
+      name: "Roll Dice"
+      description: "Roll 4d6, drop lowest, six times"
+      formula: "4d6_drop_lowest"
+      reroll_ones: false
+      
+    heroic_array:
+      name: "Heroic Array"
+      description: "For epic campaigns: 18, 16, 14, 12, 10, 8"
+      values: [18, 16, 14, 12, 10, 8]
+
+  # Background options with their benefits
+  backgrounds:
+    acolyte:
+      name: "Acolyte"
+      description: "You spent your life in service to a temple"
+      skill_proficiencies: ["insight", "religion"]
+      languages: 2
+      equipment:
+        - "holy_symbol"
+        - "prayer_book"
+        - "5_sticks_incense"
+        - "vestments"
+        - "common_clothes"
+        - "pouch"
+      gold: 15
+      feature: "Shelter of the Faithful"
+      
+    criminal:
+      name: "Criminal/Spy"
+      description: "You have a criminal past or were a spy"
+      skill_proficiencies: ["deception", "stealth"]
+      tool_proficiencies: ["thieves_tools", "gaming_set"]
+      equipment:
+        - "crowbar"
+        - "dark_common_clothes_with_hood"
+        - "pouch"
+      gold: 15
+      feature: "Criminal Contact"
+      
+    folk_hero:
+      name: "Folk Hero"
+      description: "You come from humble origins but are destined for greatness"
+      skill_proficiencies: ["animal_handling", "survival"]
+      tool_proficiencies: ["artisans_tools", "vehicles_land"]
+      equipment:
+        - "artisans_tools"
+        - "shovel"
+        - "iron_pot"
+        - "common_clothes"
+        - "pouch"
+      gold: 10
+      feature: "Rustic Hospitality"
+      
+    noble:
+      name: "Noble"
+      description: "You were born into wealth and privilege"
+      skill_proficiencies: ["history", "persuasion"]
+      tool_proficiencies: ["gaming_set"]
+      languages: 1
+      equipment:
+        - "fine_clothes"
+        - "signet_ring"
+        - "scroll_of_pedigree"
+        - "purse"
+      gold: 25
+      feature: "Position of Privilege"
+      
+    sage:
+      name: "Sage"
+      description: "You spent years learning the lore of the multiverse"
+      skill_proficiencies: ["arcana", "history"]
+      languages: 2
+      equipment:
+        - "bottle_black_ink"
+        - "quill"
+        - "small_knife"
+        - "letter_from_colleague"
+        - "common_clothes"
+        - "pouch"
+      gold: 10
+      feature: "Researcher"
+      
+    soldier:
+      name: "Soldier"
+      description: "You fought in an army or mercenary company"
+      skill_proficiencies: ["athletics", "intimidation"]
+      tool_proficiencies: ["gaming_set", "vehicles_land"]
+      equipment:
+        - "insignia_of_rank"
+        - "trophy_from_enemy"
+        - "deck_of_cards"
+        - "common_clothes"
+        - "pouch"
+      gold: 10
+      feature: "Military Rank"
+      
+    hermit:
+      name: "Hermit"
+      description: "You lived in seclusion for formative years"
+      skill_proficiencies: ["medicine", "religion"]
+      tool_proficiencies: ["herbalism_kit"]
+      languages: 1
+      equipment:
+        - "scroll_case_with_notes"
+        - "winter_blanket"
+        - "common_clothes"
+        - "herbalism_kit"
+        - "pouch"
+      gold: 5
+      feature: "Discovery"
+      
+    entertainer:
+      name: "Entertainer"
+      description: "You thrive in front of an audience"
+      skill_proficiencies: ["acrobatics", "performance"]
+      tool_proficiencies: ["disguise_kit", "musical_instrument"]
+      equipment:
+        - "musical_instrument"
+        - "favor_from_admirer"
+        - "costume"
+        - "pouch"
+      gold: 15
+      feature: "By Popular Demand"
+      
+    guild_artisan:
+      name: "Guild Artisan"
+      description: "You are a member of an artisan's guild"
+      skill_proficiencies: ["insight", "persuasion"]
+      tool_proficiencies: ["artisans_tools"]
+      languages: 1
+      equipment:
+        - "artisans_tools"
+        - "letter_of_introduction"
+        - "travelers_clothes"
+        - "pouch"
+      gold: 15
+      feature: "Guild Membership"
+      
+    outlander:
+      name: "Outlander"
+      description: "You grew up in the wilderness"
+      skill_proficiencies: ["athletics", "survival"]
+      tool_proficiencies: ["musical_instrument"]
+      languages: 1
+      equipment:
+        - "staff"
+        - "hunting_trap"
+        - "traveler_clothes"
+        - "trophy_from_animal"
+        - "pouch"
+      gold: 10
+      feature: "Wanderer"
+      
+    sailor:
+      name: "Sailor"
+      description: "You sailed on a seagoing vessel"
+      skill_proficiencies: ["athletics", "perception"]
+      tool_proficiencies: ["navigators_tools", "vehicles_water"]
+      equipment:
+        - "belaying_pin"
+        - "50_feet_silk_rope"
+        - "lucky_charm"
+        - "common_clothes"
+        - "pouch"
+      gold: 10
+      feature: "Ship's Passage"
+      
+    urchin:
+      name: "Urchin"
+      description: "You grew up on the streets"
+      skill_proficiencies: ["sleight_of_hand", "stealth"]
+      tool_proficiencies: ["disguise_kit", "thieves_tools"]
+      equipment:
+        - "small_knife"
+        - "map_of_city"
+        - "pet_mouse"
+        - "token_from_parents"
+        - "common_clothes"
+        - "pouch"
+      gold: 10
+      feature: "City Secrets"
+
+  # Starting equipment choices by class
+  equipment_packs:
+    burglars_pack:
+      name: "Burglar's Pack"
+      cost: 16
+      contents:
+        - "backpack"
+        - "bag_of_1000_ball_bearings"
+        - "10_feet_string"
+        - "bell"
+        - "5_candles"
+        - "crowbar"
+        - "hammer"
+        - "10_pitons"
+        - "hooded_lantern"
+        - "2_flasks_oil"
+        - "5_days_rations"
+        - "tinderbox"
+        - "waterskin"
+        - "50_feet_hempen_rope"
+        
+    diplomats_pack:
+      name: "Diplomat's Pack"
+      cost: 39
+      contents:
+        - "chest"
+        - "2_cases_for_maps"
+        - "fine_clothes"
+        - "bottle_ink"
+        - "ink_pen"
+        - "lamp"
+        - "2_flasks_oil"
+        - "5_sheets_paper"
+        - "vial_perfume"
+        - "sealing_wax"
+        - "soap"
+        
+    dungeoneers_pack:
+      name: "Dungeoneer's Pack"
+      cost: 12
+      contents:
+        - "backpack"
+        - "crowbar"
+        - "hammer"
+        - "10_pitons"
+        - "10_torches"
+        - "tinderbox"
+        - "10_days_rations"
+        - "waterskin"
+        - "50_feet_hempen_rope"
+        
+    entertainers_pack:
+      name: "Entertainer's Pack"
+      cost: 40
+      contents:
+        - "backpack"
+        - "bedroll"
+        - "2_costumes"
+        - "5_candles"
+        - "5_days_rations"
+        - "waterskin"
+        - "disguise_kit"
+        
+    explorers_pack:
+      name: "Explorer's Pack"
+      cost: 10
+      contents:
+        - "backpack"
+        - "bedroll"
+        - "mess_kit"
+        - "tinderbox"
+        - "10_torches"
+        - "10_days_rations"
+        - "waterskin"
+        - "50_feet_hempen_rope"
+        
+    priests_pack:
+      name: "Priest's Pack"
+      cost: 19
+      contents:
+        - "backpack"
+        - "blanket"
+        - "10_candles"
+        - "tinderbox"
+        - "alms_box"
+        - "2_blocks_incense"
+        - "censer"
+        - "vestments"
+        - "2_days_rations"
+        - "waterskin"
+        
+    scholars_pack:
+      name: "Scholar's Pack"
+      cost: 40
+      contents:
+        - "backpack"
+        - "book_of_lore"
+        - "bottle_ink"
+        - "ink_pen"
+        - "10_sheets_parchment"
+        - "little_bag_sand"
+        - "small_knife"
+
+  # Character traits and personality
+  personality_traits:
+    categories:
+      - "traits"
+      - "ideals"
+      - "bonds"
+      - "flaws"
+      
+    alignment:
+      - "lawful_good"
+      - "neutral_good"
+      - "chaotic_good"
+      - "lawful_neutral"
+      - "true_neutral"
+      - "chaotic_neutral"
+      - "lawful_evil"
+      - "neutral_evil"
+      - "chaotic_evil"
+      
+  # Validation rules
+  validation:
+    name:
+      min_length: 2
+      max_length: 50
+      pattern: "^[a-zA-Z' -]+$"
+      
+    age:
+      min: 1
+      max: 1000
+      
+    height:
+      min: 2
+      max: 10
+      unit: "feet"
+      
+    weight:
+      min: 20
+      max: 1000
+      unit: "pounds"
+
+# Character schema that gets persisted
+character_schema:
+  version: "1.0.0"
+  
+  # Core identity
+  identity:
+    name: { type: "string", required: true }
+    race: { type: "string", required: true }
+    subrace: { type: "string", required: false }
+    class: { type: "string", required: true }
+    subclass: { type: "string", required: false }
+    level: { type: "number", default: 1 }
+    background: { type: "string", required: true }
+    alignment: { type: "string", required: true }
+    
+  # Ability scores
+  abilities:
+    strength: { type: "number", min: 1, max: 30 }
+    dexterity: { type: "number", min: 1, max: 30 }
+    constitution: { type: "number", min: 1, max: 30 }
+    intelligence: { type: "number", min: 1, max: 30 }
+    wisdom: { type: "number", min: 1, max: 30 }
+    charisma: { type: "number", min: 1, max: 30 }
+    
+  # Derived stats
+  derived_stats:
+    proficiency_bonus: { type: "number", calculated: true }
+    armor_class: { type: "number", calculated: true }
+    initiative: { type: "number", calculated: true }
+    speed: { type: "number", default: 30 }
+    hit_points_max: { type: "number", required: true }
+    hit_points_current: { type: "number", required: true }
+    hit_dice_total: { type: "string", required: true }
+    hit_dice_current: { type: "number", required: true }
+    
+  # Skills and proficiencies
+  proficiencies:
+    armor: { type: "array", items: "string" }
+    weapons: { type: "array", items: "string" }
+    tools: { type: "array", items: "string" }
+    languages: { type: "array", items: "string" }
+    skills: { type: "array", items: "string" }
+    saving_throws: { type: "array", items: "string" }
+    
+  # Features and traits
+  features:
+    racial_traits: { type: "array", items: "object" }
+    class_features: { type: "array", items: "object" }
+    background_feature: { type: "object" }
+    feats: { type: "array", items: "object" }
+    
+  # Equipment and inventory
+  equipment:
+    armor: { type: "object", required: false }
+    weapons: { type: "array", items: "object" }
+    inventory: { type: "array", items: "object" }
+    gold: { type: "number", default: 0 }
+    encumbrance: { type: "number", calculated: true }
+    
+  # Spellcasting (if applicable)
+  spellcasting:
+    ability: { type: "string", required: false }
+    spell_save_dc: { type: "number", calculated: true }
+    spell_attack_bonus: { type: "number", calculated: true }
+    spells_known: { type: "array", items: "string" }
+    spell_slots: { type: "object" }
+    
+  # Personality and backstory
+  personality:
+    traits: { type: "array", items: "string", max: 2 }
+    ideals: { type: "array", items: "string", max: 1 }
+    bonds: { type: "array", items: "string", max: 1 }
+    flaws: { type: "array", items: "string", max: 1 }
+    backstory: { type: "text", required: false }
+    
+  # Physical description
+  description:
+    age: { type: "number", required: false }
+    height: { type: "string", required: false }
+    weight: { type: "string", required: false }
+    eyes: { type: "string", required: false }
+    skin: { type: "string", required: false }
+    hair: { type: "string", required: false }
+    appearance: { type: "text", required: false }
+    
+  # Campaign specific
+  campaign:
+    experience: { type: "number", default: 0 }
+    inspiration: { type: "boolean", default: false }
+    death_saves:
+      successes: { type: "number", default: 0, max: 3 }
+      failures: { type: "number", default: 0, max: 3 }
+    conditions: { type: "array", items: "string" }
+    notes: { type: "text", required: false }

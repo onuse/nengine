@@ -1,0 +1,345 @@
+# D&D 5e Rules and Mechanics for Faerun Campaign
+
+dice_mechanics:
+  default_die: "d20"
+  
+  dice_types:
+    d4: { sides: 4, description: "Four-sided die" }
+    d6: { sides: 6, description: "Six-sided die" }
+    d8: { sides: 8, description: "Eight-sided die" }
+    d10: { sides: 10, description: "Ten-sided die" }
+    d12: { sides: 12, description: "Twelve-sided die" }
+    d20: { sides: 20, description: "Twenty-sided die" }
+    d100: { sides: 100, description: "Percentile dice" }
+  
+  advantage_disadvantage:
+    advantage: "Roll 2d20, take highest"
+    disadvantage: "Roll 2d20, take lowest"
+    
+  critical_hits:
+    natural_20: "Automatic success, double damage dice on attacks"
+    natural_1: "Automatic failure"
+    
+  difficulty_classes:
+    very_easy: 5
+    easy: 10
+    medium: 15
+    hard: 20
+    very_hard: 25
+    nearly_impossible: 30
+
+ability_scores:
+  strength:
+    abbreviation: "STR"
+    description: "Physical power"
+    skills: ["athletics"]
+    
+  dexterity:
+    abbreviation: "DEX"
+    description: "Agility and reflexes"
+    skills: ["acrobatics", "sleight_of_hand", "stealth"]
+    
+  constitution:
+    abbreviation: "CON"
+    description: "Endurance and health"
+    skills: []
+    
+  intelligence:
+    abbreviation: "INT"
+    description: "Reasoning and memory"
+    skills: ["arcana", "history", "investigation", "nature", "religion"]
+    
+  wisdom:
+    abbreviation: "WIS"
+    description: "Awareness and insight"
+    skills: ["animal_handling", "insight", "medicine", "perception", "survival"]
+    
+  charisma:
+    abbreviation: "CHA"
+    description: "Force of personality"
+    skills: ["deception", "intimidation", "performance", "persuasion"]
+
+ability_modifiers:
+  score_1: -5
+  score_2-3: -4
+  score_4-5: -3
+  score_6-7: -2
+  score_8-9: -1
+  score_10-11: 0
+  score_12-13: 1
+  score_14-15: 2
+  score_16-17: 3
+  score_18-19: 4
+  score_20-21: 5
+  score_22-23: 6
+  score_24-25: 7
+  score_26-27: 8
+  score_28-29: 9
+  score_30: 10
+
+skill_system:
+  skills:
+    acrobatics:
+      name: "Acrobatics"
+      ability: "dexterity"
+      description: "Balance, tumbling, and aerial maneuvers"
+      
+    animal_handling:
+      name: "Animal Handling"
+      ability: "wisdom"
+      description: "Calming, controlling, or understanding animals"
+      
+    arcana:
+      name: "Arcana"
+      ability: "intelligence"
+      description: "Knowledge of magic, magical items, and the planes"
+      
+    athletics:
+      name: "Athletics"
+      ability: "strength"
+      description: "Jumping, climbing, swimming, and feats of strength"
+      
+    deception:
+      name: "Deception"
+      ability: "charisma"
+      description: "Lying and misleading others"
+      
+    history:
+      name: "History"
+      ability: "intelligence"
+      description: "Knowledge of historical events and lore"
+      
+    insight:
+      name: "Insight"
+      ability: "wisdom"
+      description: "Determining true intentions and reading people"
+      
+    intimidation:
+      name: "Intimidation"
+      ability: "charisma"
+      description: "Influencing through threats and fear"
+      
+    investigation:
+      name: "Investigation"
+      ability: "intelligence"
+      description: "Looking for clues and making deductions"
+      
+    medicine:
+      name: "Medicine"
+      ability: "wisdom"
+      description: "Stabilizing the dying and diagnosing ailments"
+      
+    nature:
+      name: "Nature"
+      ability: "intelligence"
+      description: "Knowledge of terrain, plants, animals, and weather"
+      
+    perception:
+      name: "Perception"
+      ability: "wisdom"
+      description: "Noticing things in the environment"
+      
+    performance:
+      name: "Performance"
+      ability: "charisma"
+      description: "Music, dance, acting, and entertainment"
+      
+    persuasion:
+      name: "Persuasion"
+      ability: "charisma"
+      description: "Influencing others with tact and diplomacy"
+      
+    religion:
+      name: "Religion"
+      ability: "intelligence"
+      description: "Knowledge of deities, rites, and religious lore"
+      
+    sleight_of_hand:
+      name: "Sleight of Hand"
+      ability: "dexterity"
+      description: "Pickpocketing and manual trickery"
+      
+    stealth:
+      name: "Stealth"
+      ability: "dexterity"
+      description: "Moving silently and hiding"
+      
+    survival:
+      name: "Survival"
+      ability: "wisdom"
+      description: "Tracking, foraging, and navigating wilderness"
+
+combat_rules:
+  initiative:
+    formula: "1d20 + dexterity_modifier"
+    order: "highest_to_lowest"
+    
+  action_economy:
+    action:
+      description: "One main action per turn"
+      examples: ["attack", "cast_spell", "dash", "dodge", "help", "hide", "ready", "search", "use_object"]
+      
+    bonus_action:
+      description: "One bonus action if available"
+      examples: ["offhand_attack", "certain_spells", "class_features"]
+      
+    movement:
+      description: "Move up to your speed"
+      base_speed: 30
+      
+    reaction:
+      description: "One reaction per round"
+      examples: ["opportunity_attack", "counterspell", "shield"]
+      
+    free_actions:
+      description: "Simple interactions"
+      examples: ["draw_weapon", "open_door", "speak"]
+  
+  attack_rolls:
+    melee: "1d20 + strength_modifier + proficiency_bonus"
+    ranged: "1d20 + dexterity_modifier + proficiency_bonus"
+    spell: "1d20 + spellcasting_modifier + proficiency_bonus"
+    
+  damage:
+    melee: "weapon_damage + strength_modifier"
+    ranged: "weapon_damage + dexterity_modifier"
+    critical: "roll_damage_dice_twice"
+    
+  armor_class:
+    unarmored: "10 + dexterity_modifier"
+    light_armor: "armor_ac + dexterity_modifier"
+    medium_armor: "armor_ac + dexterity_modifier_max_2"
+    heavy_armor: "armor_ac"
+    shield: "+2"
+    
+  hit_points:
+    calculation: "class_hit_die + constitution_modifier per level"
+    death_saves:
+      threshold: 0
+      successes_needed: 3
+      failures_needed: 3
+      dc: 10
+      
+  conditions:
+    blinded:
+      description: "Can't see, auto-fail sight checks, disadvantage on attacks"
+      
+    charmed:
+      description: "Can't attack charmer, charmer has advantage on social checks"
+      
+    deafened:
+      description: "Can't hear, auto-fail hearing checks"
+      
+    frightened:
+      description: "Disadvantage while source of fear is in sight, can't move closer"
+      
+    grappled:
+      description: "Speed becomes 0, can't benefit from speed bonuses"
+      
+    incapacitated:
+      description: "Can't take actions or reactions"
+      
+    invisible:
+      description: "Impossible to see without magic, advantage on attacks"
+      
+    paralyzed:
+      description: "Incapacitated, can't move or speak, auto-fail STR/DEX saves"
+      
+    petrified:
+      description: "Transformed to stone, incapacitated, resistance to all damage"
+      
+    poisoned:
+      description: "Disadvantage on attacks and ability checks"
+      
+    prone:
+      description: "Disadvantage on attacks, melee attacks have advantage against"
+      
+    restrained:
+      description: "Speed 0, disadvantage on attacks and DEX saves"
+      
+    stunned:
+      description: "Incapacitated, can't move, can speak falteringly"
+      
+    unconscious:
+      description: "Incapacitated, can't move or speak, unaware, drops items"
+
+resting:
+  short_rest:
+    duration: "1 hour"
+    benefits:
+      - "Spend Hit Dice to regain HP"
+      - "Regain some class features"
+      
+  long_rest:
+    duration: "8 hours"
+    benefits:
+      - "Regain all HP"
+      - "Regain half total Hit Dice"
+      - "Regain all spell slots"
+      - "Reset all abilities"
+
+experience_and_leveling:
+  level_thresholds:
+    level_1: 0
+    level_2: 300
+    level_3: 900
+    level_4: 2700
+    level_5: 6500
+    level_6: 14000
+    level_7: 23000
+    level_8: 34000
+    level_9: 48000
+    level_10: 64000
+    level_11: 85000
+    level_12: 100000
+    level_13: 120000
+    level_14: 140000
+    level_15: 165000
+    level_16: 195000
+    level_17: 225000
+    level_18: 265000
+    level_19: 305000
+    level_20: 355000
+    
+  proficiency_bonus:
+    levels_1_4: 2
+    levels_5_8: 3
+    levels_9_12: 4
+    levels_13_16: 5
+    levels_17_20: 6
+
+magic_rules:
+  spell_slots:
+    description: "Limited magical energy per day"
+    recovery: "Long rest recovers all slots"
+    
+  spell_levels:
+    cantrip: "0-level, unlimited use"
+    level_1_9: "Requires spell slots"
+    
+  spellcasting_ability:
+    wizard: "intelligence"
+    cleric: "wisdom"
+    sorcerer: "charisma"
+    warlock: "charisma"
+    bard: "charisma"
+    druid: "wisdom"
+    paladin: "charisma"
+    ranger: "wisdom"
+    
+  spell_save_dc:
+    formula: "8 + proficiency_bonus + spellcasting_modifier"
+    
+  spell_attack_bonus:
+    formula: "proficiency_bonus + spellcasting_modifier"
+    
+  concentration:
+    description: "Some spells require concentration"
+    limit: "One concentration spell at a time"
+    saves: "Constitution save when taking damage"
+    dc: "10 or half damage taken, whichever is higher"
+
+inspiration:
+  description: "Reward for good roleplaying"
+  benefit: "Advantage on one roll"
+  limit: "Maximum 1 inspiration at a time"

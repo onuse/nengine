@@ -1,0 +1,338 @@
+# Faerun Campaign - D&D 5e Adventure in the Forgotten Realms
+# Set in the legendary world of Faerun from Dungeons & Dragons
+
+game:
+  title: "Faerun Campaign: Lost Mine of Phandelver"
+  version: "1.0.0"
+  author: "Narrative Engine D&D Module"
+  description: "Begin your adventure in the Sword Coast region of Faerun. You've been hired to escort a wagon to the frontier town of Phandalin."
+  startingRoom: "high_road_ambush"
+  maxPartySize: 6
+  requiresCharacterCreation: true
+  characterSystem: "dnd_5e"
+  
+  scoring:
+    enabled: true
+    maxScore: 10000
+    showInStatusBar: true
+    experiencePoints: true
+
+ui:
+  theme: "fantasy-dnd"
+  
+  layout:
+    type: "standard"
+    
+    panels:
+      console:
+        visible: true
+        position: "left"
+        size: "55%"
+        maxLines: 200
+        enableHistory: true
+        typewriterEffect: true
+        typewriterSpeed: 40
+      
+      viewport:
+        visible: true
+        position: "right-top"
+        size: "22%"
+        showRoomName: true
+        showDescription: true
+        showExits: true
+      
+      inventory:
+        visible: true
+        position: "right-middle"
+        size: "23%"
+        showWeight: true
+        showValue: true
+        enableDragDrop: false
+      
+      party:
+        visible: true
+        position: "right-bottom"
+        showHealth: true
+        showStats: true
+        showConditions: true
+        showClass: true
+        showLevel: true
+      
+      actions:
+        visible: true
+        style: "buttons"
+      
+      map:
+        visible: false
+
+  themeConfig:
+    name: "Forgotten Realms"
+    description: "Immersive D&D fantasy theme inspired by the Sword Coast"
+    
+    # Color palette inspired by medieval fantasy and D&D art
+    colors:
+      # Primary colors - rich browns and golds like old parchment and leather
+      primary: "#8B4513"        # Saddle brown (leather bound books)
+      secondary: "#DAA520"      # Goldenrod (treasure and magic)
+      tertiary: "#654321"       # Dark brown (ancient wood)
+      
+      # Backgrounds - parchment and stone textures
+      background: "#2F2B1A"     # Dark parchment
+      backgroundAlt: "#3A3425"  # Aged parchment
+      backgroundPanel: "#1A1814" # Dark stone
+      
+      # Text colors - ink and illuminated manuscript style
+      text: "#F4E5D3"          # Cream parchment text
+      textAlt: "#E6D2B8"       # Aged ink
+      textTitle: "#DAA520"     # Golden titles
+      textMuted: "#B8A082"     # Faded ink
+      
+      # UI borders and accents - metallic fantasy elements
+      border: "#8B7355"        # Bronze border
+      borderActive: "#DAA520"  # Gold active
+      borderFocus: "#CD853F"   # Peru highlight
+      
+      # Status colors with fantasy flair
+      success: "#228B22"       # Forest green (nature magic)
+      warning: "#FF8C00"       # Dark orange (fire)
+      error: "#DC143C"         # Crimson (blood/danger)
+      info: "#4682B4"          # Steel blue (magic)
+      healing: "#90EE90"       # Light green (healing magic)
+      mana: "#6495ED"          # Cornflower blue (mana)
+      
+      # D&D specific colors
+      strength: "#CD5C5C"      # Indian red
+      dexterity: "#32CD32"     # Lime green  
+      constitution: "#8B4513"  # Saddle brown
+      intelligence: "#4169E1"  # Royal blue
+      wisdom: "#DAA520"        # Goldenrod
+      charisma: "#FF69B4"      # Hot pink
+      
+    # Fantasy-appropriate fonts
+    fonts:
+      # Headers and titles - medieval manuscript style
+      title: "'Cinzel Decorative', 'Luminari', 'Papyrus', serif"
+      heading: "'Cinzel', 'Trajan Pro', 'Georgia', serif"
+      
+      # Body text - readable but atmospheric
+      main: "'Cinzel', 'Minion Pro', 'Georgia', serif"
+      flavour: "'Cinzel', 'Luminari', cursive"
+      
+      # UI elements
+      ui: "'Open Sans', 'Segoe UI', sans-serif"
+      console: "'Courier New', 'Monaco', 'Consolas', monospace"
+      
+    # Visual styling
+    borders:
+      style: "solid"
+      width: "2px"
+      radius: "6px"
+      decorative: "ridge"  # For special panels
+      
+    shadows:
+      text: "2px 2px 4px rgba(0,0,0,0.8)"
+      panel: "0 4px 8px rgba(0,0,0,0.6)"
+      button: "inset 0 1px 0 rgba(255,255,255,0.2)"
+      
+    # Background images and textures
+    textures:
+      parchment: "url('https://i.imgur.com/parchment-texture.jpg')"
+      leather: "url('https://i.imgur.com/leather-texture.jpg')"
+      stone: "url('https://i.imgur.com/stone-texture.jpg')"
+      wood: "url('https://i.imgur.com/wood-grain.jpg')"
+      
+    # Atmospheric elements
+    atmosphere:
+      particles: true           # Floating dust motes
+      candleFlicker: true      # Subtle lighting effects
+      pageFlip: true           # Page turning animations
+      inkFlow: true            # Writing animations
+
+  features:
+    # Core audio/visual features
+    enableSound: true
+    enableMusic: true
+    enableAnimations: true
+    typewriterEffect: true
+    accessibilityMode: false
+    
+    # D&D specific features
+    diceRolls: true
+    showDiceAnimations: true
+    rollHistory: true              # Show recent dice rolls
+    advantageIndicators: true      # Visual indicators for advantage/disadvantage
+    
+    # Atmospheric features
+    ambientSounds: true           # Location-based ambient audio
+    weatherEffects: true          # Visual weather in outdoor areas
+    candlelightFlicker: true      # Subtle lighting animations
+    floatingParticles: true       # Dust motes and magical sparkles
+    
+    # Enhanced UI features
+    characterPortraits: true      # Show character avatars
+    npcPortraits: true           # Show NPC portraits during dialogue
+    locationArtwork: true        # Background images for locations
+    monsterArtwork: true         # Show monster images during combat
+    
+    # Immersion features
+    pageFlipTransitions: true    # Page-turning animations
+    inkBlotEffects: true         # Ink spreading on text appearance
+    parchmentTextures: true      # Paper texture overlays
+    leatherBindingEffects: true  # Leather book aesthetic
+    
+    # Quality of life
+    autoSaveIndicator: true      # Show when game is saving
+    experienceVisualizer: true   # XP progress bars and celebrations
+    healthVisualization: true    # Visual health indicators
+    spellSlotVisuals: true       # Visual spell slot tracking
+    
+    # Advanced features
+    dynamicLighting: true        # Torch/magical light effects
+    combatAnimations: true       # Weapon swing and spell animations
+    emotiveText: true           # Text color/style changes for emotions
+    contextualMusic: true       # Music changes based on situation
+
+mechanics:
+  combatSystem: "dnd-5e"
+  initiativeSystem: true
+  
+  commands:
+    movement: ["north", "south", "east", "west", "northeast", "northwest", "southeast", "southwest", "up", "down", "enter", "exit"]
+    interaction: ["look", "examine", "search", "get", "take", "drop", "use", "open", "close", "unlock", "lock", "push", "pull", "read"]
+    conversation: ["talk", "ask", "tell", "persuade", "intimidate", "deceive", "give", "show", "trade"]
+    combat: ["attack", "cast", "defend", "dodge", "help", "hide", "ready", "dash", "disengage", "grapple", "shove", "flee"]
+    meta: ["inventory", "stats", "skills", "spells", "rest", "save", "load", "help", "score", "party", "conditions"]
+    special: ["perception", "investigation", "insight", "stealth", "roll"]
+
+  difficultyClasses:
+    veryEasy: 5
+    easy: 10
+    medium: 15
+    hard: 20
+    veryHard: 25
+    nearlyImpossible: 30
+
+  advantageSystem:
+    enabled: true
+    
+  proficiencyBonus:
+    level1to4: 2
+    level5to8: 3
+    level9to12: 4
+    level13to16: 5
+    level17to20: 6
+
+llm:
+  provider: "ollama"
+  model: "gemma2:9b"
+  fallbackModel: "mistral:7b"
+  contextWindow: 8192
+  temperature: 0.8
+  autoDetectModels: true
+  
+  narrativeStyle:
+    tone: "epic-fantasy"
+    verbosity: "descriptive"
+    perspective: "second"
+    
+  extraInstructions: |
+    You are the Dungeon Master for a Dungeons & Dragons 5th Edition campaign set in Faerun.
+    Your role is to bring the Forgotten Realms to life with rich descriptions and engaging storytelling.
+    
+    Core D&D Principles:
+    - Always call for appropriate ability checks (Perception, Investigation, Insight, etc.)
+    - Use proper D&D terminology (hit points, armor class, saving throws)
+    - Reference the six abilities: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma
+    - Describe combat in epic, cinematic terms while maintaining mechanical accuracy
+    - Award experience points for encounters and clever solutions
+    
+    Faerun Setting:
+    - Reference iconic locations like Waterdeep, Baldur's Gate, Neverwinter when appropriate
+    - Include mentions of Faerun's gods (Tyr, Torm, Lathander, etc.) in NPC dialogue
+    - Use Common, Elvish, Dwarvish, and other D&D languages appropriately
+    - Reference the Sword Coast, the Lords' Alliance, and other Faerun organizations
+    
+    Narrative Style:
+    - Begin room descriptions with environmental details (light, sounds, smells)
+    - Describe NPCs with distinct voices, mannerisms, and motivations
+    - Create tension through descriptive foreshadowing
+    - Reward creative problem-solving and role-playing
+    - Make failed rolls interesting, not just "you fail"
+    
+    Combat Descriptions:
+    - Describe hits and misses cinematically
+    - Reference weapon types and spell effects accurately
+    - Track conditions like prone, grappled, frightened
+    - Describe creature behaviors based on their intelligence
+    
+    NEVER break character as the DM
+    NEVER reference game files or technical mechanics
+    ALWAYS maintain the fantasy immersion
+    Let players drive the story through their choices
+
+# D&D-optimized model selection per VRAM tier
+modelTiers:
+  # 4-6GB VRAM: Focus on efficiency while maintaining D&D knowledge
+  minimal:
+    primary: "phi3:mini"              # Efficient but smart enough for rules
+    fallback: "gemma2:2b"             # Lightweight backup
+    
+  budget:
+    primary: "gemma2:9b-q4_K_M"       # Good D&D knowledge, efficient
+    fallback: "phi3:mini"
+    
+  # 8GB VRAM: Optimal for most D&D games
+  gaming:
+    primary: "llama3.1:8b"            # Excellent creative writing
+    fallback: "gemma2:9b"             # Strong D&D rule knowledge
+    
+  # 12GB VRAM: Enhanced creativity and rule knowledge
+  gaming_high:
+    primary: "llama3.1:8b"            # Best creativity for this tier
+    fallback: "mistral:7b-instruct"   # Strong logical reasoning
+    
+  # 16GB VRAM: Premium D&D experience
+  enthusiast:
+    primary: "llama3.1:13b"           # Excellent for complex narratives
+    fallback: "mixtral:8x7b-q4_K_M"   # Multi-expert reasoning
+    
+  # 24GB VRAM: Professional D&D mastery
+  prosumer:
+    primary: "mixtral:8x7b"           # Best reasoning and creativity balance
+    fallback: "llama3.1:13b"          # Excellent narrative backup
+    
+  # 32GB VRAM: RTX 5090 Ultimate D&D Experience
+  prosumer_ultra:
+    primary: "llama3.1:70b-q4_K_M"    # 70B model fits perfectly in 32GB
+    fallback: "mixtral:8x22b-q4_K_M"  # Advanced multi-expert reasoning
+    
+  # 64GB+ VRAM: Unlimited D&D mastery
+  workstation:
+    primary: "llama3.1:70b"           # Full precision 70B model
+    fallback: "mixtral:8x22b"         # Full precision backup
+
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/npcs.yaml"
+  items: "./content/items.yaml"
+  characters: "./content/characters.yaml"
+  rules: "./content/rules.yaml"
+  skills: "./content/skills.yaml"
+  spells: "./content/spells.yaml"
+  monsters: "./content/monsters.yaml"
+  classes: "./content/classes.yaml"
+  races: "./content/races.yaml"
+  characterCreation: "./content/character-creation.yaml"
+
+saves:
+  autoSave: true
+  autoSaveInterval: 300
+  maxSaves: 20
+  enableBranching: true
+  campaignMode: true
+
+development:
+  debugMode: false
+  showEntityIds: false
+  enableConsoleCommands: true
+  hotReload: false

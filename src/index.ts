@@ -9,6 +9,7 @@ import { MCPServerManager as ExternalMCPManager } from './core/mcp-manager';
 import { MCPServerManager } from './mcp/mcp-server-manager';
 import { NarrativeController } from './llm/narrative-controller';
 import { GameLoader } from './core/game-loader';
+import { ModelTierDetector } from './core/model-tier-detector';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -31,7 +32,34 @@ let currentGame: any = null;
 async function initializeGame() {
   try {
     const gameName = process.argv.find(arg => arg.startsWith('--game='))?.split('=')[1] || DEFAULT_GAME;
+    
     currentGame = await gameLoader.loadGame(gameName);
+    
+    // Auto-detect VRAM and optimize model selection
+    console.log('🔍 Detecting system capabilities...');
+    const preferUncensored = currentGame.llm?.preferUncensored || 
+                            currentGame.game?.maturity_rating === 'adult' ||
+                            currentGame.game?.content_warnings?.length > 0;
+    const modelConfig = await ModelTierDetector.autoDetectAndConfigure(preferUncensored, currentGame);
+    
+    // Override LLM config with auto-detected optimal models (unless game explicitly disables auto-detection)
+    if (currentGame.llm && currentGame.llm.autoDetectModels !== false) {
+      const originalModel = currentGame.llm.model;
+      const originalFallback = currentGame.llm.fallbackModel;
+      
+      currentGame.llm.model = modelConfig.recommendedModel;
+      currentGame.llm.fallbackModel = modelConfig.fallbackModel;
+      
+      console.log(`🤖 Model auto-optimization:`);
+      console.log(`   Original: ${originalModel} → Optimized: ${modelConfig.recommendedModel}`);
+      console.log(`   Fallback: ${originalFallback} → Optimized: ${modelConfig.fallbackModel}`);
+      console.log(`   Tier: ${modelConfig.selectedTier.name} (${modelConfig.selectedTier.description})`);
+      if (currentGame.modelTiers) {
+        console.log(`   Using game-specific model preferences`);
+      }
+    } else if (currentGame.llm?.autoDetectModels === false) {
+      console.log(`⚙️  Auto-detection disabled, using game-specified models`);
+    }
     
     // Update Git manager to use game-specific saves
     const savesPath = gameLoader.getSavesPath();
@@ -389,6 +417,23 @@ app.get('/api/game/:gameName/theme.css', (req, res) => {
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', debug: DEBUG_MODE });
+});
+
+app.get('/api/system/capabilities', async (req, res) => {
+  try {
+    const vramInfo = await ModelTierDetector.detectVRAM();
+    const allTiers = ModelTierDetector.getAllTiers();
+    const selectedTier = ModelTierDetector.selectOptimalTier(vramInfo);
+    
+    res.json({
+      vram: vramInfo,
+      selectedTier,
+      availableTiers: allTiers,
+      currentGame: currentGame?.game?.title || 'None'
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 server.listen(PORT, async () => {

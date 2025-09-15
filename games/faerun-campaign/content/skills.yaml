@@ -1,0 +1,340 @@
+# D&D 5e Skills System for Faerun Campaign
+# Complete skill definitions with ability score associations
+
+skills:
+  version: "1.0.0"
+  system: "dnd_5e"
+  
+  # Core D&D 5e Skills
+  skill_definitions:
+    acrobatics:
+      name: "Acrobatics"
+      ability: "dexterity"
+      description: "Your Dexterity (Acrobatics) check covers your attempt to stay on your feet in a tricky situation"
+      example_uses:
+        - "Stay upright on a rocking ship"
+        - "Walk across a tightrope"
+        - "Perform acrobatic stunts"
+        - "Land safely from a fall"
+      dc_examples:
+        easy: "Walk across an icy surface (DC 10)"
+        medium: "Walk on a narrow ledge (DC 15)"
+        hard: "Swing from a chandelier (DC 20)"
+        
+    animal_handling:
+      name: "Animal Handling" 
+      ability: "wisdom"
+      description: "When there is any question whether you can calm down a domesticated animal"
+      example_uses:
+        - "Calm a frightened horse"
+        - "Intuit an animal's intentions"
+        - "Control a mount in combat"
+        - "Train a pet or working animal"
+      dc_examples:
+        easy: "Calm a startled horse (DC 10)"
+        medium: "Control a warhorse in battle (DC 15)"
+        hard: "Calm a dire wolf (DC 20)"
+        
+    arcana:
+      name: "Arcana"
+      ability: "intelligence"
+      description: "Your Intelligence (Arcana) check measures your ability to recall lore about spells and magic items"
+      example_uses:
+        - "Identify magical effects"
+        - "Recall lore about magical creatures"
+        - "Understand arcane symbols"
+        - "Know about schools of magic"
+      dc_examples:
+        easy: "Identify a common magic item (DC 10)"
+        medium: "Recall lore about a magical creature (DC 15)" 
+        hard: "Understand ancient magical writing (DC 20)"
+        
+    athletics:
+      name: "Athletics"
+      ability: "strength"
+      description: "Your Strength (Athletics) check covers difficult situations you encounter while climbing or swimming"
+      example_uses:
+        - "Climb a difficult surface"
+        - "Swim in stormy water"
+        - "Jump unusually far"
+        - "Break free from restraints"
+      dc_examples:
+        easy: "Climb a rope (DC 10)"
+        medium: "Climb a cliff with few handholds (DC 15)"
+        hard: "Swim against a strong current (DC 20)"
+        
+    deception:
+      name: "Deception"
+      ability: "charisma"
+      description: "Your Charisma (Deception) check determines whether you can convincingly hide the truth"
+      example_uses:
+        - "Fast-talk a guard"
+        - "Con a merchant"
+        - "Earn money through gambling"
+        - "Maintain a disguise"
+      dc_examples:
+        easy: "Tell a believable lie (DC 10)"
+        medium: "Convince someone of an unlikely story (DC 15)"
+        hard: "Maintain a complex deception (DC 20)"
+        
+    history:
+      name: "History"
+      ability: "intelligence"
+      description: "Your Intelligence (History) check measures your ability to recall lore about historical events"
+      example_uses:
+        - "Recall historical events"
+        - "Know about ancient kingdoms"
+        - "Understand historical significance"
+        - "Remember legendary figures"
+      dc_examples:
+        easy: "Recall common historical knowledge (DC 10)"
+        medium: "Remember obscure historical facts (DC 15)"
+        hard: "Know ancient secrets (DC 20)"
+      faerun_specific:
+        - "Wars of the Crown in Cormyr"
+        - "The Time of Troubles"
+        - "Fall of Netheril"
+        - "Rise of Waterdeep"
+        
+    insight:
+      name: "Insight"
+      ability: "wisdom"
+      description: "Your Wisdom (Insight) check decides whether you can determine the true intentions of a creature"
+      example_uses:
+        - "Determine if someone is lying"
+        - "Predict a creature's next move"
+        - "Read body language"
+        - "Sense someone's mood"
+      dc_examples:
+        easy: "Notice obvious nervousness (DC 10)"
+        medium: "Detect a well-practiced lie (DC 15)"
+        hard: "Read a master manipulator (DC 20)"
+        
+    intimidation:
+      name: "Intimidation"
+      ability: "charisma"
+      description: "When you attempt to influence someone through overt threats or hostile actions"
+      example_uses:
+        - "Extract information through threats"
+        - "Make enemies back down"
+        - "Cow a crowd"
+        - "Break someone's resolve"
+      dc_examples:
+        easy: "Intimidate a cowardly NPC (DC 10)"
+        medium: "Threaten a trained soldier (DC 15)"
+        hard: "Intimidate a fearless opponent (DC 20)"
+        
+    investigation:
+      name: "Investigation"
+      ability: "intelligence"
+      description: "When you look around for clues and make deductions based on those clues"
+      example_uses:
+        - "Search for hidden objects"
+        - "Deduce how a trap works"
+        - "Determine what killed a creature"
+        - "Find secret doors or compartments"
+      dc_examples:
+        easy: "Find obvious clues (DC 10)"
+        medium: "Piece together a mystery (DC 15)"
+        hard: "Solve a complex puzzle (DC 20)"
+        
+    medicine:
+      name: "Medicine"
+      ability: "wisdom"
+      description: "A Wisdom (Medicine) check lets you try to stabilize a dying companion"
+      example_uses:
+        - "Stabilize the dying"
+        - "Diagnose an illness"
+        - "Treat wounds"
+        - "Recognize symptoms"
+      dc_examples:
+        easy: "Treat minor injuries (DC 10)"
+        medium: "Diagnose common diseases (DC 15)"
+        hard: "Treat exotic poisons (DC 20)"
+        
+    nature:
+      name: "Nature"
+      ability: "intelligence"
+      description: "Your Intelligence (Nature) check measures your ability to recall lore about terrain and creatures"
+      example_uses:
+        - "Identify plants and animals"
+        - "Navigate wilderness"
+        - "Predict weather"
+        - "Find food and shelter"
+      dc_examples:
+        easy: "Identify common animals (DC 10)"
+        medium: "Predict tomorrow's weather (DC 15)"
+        hard: "Identify rare or magical plants (DC 20)"
+        
+    perception:
+      name: "Perception"
+      ability: "wisdom"
+      description: "Your Wisdom (Perception) check lets you spot, hear, or otherwise detect the presence of something"
+      example_uses:
+        - "Notice hidden enemies"
+        - "Hear distant sounds"
+        - "Spot concealed objects"
+        - "Detect subtle changes"
+      dc_examples:
+        easy: "Notice something in plain sight (DC 10)"
+        medium: "Spot a hidden creature (DC 15)"
+        hard: "Detect an invisible stalker (DC 20)"
+        
+    performance:
+      name: "Performance"
+      ability: "charisma"
+      description: "Your Charisma (Performance) check determines how well you can delight an audience"
+      example_uses:
+        - "Perform music or song"
+        - "Tell stories"
+        - "Act or recite poetry"
+        - "Entertain a crowd"
+      dc_examples:
+        easy: "Routine performance (DC 10)"
+        medium: "Memorable performance (DC 15)"
+        hard: "Virtuoso performance (DC 20)"
+        
+    persuasion:
+      name: "Persuasion"
+      ability: "charisma"
+      description: "When you attempt to influence someone through tact and social graces"
+      example_uses:
+        - "Convince someone to help"
+        - "Negotiate a deal"
+        - "Inspire confidence"
+        - "Make a good impression"
+      dc_examples:
+        easy: "Convince a friendly NPC (DC 10)"
+        medium: "Persuade a neutral party (DC 15)"
+        hard: "Win over a hostile audience (DC 20)"
+        
+    religion:
+      name: "Religion"
+      ability: "intelligence"
+      description: "Your Intelligence (Religion) check measures your ability to recall lore about deities and religious practices"
+      example_uses:
+        - "Recognize religious symbols"
+        - "Know religious practices"
+        - "Understand divine magic"
+        - "Recall myths and legends"
+      dc_examples:
+        easy: "Identify major deities (DC 10)"
+        medium: "Know obscure religious practices (DC 15)"
+        hard: "Understand ancient divine magic (DC 20)"
+      faerun_deities:
+        major_good: ["Torm", "Tyr", "Lathander", "Selune", "Bahamut"]
+        major_neutral: ["Oghma", "Silvanus", "Waukeen", "Kelemvor"]
+        major_evil: ["Bane", "Cyric", "Shar", "Tiamat", "Asmodeus"]
+        
+    sleight_of_hand:
+      name: "Sleight of Hand"
+      ability: "dexterity"
+      description: "Whenever you attempt an act of legerdemain or manual trickery"
+      example_uses:
+        - "Plant or steal objects"
+        - "Conceal items on your person"
+        - "Pick locks or pockets"
+        - "Perform magic tricks"
+      dc_examples:
+        easy: "Palm a coin (DC 10)"
+        medium: "Pick a simple lock (DC 15)"
+        hard: "Steal from an alert guard (DC 20)"
+        
+    stealth:
+      name: "Stealth"
+      ability: "dexterity"
+      description: "Make a Dexterity (Stealth) check when you attempt to conceal yourself from enemies"
+      example_uses:
+        - "Hide from enemies"
+        - "Move silently"
+        - "Avoid detection"
+        - "Set up ambushes"
+      dc_examples:
+        easy: "Hide in dense foliage (DC 10)"
+        medium: "Sneak past a guard (DC 15)"
+        hard: "Hide in plain sight (DC 20)"
+        
+    survival:
+      name: "Survival"
+      ability: "wisdom"
+      description: "The DM might ask you to make a Wisdom (Survival) check to follow tracks or navigate"
+      example_uses:
+        - "Track creatures"
+        - "Navigate wilderness"
+        - "Find food and water"
+        - "Avoid getting lost"
+      dc_examples:
+        easy: "Follow obvious tracks (DC 10)"
+        medium: "Navigate without landmarks (DC 15)"
+        hard: "Track over hard ground (DC 20)"
+
+  # Skill Proficiency Rules
+  proficiency_system:
+    proficiency_bonus:
+      levels_1_4: 2
+      levels_5_8: 3
+      levels_9_12: 4
+      levels_13_16: 5
+      levels_17_20: 6
+      
+    expertise:
+      description: "Double proficiency bonus for specific skills"
+      available_to: ["rogue", "bard", "ranger_revised"]
+      
+    jack_of_all_trades:
+      description: "Add half proficiency to non-proficient checks"
+      available_to: ["bard"]
+      
+    reliable_talent:
+      description: "Treat d20 rolls of 9 or lower as 10 for proficient skills"
+      available_to: ["rogue"]
+      level_requirement: 11
+
+  # Passive Scores
+  passive_scores:
+    passive_perception:
+      formula: "10 + wisdom_modifier + proficiency_bonus (if proficient)"
+      description: "Always-on awareness level"
+      
+    passive_investigation:
+      formula: "10 + intelligence_modifier + proficiency_bonus (if proficient)"
+      description: "Notice things without actively looking"
+      
+    passive_insight:
+      formula: "10 + wisdom_modifier + proficiency_bonus (if proficient)"
+      description: "Detect lies and motives unconsciously"
+
+  # Environmental Modifiers
+  environmental_conditions:
+    advantage:
+      - "Using appropriate tools"
+      - "Having help from an ally"
+      - "Being in an ideal situation"
+      
+    disadvantage:
+      - "Working in poor conditions"
+      - "Using improvised tools"
+      - "Being rushed or distracted"
+      
+    circumstance_bonuses:
+      excellent_tools: 2
+      appropriate_background: 2
+      relevant_expertise: 2
+
+  # Faerun-Specific Applications
+  faerun_specializations:
+    sword_coast_lore:
+      relevant_skills: ["history", "religion", "nature"]
+      description: "Knowledge specific to the Sword Coast region"
+      
+    underdark_survival:
+      relevant_skills: ["survival", "nature", "stealth"]
+      description: "Surviving in the dangerous Underdark"
+      
+    waterdeep_streetwise:
+      relevant_skills: ["insight", "investigation", "sleight_of_hand"]
+      description: "Navigating the City of Splendors"
+      
+    magical_lore:
+      relevant_skills: ["arcana", "history", "religion"]
+      description: "Understanding Faerun's rich magical history"

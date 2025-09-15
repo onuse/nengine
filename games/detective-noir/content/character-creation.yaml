@@ -1,0 +1,256 @@
+# Character Creation for Detective Noir Game
+# Another completely different character system
+
+character_creation:
+  system: "detective_noir"
+  version: "1.0.0"
+  
+  creation_flow:
+    - step: "archetype"
+      title: "Choose Your Detective Type"
+      description: "What kind of investigator are you?"
+      optional: false
+      
+    - step: "background"
+      title: "Your Past"
+      description: "What brought you to this profession?"
+      optional: false
+      
+    - step: "specialization"
+      title: "Area of Expertise"
+      description: "What's your investigative specialty?"
+      optional: false
+      
+    - step: "connections"
+      title: "Your Network"
+      description: "Who do you know in the city?"
+      optional: false
+      
+    - step: "flaws"
+      title: "Personal Demons"
+      description: "What haunts you?"
+      optional: false
+      
+    - step: "office"
+      title: "Your Office"
+      description: "Where do you operate from?"
+      optional: false
+
+  archetypes:
+    hardboiled:
+      name: "Hardboiled Detective"
+      description: "Tough, cynical, seen it all"
+      skills:
+        intimidation: "expert"
+        streetwise: "expert"
+        combat: "competent"
+      starting_gear: ["revolver", "flask", "cigarettes"]
+      reputation: "feared_but_respected"
+      
+    cerebral:
+      name: "Cerebral Investigator"
+      description: "Analytical, methodical, brilliant"
+      skills:
+        deduction: "master"
+        research: "expert"
+        forensics: "expert"
+      starting_gear: ["magnifying_glass", "notebook", "chemistry_set"]
+      reputation: "brilliant_but_odd"
+      
+    charming:
+      name: "Charming Investigator"
+      description: "Smooth talker, well-connected"
+      skills:
+        persuasion: "expert"
+        networking: "expert"
+        disguise: "competent"
+      starting_gear: ["business_cards", "fine_clothes", "little_black_book"]
+      reputation: "well_liked"
+      
+    tech_savvy:
+      name: "Modern Detective"
+      description: "Uses cutting-edge methods"
+      skills:
+        computers: "expert"
+        surveillance: "expert"
+        forensics: "competent"
+      starting_gear: ["laptop", "camera", "listening_devices"]
+      reputation: "innovative"
+
+  backgrounds:
+    ex_cop:
+      name: "Ex-Police"
+      description: "Former member of the force"
+      benefits:
+        police_contacts: 3
+        knowledge: ["police_procedures", "criminal_law"]
+        licenses: ["concealed_carry", "private_investigator"]
+      drawbacks: ["some_cops_dislike_you"]
+      
+    journalist:
+      name: "Former Journalist"
+      description: "Used to uncover stories"
+      benefits:
+        media_contacts: 3
+        knowledge: ["research_methods", "city_politics"]
+        skills: ["photography", "interviewing"]
+      drawbacks: ["known_face"]
+      
+    criminal:
+      name: "Reformed Criminal"
+      description: "Knows the underworld intimately"
+      benefits:
+        underworld_contacts: 3
+        knowledge: ["criminal_methods", "black_market"]
+        skills: ["lockpicking", "surveillance_detection"]
+      drawbacks: ["criminal_record", "old_enemies"]
+      
+    academic:
+      name: "Academic Background"
+      description: "Professor or researcher turned detective"
+      benefits:
+        academic_contacts: 3
+        knowledge: ["psychology", "history", "languages"]
+        access: ["university_library", "research_databases"]
+      drawbacks: ["ivory_tower_reputation"]
+
+  specializations:
+    homicide:
+      name: "Homicide Specialist"
+      knowledge_areas: ["forensics", "autopsy_reports", "ballistics"]
+      contacts: ["coroner", "crime_scene_tech"]
+      
+    fraud:
+      name: "Fraud Investigator"
+      knowledge_areas: ["accounting", "forgery_detection", "paper_trails"]
+      contacts: ["bank_manager", "document_expert"]
+      
+    missing_persons:
+      name: "Missing Persons Expert"
+      knowledge_areas: ["tracking", "psychology", "underground_networks"]
+      contacts: ["social_worker", "street_informant"]
+      
+    blackmail:
+      name: "Blackmail Specialist"
+      knowledge_areas: ["photography", "surveillance", "high_society"]
+      contacts: ["gossip_columnist", "hotel_concierge"]
+
+  personal_flaws:
+    alcoholic:
+      name: "Alcoholism"
+      description: "You drink too much"
+      mechanical_effect: "Disadvantage on morning actions"
+      story_hooks: ["AA_meetings", "bar_connections"]
+      
+    gambling_debt:
+      name: "Gambling Debts"
+      description: "You owe the wrong people money"
+      mechanical_effect: "Regular payment obligations"
+      story_hooks: ["loan_sharks", "underground_casinos"]
+      
+    haunted_past:
+      name: "Haunted by a Case"
+      description: "An old case still haunts you"
+      mechanical_effect: "Occasional flashbacks"
+      story_hooks: ["cold_case", "survivor_guilt"]
+      
+    corrupt:
+      name: "Morally Flexible"
+      description: "You'll bend the rules for the right price"
+      mechanical_effect: "Extra income opportunities, reputation risk"
+      story_hooks: ["dirty_money", "compromised_ethics"]
+
+  office_locations:
+    downtown:
+      name: "Downtown Office"
+      description: "Professional building, respectable address"
+      rent: 500
+      prestige: "high"
+      client_type: "wealthy"
+      
+    chinatown:
+      name: "Chinatown Walkup"
+      description: "Above a restaurant, colorful neighborhood"
+      rent: 200
+      prestige: "medium"
+      client_type: "diverse"
+      
+    waterfront:
+      name: "Waterfront Warehouse"
+      description: "Converted warehouse space"
+      rent: 300
+      prestige: "low"
+      client_type: "desperate"
+      
+    home_office:
+      name: "Home Office"
+      description: "Work from your apartment"
+      rent: 0
+      prestige: "very_low"
+      client_type: "referrals_only"
+
+character_schema:
+  version: "1.0.0"
+  
+  identity:
+    name: { type: "string", required: true }
+    archetype: { type: "string", required: true }
+    background: { type: "string", required: true }
+    specialization: { type: "string", required: true }
+    age: { type: "number", min: 25, max: 70 }
+    description: { type: "text" }
+    
+  skills:
+    # Investigation skills
+    observation: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    deduction: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    interrogation: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    research: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    
+    # Social skills
+    persuasion: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    intimidation: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    networking: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    disguise: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    
+    # Technical skills
+    forensics: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    lockpicking: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    surveillance: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    combat: { type: "string", enum: ["novice", "competent", "expert", "master"] }
+    
+  knowledge:
+    areas: { type: "array", items: "string" }
+    languages: { type: "array", items: "string" }
+    city_districts: { type: "array", items: "string" }
+    
+  resources:
+    money: { type: "number", default: 1000 }
+    office: { type: "object" }
+    equipment: { type: "array", items: "string" }
+    licenses: { type: "array", items: "string" }
+    
+  contacts:
+    police: { type: "array", items: "contact" }
+    underworld: { type: "array", items: "contact" }
+    media: { type: "array", items: "contact" }
+    informants: { type: "array", items: "contact" }
+    clients: { type: "array", items: "contact" }
+    
+  reputation:
+    public: { type: "number", min: 0, max: 100 }
+    police: { type: "number", min: -100, max: 100 }
+    underworld: { type: "number", min: -100, max: 100 }
+    high_society: { type: "number", min: 0, max: 100 }
+    
+  case_history:
+    solved_cases: { type: "array", items: "case" }
+    cold_cases: { type: "array", items: "case" }
+    current_cases: { type: "array", items: "case" }
+    case_solve_rate: { type: "number", calculated: true }
+    
+  personal:
+    flaws: { type: "array", items: "string", max: 2 }
+    vices: { type: "array", items: "string" }
+    enemies: { type: "array", items: "enemy" }
+    allies: { type: "array", items: "ally" }

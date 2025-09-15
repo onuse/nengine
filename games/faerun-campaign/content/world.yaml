@@ -1,0 +1,309 @@
+# Faerun World Data - Sword Coast Region
+
+regions:
+  sword_coast:
+    name: "The Sword Coast"
+    description: "The western coast of Faerun, stretching from Waterdeep to Amn"
+    
+  sword_coast_north:
+    name: "The Sword Coast North"
+    description: "The frontier region north of Waterdeep, also known as the Savage Frontier"
+
+rooms:
+  - id: high_road_ambush
+    name: "Ambush on the High Road"
+    description: |
+      The rutted track emerges from a wooded hillside, winding its way between steep rocky outcroppings. 
+      Two dead horses lie in the road ahead, their saddlebags torn open and contents scattered. 
+      Black-feathered arrows jut from their flanks. The woods press close on both sides of the trail.
+      
+      This is about five miles outside of Phandalin, where you were hired to escort supplies.
+    exits:
+      north: "goblin_trail_start"
+      south: "high_road_south"
+      investigate: "ambush_investigation"
+    region: "sword_coast_north"
+    danger_level: "low"
+    
+  - id: ambush_investigation
+    name: "Scene of the Ambush"
+    description: |
+      Examining the scene more closely, you find signs of a struggle. The horses have been dead for about a day.
+      Drag marks lead into the brush on the north side of the road. An empty leather map case lies trampled in the mud.
+      
+      A successful Investigation check might reveal goblin tracks and a hidden trail.
+    exits:
+      back: "high_road_ambush"
+      follow_tracks: "goblin_trail_start"
+    items: ["empty_map_case", "torn_saddlebag"]
+    skill_checks:
+      investigation:
+        dc: 12
+        success: "You spot small humanoid tracks - goblins! They lead north into the woods."
+        failure: "The tracks are too muddled to make out clearly."
+      survival:
+        dc: 10
+        success: "About a dozen goblins were here. They left heading north about a day ago."
+    
+  - id: goblin_trail_start
+    name: "Goblin Trail"
+    description: |
+      A narrow trail winds northwest through the dense woods. Broken branches and disturbed undergrowth mark the recent passage of several small humanoids dragging something heavy.
+      
+      The canopy overhead blocks most of the sunlight, creating deep shadows between the trees.
+    exits:
+      south: "high_road_ambush"
+      northwest: "goblin_trap_snare"
+    danger_level: "medium"
+    hidden_features:
+      - "snare_trap"
+      - "pit_trap"
+      
+  # Cragmaw Hideout Area
+  - id: cragmaw_entrance
+    name: "Cragmaw Hideout Entrance"
+    description: |
+      Following the stream, you come upon a cave entrance in a hillside five miles from the ambush site.
+      A shallow stream flows from the cave mouth, which is screened by dense briar thickets.
+      
+      A narrow, dry path runs alongside the stream, littered with well-gnawed bones.
+    exits:
+      inside: "cragmaw_cave_mouth"
+      back: "goblin_trail_end"
+    npcs: ["goblin_sentry_1", "goblin_sentry_2"]
+    
+  - id: cragmaw_cave_mouth
+    name: "Cave Mouth"
+    description: |
+      The cave mouth curves sharply to the east after about 20 feet. A stream emerges from deeper in the cave, flowing westward. The air is damp and smells of wet dog and rotting meat.
+      
+      On either side of the stream, the cavern floor is smooth but damp, rising in a gentle slope toward the back.
+    exits:
+      outside: "cragmaw_entrance"
+      east: "wolf_den"
+      northeast: "steep_passage"
+    light: "dim"
+    
+  # Phandalin - Frontier Town
+  - id: phandalin_square
+    name: "Phandalin Town Square"
+    description: |
+      The frontier town of Phandalin consists of forty or fifty simple log buildings, some built on old fieldstone foundations from a ruined older settlement. 
+      
+      The town square is unpaved, with a large notice board and a well in the center. 
+      Barthen's Provisions, the Stonehill Inn, and the Shrine of Luck are all visible from here.
+    exits:
+      north: "stonehill_inn"
+      south: "barthens_provisions"
+      east: "shrine_of_luck"
+      west: "sleeping_giant_tap"
+      road_north: "triboar_trail"
+      road_south: "high_road_south"
+    region: "sword_coast_north"
+    safe_zone: true
+    
+  - id: stonehill_inn
+    name: "The Stonehill Inn"
+    description: |
+      A large, comfortable inn at the heart of Phandalin. The common room is filled with locals nursing mugs of ale or cider, 
+      all engaged in quiet conversation. A fire crackles in the hearth, and the smell of roasting meat fills the air.
+      
+      Toblen Stonehill, the friendly innkeeper, greets you warmly.
+    exits:
+      outside: "phandalin_square"
+      upstairs: "inn_rooms"
+    npcs: ["toblen_stonehill", "inn_patron_1", "inn_patron_2"]
+    services:
+      rest: { cost: 5, type: "long_rest" }
+      food: { cost: 5, quality: "modest" }
+      rumors: true
+      
+  # Major Cities (Referenced/Distant)
+  - id: waterdeep_gates
+    name: "The Gates of Waterdeep"
+    description: |
+      The City of Splendors rises before you - Waterdeep, the crown jewel of the Sword Coast. 
+      Massive walls protect the greatest city of the North, where a hundred thousand souls make their home.
+      
+      The spires of Blackstaff Tower and the Palace of Waterdeep rise above the cityscape.
+      Trade caravans stream through the gates as the City Watch maintains order.
+    exits:
+      enter: "waterdeep_market"
+      south: "high_road_south"
+    region: "sword_coast"
+    services:
+      everything: true
+    
+  - id: waterdeep_market
+    name: "Waterdeep Market Ward"
+    description: |
+      The busiest district in Waterdeep overwhelms the senses. Merchants hawk their wares from a thousand stalls.
+      Street performers compete for coin while nobles in fine clothes brush past common laborers.
+      
+      The famous Yawning Portal Inn is nearby, built around the entrance to Undermountain.
+    exits:
+      north: "waterdeep_castle_ward"
+      south: "waterdeep_dock_ward"
+      east: "waterdeep_trades_ward"
+      west: "waterdeep_gates"
+      inn: "yawning_portal"
+    npcs: ["merchant_various", "city_watch_patrol"]
+    
+  - id: yawning_portal
+    name: "The Yawning Portal Inn"
+    description: |
+      This famous tavern and inn features a 40-foot-wide well that descends 140 feet into the first level of Undermountain.
+      Durnan, the gruff proprietor and former adventurer, watches over the well.
+      
+      Adventurers pay Durnan 1 gold piece to be lowered into the dungeon, though few return.
+    exits:
+      outside: "waterdeep_market"
+      well: "undermountain_entry"
+    npcs: ["durnan", "mirt_the_moneylender"]
+    
+  - id: neverwinter_approach
+    name: "The Road to Neverwinter"
+    description: |
+      The Jewel of the North lies ahead - Neverwinter, the city that even the harshest winters cannot defeat.
+      The city's famous Clockwork Tower chimes the hour, its mechanical precision a wonder of engineering.
+      
+      Once ruled by Lord Nasher, the city has rebuilt after the eruption of Mount Hotenow.
+    exits:
+      enter: "neverwinter_protectors_enclave"
+      south: "high_road_south"
+    region: "sword_coast_north"
+    
+  - id: baldurs_gate_approach
+    name: "Approach to Baldur's Gate"
+    description: |
+      The great port city of Baldur's Gate sprawls along the Chionthar River where it meets the Sea of Swords.
+      This gateway between the Sword Coast and the Western Heartlands teems with trade and intrigue.
+      
+      The Upper City's towers rise above the fog, while the Lower City's sprawl extends to the Gray Harbor.
+    exits:
+      enter: "baldurs_gate_basilisk"
+      north: "coast_way_north"
+    region: "sword_coast"
+    
+  # Dungeons and Dangerous Places
+  - id: wave_echo_cave_entrance
+    name: "Wave Echo Cave"
+    description: |
+      Hidden in the foothills of the Sword Mountains, this is the lost mine that the Rockseeker brothers sought.
+      The entrance is partially collapsed, but a passage remains open. From within, you hear a rhythmic booming sound,
+      like the pounding of waves against a shore - the echo that gives the cave its name.
+      
+      This was once the site of the Phandelver's Pact, where dwarves and gnomes worked alongside human spellcasters.
+    exits:
+      inside: "wave_echo_entrance_tunnel"
+      outside: "sword_mountains_foothills"
+    danger_level: "high"
+    quest_location: true
+    
+  - id: undermountain_entry
+    name: "Undermountain - Entry Well"
+    description: |
+      You descend into the legendary mega-dungeon beneath Waterdeep. Created by the mad wizard Halaster Blackcloak,
+      Undermountain is the deepest and deadliest dungeon in all Faerun.
+      
+      The room at the bottom of the well is lit by phosphorescent fungi. Graffiti from previous adventurers
+      covers the walls, most of it warnings. Passages lead off in all directions.
+    exits:
+      up: "yawning_portal"
+      north: "undermountain_hall_of_mirrors"
+      south: "undermountain_goblin_bazaar"
+      east: "undermountain_bone_throne"
+    danger_level: "extreme"
+    
+  # Wilderness Locations
+  - id: high_road_south
+    name: "The High Road"
+    description: |
+      This well-traveled road connects Waterdeep in the north to the cities of the south.
+      Merchant caravans and adventurers regularly travel this route, though bandits and monsters are constant threats.
+      
+      Mile markers indicate the distance to major settlements.
+    exits:
+      north: "high_road_ambush"
+      south: "high_road_crossroads"
+      east: "triboar_trail"
+    region: "sword_coast"
+    
+  - id: evermoors
+    name: "The Evermoors"
+    description: |
+      This vast, cold marshland stretches for miles. The bog is notorious for trolls and dangerous fey.
+      Thick mists limit visibility, and the ground squelches treacherously underfoot.
+      
+      Will-o'-wisps dance in the distance, trying to lead travelers astray.
+    exits:
+      south: "dessarin_valley"
+      east: "nether_mountains"
+    danger_level: "high"
+    environment: "swamp"
+    
+  - id: high_forest_edge
+    name: "Edge of the High Forest"
+    description: |
+      One of the oldest forests in Faerun stretches before you. Ancient trees tower overhead,
+      their canopy so thick that twilight reigns even at midday.
+      
+      This is the domain of treants, elves, and far stranger things. The Grandfather Tree,
+      the oldest living thing in the North, is said to dwell somewhere in these depths.
+    exits:
+      deeper: "high_forest_depths"
+      road: "high_road_south"
+    danger_level: "medium"
+    
+  # Iconic Faerun Locations
+  - id: candlekeep_gates
+    name: "The Gates of Candlekeep"
+    description: |
+      The fortress library of Candlekeep rises from rocky cliffs overlooking the Sea of Swords.
+      This bastion of knowledge houses the finest collection of writings in all Faerun.
+      
+      Entry requires donation of a book not already in their collection. The Avowed monks guard their knowledge jealously.
+    exits:
+      inside: "candlekeep_court_of_air"
+      road: "coast_way_south"
+    region: "sword_coast"
+    services:
+      knowledge: true
+      
+  - id: luskan_docks
+    name: "Luskan Docks"
+    description: |
+      The City of Sails is a dangerous place. This northern port is ruled by five High Captains,
+      each commanding a fleet of pirates barely held in check by mutual greed.
+      
+      The smell of tar, salt, and rotting fish permeates the air. Rough sailors eye you suspiciously.
+    exits:
+      city: "luskan_cutlass_inn"
+      sea: "sea_of_swords"
+    danger_level: "high"
+    region: "sword_coast_north"
+    
+  - id: icewind_dale_approach
+    name: "The Pass to Icewind Dale"
+    description: |
+      Beyond this mountain pass lies Icewind Dale, the frozen northernmost settled land in Faerun.
+      Ten-Towns huddles against the bitter cold, while barbarian tribes and frost giants roam the tundra.
+      
+      The wind howls through the pass, carrying snow even in summer months.
+    exits:
+      north: "ten_towns_bryn_shander"
+      south: "spine_of_world_foothills"
+    region: "icewind_dale"
+    environment: "arctic"
+    
+  - id: myth_drannor_ruins
+    name: "The Ruins of Myth Drannor"
+    description: |
+      Once the greatest city of the elves, Myth Drannor now lies in ruins, overrun by monsters.
+      Broken towers pierce the forest canopy, and ancient magic still crackles in the air.
+      
+      Devils, demons, and dragons fight over the treasures that remain. Only the foolish or desperate venture here.
+    exits:
+      flee: "cormanthor_forest"
+    danger_level: "extreme"
+    magic_level: "very_high"

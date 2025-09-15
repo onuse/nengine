@@ -1,0 +1,324 @@
+# Intelligent Encounter Tables and Search Metadata for Faerun Campaign
+# This enables the MCP system to dynamically find appropriate monsters
+
+encounter_search_metadata:
+  version: "1.0.0"
+  description: "Metadata for intelligent monster search and encounter building"
+
+# Challenge Rating brackets for different character levels
+level_appropriate_encounters:
+  level_1:
+    easy: ["CR_0", "CR_1/8"]
+    medium: ["CR_1/4", "CR_1/2"]
+    hard: ["CR_1", "CR_2"]
+    deadly: ["CR_3", "CR_4"]
+    
+  level_2-3:
+    easy: ["CR_1/4", "CR_1/2"]
+    medium: ["CR_1", "CR_2"]
+    hard: ["CR_3", "CR_4"]
+    deadly: ["CR_5", "CR_6"]
+    
+  level_4-5:
+    easy: ["CR_1", "CR_2"]
+    medium: ["CR_3", "CR_4"]
+    hard: ["CR_5", "CR_6"]
+    deadly: ["CR_7", "CR_8"]
+    
+  level_6-10:
+    easy: ["CR_2", "CR_3"]
+    medium: ["CR_4", "CR_6"]
+    hard: ["CR_7", "CR_9"]
+    deadly: ["CR_10", "CR_12"]
+    
+  level_11-15:
+    easy: ["CR_5", "CR_7"]
+    medium: ["CR_8", "CR_10"]
+    hard: ["CR_11", "CR_13"]
+    deadly: ["CR_14", "CR_16"]
+    
+  level_16-20:
+    easy: ["CR_10", "CR_12"]
+    medium: ["CR_13", "CR_15"]
+    hard: ["CR_16", "CR_18"]
+    deadly: ["CR_19", "CR_21"]
+
+# Environment-based encounter tables
+environment_encounters:
+  forest:
+    common: ["wolf", "dire_wolf", "brown_bear", "owlbear", "dryad"]
+    uncommon: ["displacer_beast", "treant", "green_dragon_wyrmling"]
+    rare: ["unicorn", "adult_green_dragon"]
+    legendary: ["ancient_green_dragon"]
+    
+  mountains:
+    common: ["eagle", "mountain_goat", "orc", "harpy"]
+    uncommon: ["griffon", "manticore", "stone_giant"]
+    rare: ["red_dragon_adult", "roc"]
+    legendary: ["ancient_red_dragon", "storm_giant"]
+    
+  swamp:
+    common: ["crocodile", "lizardfolk", "will_o_wisp", "shambling_mound"]
+    uncommon: ["black_dragon_wyrmling", "hydra"]
+    rare: ["adult_black_dragon", "aboleth"]
+    legendary: ["ancient_black_dragon"]
+    
+  underdark:
+    common: ["drow", "duergar", "hook_horror", "rust_monster"]
+    uncommon: ["mind_flayer", "beholder_zombie", "cloaker"]
+    rare: ["beholder", "purple_worm"]
+    legendary: ["elder_brain", "ancient_shadow_dragon"]
+    
+  urban:
+    common: ["commoner", "guard", "noble", "spy"]
+    uncommon: ["assassin", "mage", "priest"]
+    rare: ["archmage", "vampire"]
+    legendary: ["lich", "ancient_brass_dragon"]
+    
+  dungeon:
+    common: ["skeleton", "zombie", "orc", "goblin"]
+    uncommon: ["mimic", "gelatinous_cube", "owlbear"]
+    rare: ["medusa", "bone_devil"]
+    legendary: ["lich", "pit_fiend"]
+    
+  coastal:
+    common: ["sahuagin", "merfolk", "giant_crab"]
+    uncommon: ["water_elemental", "bronze_dragon_wyrmling"]
+    rare: ["adult_bronze_dragon", "kraken_priest"]
+    legendary: ["ancient_bronze_dragon", "kraken"]
+
+# Faction-based encounters
+faction_encounters:
+  zhentarim:
+    agents: ["zhentarim_thug", "spy", "assassin"]
+    leaders: ["mage", "knight", "war_priest"]
+    monsters: ["hell_hound", "bone_devil"]
+    
+  lords_alliance:
+    agents: ["guard", "veteran", "knight"]
+    leaders: ["noble", "mage", "war_priest"]
+    allies: ["griffon", "pegasus"]
+    
+  harpers:
+    agents: ["spy", "bard", "druid"]
+    leaders: ["archmage", "archdruid"]
+    allies: ["treant", "unicorn"]
+    
+  emerald_enclave:
+    agents: ["scout", "druid", "ranger"]
+    monsters: ["awakened_tree", "unicorn", "treant"]
+    
+  cult_of_dragon:
+    cultists: ["cultist", "cult_fanatic", "dragon_cultist"]
+    monsters: ["kobold", "dragon_wyrmling", "dracolich"]
+    dragons: ["young_dragon", "adult_dragon", "ancient_dragon"]
+    
+  drow_houses:
+    soldiers: ["drow", "drow_elite_warrior"]
+    priestesses: ["drow_priestess", "yochlol"]
+    monsters: ["spider", "drider", "shadow_demon"]
+
+# Encounter type classifications
+encounter_types:
+  combat:
+    description: "Direct hostile confrontation"
+    monsters: ["orc", "goblin", "bandit", "dragon", "demon"]
+    
+  stealth:
+    description: "Requires sneaking or hiding"
+    monsters: ["assassin", "doppelganger", "mimic", "invisible_stalker"]
+    
+  social:
+    description: "Roleplay and negotiation"
+    monsters: ["noble", "merchant", "devil", "celestial", "fey"]
+    
+  exploration:
+    description: "Discovery and investigation"
+    monsters: ["guardian", "construct", "undead", "aberration"]
+    
+  puzzle:
+    description: "Mental challenges"
+    monsters: ["sphinx", "couatl", "androsphinx", "gynosphinx"]
+
+# Monster role classifications
+monster_roles:
+  minion:
+    description: "Weak enemies in large numbers"
+    examples: ["goblin", "kobold", "skeleton", "zombie"]
+    tactics: "Overwhelm with numbers"
+    
+  soldier:
+    description: "Standard enemy combatants"
+    examples: ["orc", "hobgoblin", "guard", "veteran"]
+    tactics: "Direct combat"
+    
+  brute:
+    description: "High damage, low tactics"
+    examples: ["ogre", "hill_giant", "owlbear", "troll"]
+    tactics: "Charge in and smash"
+    
+  skirmisher:
+    description: "Mobile hit-and-run"
+    examples: ["stirge", "sprite", "phase_spider"]
+    tactics: "Hit and run, mobility"
+    
+  artillery:
+    description: "Long-range attackers"
+    examples: ["archer", "mage", "medusa", "beholder"]
+    tactics: "Stay at range, support"
+    
+  controller:
+    description: "Battlefield manipulation"
+    examples: ["wizard", "mind_flayer", "aboleth"]
+    tactics: "Control spells and abilities"
+    
+  leader:
+    description: "Buffs allies, directs combat"
+    examples: ["hobgoblin_captain", "orc_war_chief", "pit_fiend"]
+    tactics: "Command and coordinate"
+    
+  solo:
+    description: "Single powerful enemy"
+    examples: ["dragon", "lich", "tarrasque", "empyrean"]
+    tactics: "Legendary actions, lair actions"
+
+# Intelligent search tags for MCP queries
+search_tags:
+  by_challenge:
+    cr_0: ["commoner", "rat", "cat"]
+    cr_eighth: ["bandit", "guard", "kobold", "stirge"]
+    cr_quarter: ["goblin", "skeleton", "wolf", "acolyte"]
+    cr_half: ["orc", "hobgoblin", "warhorse", "scout"]
+    cr_1: ["dire_wolf", "ghoul", "imp", "spy"]
+    cr_2: ["brown_bear", "ogre", "ghast", "cult_fanatic"]
+    cr_3: ["owlbear", "phase_spider", "knight", "veteran"]
+    cr_4: ["ettin", "black_pudding", "couatl"]
+    cr_5: ["hill_giant", "troll", "air_elemental", "gladiator"]
+    cr_10: ["stone_giant", "young_red_dragon", "aboleth"]
+    cr_13: ["beholder", "adult_copper_dragon", "storm_giant"]
+    cr_17: ["adult_red_dragon", "marilith"]
+    cr_20: ["lich", "pit_fiend"]
+    cr_24: ["ancient_red_dragon"]
+    cr_30: ["tarrasque"]
+    
+  by_type:
+    aberration: ["beholder", "mind_flayer", "aboleth", "chuul"]
+    beast: ["wolf", "bear", "eagle", "giant_spider"]
+    celestial: ["deva", "planetar", "solar", "unicorn"]
+    construct: ["golem", "animated_armor", "helmed_horror"]
+    dragon: ["red_dragon", "blue_dragon", "metallic_dragon"]
+    elemental: ["fire_elemental", "earth_elemental", "djinni"]
+    fey: ["dryad", "satyr", "hag", "archfey"]
+    fiend: ["demon", "devil", "balor", "pit_fiend"]
+    giant: ["hill_giant", "stone_giant", "storm_giant"]
+    humanoid: ["human", "elf", "dwarf", "orc", "goblin"]
+    monstrosity: ["owlbear", "displacer_beast", "chimera"]
+    ooze: ["gelatinous_cube", "black_pudding", "ochre_jelly"]
+    plant: ["shambling_mound", "treant", "awakened_tree"]
+    undead: ["skeleton", "zombie", "lich", "vampire"]
+    
+  by_environment:
+    arctic: ["frost_giant", "white_dragon", "yeti", "mammoth"]
+    coast: ["sahuagin", "merfolk", "bronze_dragon", "sea_hag"]
+    desert: ["blue_dragon", "brass_dragon", "lamia", "sphinx"]
+    forest: ["dryad", "owlbear", "green_dragon", "treant"]
+    grassland: ["centaur", "hippogriff", "ankheg", "bulezau"]
+    hill: ["hill_giant", "griffon", "peryton", "hobgoblin"]
+    mountain: ["stone_giant", "red_dragon", "roc", "bulezau"]
+    swamp: ["black_dragon", "hydra", "shambling_mound", "will_o_wisp"]
+    underdark: ["drow", "duergar", "hook_horror", "purple_worm"]
+    underwater: ["aboleth", "kraken", "merrow", "sea_spawn"]
+    urban: ["vampire", "doppelganger", "spy", "cult_fanatic"]
+    
+  by_tactics:
+    ambush: ["displacer_beast", "phase_spider", "doppelganger"]
+    artillery: ["beholder", "medusa", "archmage", "lich"]
+    brute_force: ["ogre", "troll", "hill_giant", "owlbear"]
+    hit_and_run: ["stirge", "imp", "sprite", "quickling"]
+    pack_hunters: ["wolf", "dire_wolf", "gnoll", "hobgoblin"]
+    spellcaster: ["mage", "lich", "archmage", "mind_flayer"]
+    stealth: ["assassin", "drow", "shadow", "stalker"]
+    swarm: ["rat", "bat", "spider", "insect"]
+
+# Pre-built encounter templates
+encounter_templates:
+  goblin_ambush:
+    name: "Goblin Ambush"
+    level_range: [1, 3]
+    environment: ["forest", "hills", "road"]
+    monsters:
+      - { monster: "goblin", quantity: "2d4+2" }
+      - { monster: "hobgoblin", quantity: 1, role: "leader", chance: 30 }
+    tactics: "Hidden archers, then melee rush"
+    treasure: "modest"
+    
+  dragon_lair:
+    name: "Dragon's Lair"
+    level_range: [5, 20]
+    environment: ["mountain", "cave", "ruins"]
+    monsters:
+      - { monster: "young_red_dragon", quantity: 1 }
+      - { monster: "kobold", quantity: "3d6", role: "minion" }
+    lair_actions: true
+    treasure: "hoard"
+    
+  underdark_patrol:
+    name: "Drow Patrol"
+    level_range: [3, 8]
+    environment: ["underdark", "cave"]
+    monsters:
+      - { monster: "drow", quantity: "2d4+1" }
+      - { monster: "drow_elite_warrior", quantity: 1, role: "leader" }
+      - { monster: "quaggoth", quantity: "1d2", role: "pet" }
+    tactics: "Magic and poison, retreat if outmatched"
+    
+  cultist_ritual:
+    name: "Demonic Summoning"
+    level_range: [4, 10]
+    environment: ["ruins", "dungeon", "temple"]
+    monsters:
+      - { monster: "cultist", quantity: "2d6+3" }
+      - { monster: "cult_fanatic", quantity: 1, role: "leader" }
+      - { monster: "demon", quantity: 1, role: "summoned", trigger: "ritual_complete" }
+    objectives: ["stop_ritual", "rescue_sacrifice"]
+
+# Dynamic encounter scaling
+encounter_scaling:
+  party_size_modifiers:
+    size_3: { multiplier: 0.7, description: "Small party" }
+    size_4: { multiplier: 1.0, description: "Standard party" }
+    size_5: { multiplier: 1.5, description: "Large party" }
+    size_6: { multiplier: 2.0, description: "Very large party" }
+    
+  difficulty_adjustments:
+    easy: { xp_multiplier: 0.5 }
+    medium: { xp_multiplier: 1.0 }
+    hard: { xp_multiplier: 1.5 }
+    deadly: { xp_multiplier: 2.0 }
+    
+  terrain_modifiers:
+    advantage_to_monsters: { difficulty_increase: 1 }
+    advantage_to_party: { difficulty_decrease: 1 }
+    neutral: { difficulty_modifier: 0 }
+
+# Story-driven encounter hooks
+story_encounters:
+  revenge:
+    description: "Enemy seeks vengeance for past actions"
+    triggers: ["killed_important_npc", "destroyed_lair", "stole_treasure"]
+    escalation: "Starts with minions, builds to boss fight"
+    
+  investigation:
+    description: "Mystery that requires solving"
+    monsters: ["shapechanger", "invisible_creature", "mind_reader"]
+    clues: ["physical_evidence", "witness_testimony", "magical_traces"]
+    
+  protection:
+    description: "Defend someone or something"
+    waves: ["scout", "advance_guard", "main_force", "elite_strike"]
+    objectives: ["protect_npc", "guard_location", "escort_mission"]
+    
+  infiltration:
+    description: "Stealth mission with combat backup"
+    detection_levels: ["unaware", "suspicious", "alert", "hostile"]
+    consequences: ["alarm", "reinforcements", "escape_routes_blocked"]
