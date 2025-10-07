@@ -81,9 +81,9 @@ async function initializeGame() {
       useAgents: true,
       agentConfig: {
         enabled: true,
-        variationModel: 'gemma2:3b',
+        variationModel: 'phi3:mini',
         evaluationModel: 'gemma2:9b',
-        timeoutMs: 15000
+        timeoutMs: 600000  // 10 minutes for 12B model
       }
     };
     
@@ -117,6 +117,7 @@ class StatusBroadcaster {
   }
   
   broadcast(status: string, details?: any) {
+    console.log(`[StatusBroadcaster] Broadcasting: ${status} (${this.connections.size} connections)`);
     const message = JSON.stringify({
       type: 'status_update',
       status,
@@ -128,6 +129,7 @@ class StatusBroadcaster {
       if (ws.readyState === 1) { // OPEN
         try {
           ws.send(message);
+          console.log(`[StatusBroadcaster] Sent to client: ${status}`);
         } catch (error) {
           console.warn('Failed to send status to client:', error);
           this.connections.delete(ws);

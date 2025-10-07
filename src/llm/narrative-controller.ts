@@ -68,6 +68,7 @@ export class NarrativeController {
     // Initialize agent system if configured
     if (this.config.useAgents) {
       this.agentOrchestrator = new AgentOrchestrator(
+        this.mcpManager,
         (action, context, mechanicalResults) => this.generateDirectResponse(action, context, mechanicalResults),
         this.config.agentConfig
       );

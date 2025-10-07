@@ -79,12 +79,18 @@ export abstract class BaseAgent implements Agent {
   }
 
   protected buildSystemPrompt(additionalContext?: string): string {
-    let prompt = `You are a ${this.role} agent in a text adventure game narrative system.`;
-    
+    let prompt = `You are a ${this.role} agent in a text adventure game.
+ABSOLUTE RULES:
+- MAXIMUM 80 words per response
+- NEVER control the player character
+- NEVER use "you do/move/feel/decide"
+- Describe ONLY what the player observes
+- Always end with "What do you do?"`;
+
     if (additionalContext) {
       prompt += ` ${additionalContext}`;
     }
-    
+
     return prompt;
   }
 

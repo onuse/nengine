@@ -190,7 +190,7 @@ export class NoveltyScorer extends BaseAgent {
     const prompt: LLMPrompt = {
       systemContext: this.buildSystemPrompt('Evaluate the quality of this narrative text. Be objective and consistent.'),
       worldState: input.context,
-      recentHistory: [],
+      recentHistory: input.recentHistory || [],
       availableActions: [],
       query: `Evaluate this narrative response for a text adventure game:
 

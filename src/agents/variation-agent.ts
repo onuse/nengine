@@ -116,11 +116,12 @@ export class VariationAgent extends BaseAgent {
     const actionDescription = this.describeAction(input);
     const mechanicalInfo = this.formatMechanicalResults(input);
     const worldState = input.context;
+    const recentHistory = input.recentHistory || [];
 
     return [
-      this.buildSensoryPrompt(baseContext, actionDescription, mechanicalInfo, worldState),
-      this.buildActionPrompt(baseContext, actionDescription, mechanicalInfo, worldState),
-      this.buildEmotionalPrompt(baseContext, actionDescription, mechanicalInfo, worldState)
+      this.buildSensoryPrompt(baseContext, actionDescription, mechanicalInfo, worldState, recentHistory),
+      this.buildActionPrompt(baseContext, actionDescription, mechanicalInfo, worldState, recentHistory),
+      this.buildEmotionalPrompt(baseContext, actionDescription, mechanicalInfo, worldState, recentHistory)
     ];
   }
 
@@ -178,60 +179,74 @@ export class VariationAgent extends BaseAgent {
     return results;
   }
 
-  private buildSensoryPrompt(context: string, action: string, mechanical: string, worldState: any): LLMPrompt {
+  private buildSensoryPrompt(context: string, action: string, mechanical: string, worldState: any, recentHistory: string[]): LLMPrompt {
     return {
-      systemContext: this.buildSystemPrompt('Focus on sensory details - what the player sees, hears, feels, smells. Be vivid and immersive.'),
+      systemContext: this.buildSystemPrompt('Focus on sensory details - what the player OBSERVES (not what they do).'),
       worldState: this.createFallbackWorldState(worldState),
-      recentHistory: [],
+      recentHistory: recentHistory,
       availableActions: [],
       query: `${context}\n${action}\n${mechanical}
 
-Generate a sensory-focused narrative response. Emphasize:
-- Visual details and atmosphere
-- Sounds and ambient noise  
-- Tactile sensations
-- Smells and tastes if relevant
+CRITICAL CONSTRAINTS:
+- MAXIMUM 80 words total
+- NEVER describe player actions ("you do/move/feel")
+- ONLY describe what the player observes
+- End with "What do you do?" or similar
+
+Generate a sensory-focused response emphasizing:
+- What is SEEN (not "you see")
+- What is HEARD (not "you hear")
+- Environmental details only
+
+FORBIDDEN: Player emotions, thoughts, or actions.`
+    };
+  }
+
+  private buildActionPrompt(context: string, action: string, mechanical: string, worldState: any, recentHistory: string[]): LLMPrompt {
+    return {
+      systemContext: this.buildSystemPrompt('Focus on environmental action - what happens AROUND the player (not player actions).'),
+      worldState: this.createFallbackWorldState(worldState),
+      recentHistory: recentHistory,
+      availableActions: [],
+      query: `${context}\n${action}\n${mechanical}
+
+CRITICAL CONSTRAINTS:
+- MAXIMUM 80 words total
+- NEVER describe player actions
+- ONLY describe NPC/environment actions
+- End with "What do you do?"
+
+Generate response showing:
+- Environmental changes
+- NPC movements (if any)
+- Object interactions
+- Immediate dangers/opportunities
+
+FORBIDDEN: "You move/attack/decide" etc.`
+    };
+  }
+
+  private buildEmotionalPrompt(context: string, action: string, mechanical: string, worldState: any, recentHistory: string[]): LLMPrompt {
+    return {
+      systemContext: this.buildSystemPrompt('Focus on NPC emotions and atmosphere - NOT player feelings.'),
+      worldState: this.createFallbackWorldState(worldState),
+      recentHistory: recentHistory,
+      availableActions: [],
+      query: `${context}\n${action}\n${mechanical}
+
+CRITICAL CONSTRAINTS:
+- MAXIMUM 80 words total
+- NEVER describe player emotions/thoughts
+- ONLY describe NPC reactions & atmosphere
+- End with "What do you do?"
+
+Generate response showing:
+- NPC emotional states (if present)
+- Atmospheric tension
 - Environmental mood
+- Observable social dynamics
 
-Keep it engaging and immersive. Do not use generic phrases.`
-    };
-  }
-
-  private buildActionPrompt(context: string, action: string, mechanical: string, worldState: any): LLMPrompt {
-    return {
-      systemContext: this.buildSystemPrompt('Focus on action and movement - dynamic descriptions of what happens.'),
-      worldState: this.createFallbackWorldState(worldState),
-      recentHistory: [],
-      availableActions: [],
-      query: `${context}\n${action}\n${mechanical}
-
-Generate an action-focused narrative response. Emphasize:
-- Dynamic movement and activity
-- Cause and effect sequences
-- Physical interactions
-- Immediate consequences
-- Forward momentum
-
-Keep it energetic and engaging. Vary your sentence structure.`
-    };
-  }
-
-  private buildEmotionalPrompt(context: string, action: string, mechanical: string, worldState: any): LLMPrompt {
-    return {
-      systemContext: this.buildSystemPrompt('Focus on emotion and character psychology - inner thoughts and feelings.'),
-      worldState: this.createFallbackWorldState(worldState),
-      recentHistory: [],
-      availableActions: [],
-      query: `${context}\n${action}\n${mechanical}
-
-Generate an emotion-focused narrative response. Emphasize:
-- Character feelings and motivations
-- Psychological state
-- Emotional reactions
-- Inner thoughts and concerns
-- Character relationships
-
-Keep it psychologically rich and meaningful. Avoid cliches.`
+FORBIDDEN: Player psychology or feelings.`
     };
   }
 

@@ -5,9 +5,11 @@
 
 import { VariationAgent } from './variation-agent';
 import { NoveltyScorer } from './novelty-scorer';
+import { EnhancementAgent } from './enhancement-agent';
 import { AgentConfig, AgentMetrics } from './types';
 import { PlayerAction, NarrativeResult } from '../llm/narrative-controller';
 import { WorldContext } from '../llm/types';
+import { MCPServerManager } from '../mcp/mcp-server-manager';
 
 // Global status broadcaster for live UI updates
 declare global {
@@ -33,31 +35,47 @@ export interface OrchestrationResult {
 export class AgentOrchestrator {
   private variationAgent: VariationAgent;
   private noveltyScorer: NoveltyScorer;
+  private enhancementAgent: EnhancementAgent;
   private config: AgentConfig;
   private metrics: AgentMetrics;
+  private mcpManager: MCPServerManager;
   private fallbackHandler: (action: PlayerAction, context: WorldContext, mechanicalResults?: any) => Promise<NarrativeResult>;
 
   constructor(
+    mcpManager: MCPServerManager,
     fallbackHandler: (action: PlayerAction, context: WorldContext, mechanicalResults?: any) => Promise<NarrativeResult>,
     config: Partial<AgentConfig> = {}
   ) {
+    this.mcpManager = mcpManager;
     this.fallbackHandler = fallbackHandler;
-    this.config = {
+    const defaultConfig = {
       enabled: true,
       fallbackOnError: true,
-      timeoutMs: 120000,
+      timeoutMs: 600000,  // 10 minutes - disabled for testing
       maxRetries: 1,
       variation: {
-        model: 'gemma2:3b',
+        model: 'MHKetbi/Unsloth_gemma3-12b-it:q4_K_M',  // 12B for quality
         temperature: 0.9,
-        variationCount: 3
+        variationCount: 2  // Reduced for 12B model performance
       },
       evaluation: {
-        model: 'gemma2:9b',
+        model: 'MHKetbi/Unsloth_gemma3-12b-it:q4_K_M',  // 12B for quality
         temperature: 0.2,
         minScore: 6.0
+      }
+    };
+    
+    this.config = {
+      ...defaultConfig,
+      ...config,
+      variation: {
+        ...defaultConfig.variation,
+        ...config.variation
       },
-      ...config
+      evaluation: {
+        ...defaultConfig.evaluation,
+        ...config.evaluation
+      }
     };
 
     this.variationAgent = new VariationAgent({
@@ -71,6 +89,12 @@ export class AgentOrchestrator {
       model: this.config.evaluation.model,
       temperature: this.config.evaluation.temperature,
       minScore: this.config.evaluation.minScore,
+      timeoutMs: this.config.timeoutMs
+    });
+
+    this.enhancementAgent = new EnhancementAgent({
+      model: this.config.variation.model, // Use same model as variation for consistency
+      temperature: 0.7, // Slightly creative for enhancement
       timeoutMs: this.config.timeoutMs
     });
 
@@ -90,7 +114,8 @@ export class AgentOrchestrator {
     try {
       await Promise.all([
         this.variationAgent.initialize(),
-        this.noveltyScorer.initialize()
+        this.noveltyScorer.initialize(),
+        this.enhancementAgent.initialize()
       ]);
       
       console.log('[AgentOrchestrator] All agents initialized successfully');
@@ -115,21 +140,25 @@ export class AgentOrchestrator {
     try {
       console.log(`[AgentOrchestrator] Processing action: ${action.type} - "${action.rawInput}"`);
       console.log(`[AgentOrchestrator] DEBUG: context is:`, context ? 'valid object' : 'null/undefined');
-      console.log(`[AgentOrchestrator] DEBUG: using 2-minute timeout (120000ms)`);
+      console.log(`[AgentOrchestrator] DEBUG: using timeout ${this.config.timeoutMs}ms`);
       if (context) {
         console.log(`[AgentOrchestrator] DEBUG: currentRoomName =`, context.currentRoomName);
       }
       
       // Broadcast status to UI
       global.statusBroadcaster?.broadcast('🧠 Initializing multi-agent narrative system...');
+
+      // Fetch recent narrative history for continuity
+      const recentHistory = await this.getRecentHistory();
       
       // Phase 1: Generate variations
-      global.statusBroadcaster?.broadcast('🎭 Generating 3 narrative variations...');
+      global.statusBroadcaster?.broadcast(`🎭 Generating ${this.config.variation.variationCount} narrative variations...`);
       const variationResult = await this.executeWithTimeout(
         this.variationAgent.execute({
           action,
           context,
-          mechanicalResults
+          mechanicalResults,
+          recentHistory
         }),
         this.config.timeoutMs,
         'Variation generation timed out'
@@ -152,7 +181,8 @@ export class AgentOrchestrator {
             ...context,
             proposals: variations
           },
-          mechanicalResults
+          mechanicalResults,
+          recentHistory
         }),
         this.config.timeoutMs,
         'Evaluation timed out'
@@ -165,6 +195,31 @@ export class AgentOrchestrator {
       const selectedNarrative = evaluationResult.content.selected;
       const scores = evaluationResult.content.scores;
       global.statusBroadcaster?.broadcast('🎯 Selected optimal narrative variation');
+
+      // Phase 3: Enhance the selected narrative with progressive details
+      global.statusBroadcaster?.broadcast('🎨 Enhancing narrative with progressive details...');
+      const enhancementResult = await this.executeWithTimeout(
+        this.enhancementAgent.execute({
+          action,
+          context: {
+            ...context,
+            selectedNarrative
+          },
+          mechanicalResults,
+          recentHistory
+        }),
+        this.config.timeoutMs,
+        'Enhancement timed out'
+      );
+
+      let finalNarrative = selectedNarrative;
+      if (enhancementResult.success && enhancementResult.content) {
+        finalNarrative = enhancementResult.content;
+        global.statusBroadcaster?.broadcast('✨ Narrative enhanced with progressive elements');
+      } else {
+        console.warn('[AgentOrchestrator] Enhancement failed, using original:', enhancementResult.error);
+        global.statusBroadcaster?.broadcast('⚠️ Enhancement failed, using original narrative');
+      }
       
       const totalDuration = Date.now() - startTime;
       
@@ -176,8 +231,8 @@ export class AgentOrchestrator {
 
       return {
         success: true,
-        narrative: selectedNarrative,
-        dialogue: this.extractDialogue(selectedNarrative),
+        narrative: finalNarrative,
+        dialogue: this.extractDialogue(finalNarrative),
         metadata: {
           agentGenerated: true,
           selectedIndex: this.findSelectedIndex(variations, selectedNarrative),
@@ -231,11 +286,27 @@ export class AgentOrchestrator {
     timeoutMs: number,
     timeoutMessage: string
   ): Promise<T> {
+    let timeoutId: NodeJS.Timeout | undefined;
+    let isResolved = false;
+    
     const timeoutPromise = new Promise<T>((_, reject) => {
-      setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
+      timeoutId = setTimeout(() => {
+        if (!isResolved) {
+          reject(new Error(timeoutMessage));
+        }
+      }, timeoutMs);
     });
 
-    return Promise.race([promise, timeoutPromise]);
+    try {
+      const result = await Promise.race([promise, timeoutPromise]);
+      isResolved = true;
+      if (timeoutId) clearTimeout(timeoutId);
+      return result;
+    } catch (error) {
+      isResolved = true;
+      if (timeoutId) clearTimeout(timeoutId);
+      throw error;
+    }
   }
 
   private extractDialogue(narrative: string): string | undefined {
@@ -327,5 +398,17 @@ export class AgentOrchestrator {
 
     // For now, just run normal process - in future could implement constraint handling
     return this.processAction(action, context, mechanicalResults);
+  }
+
+  private async getRecentHistory(): Promise<string[]> {
+    try {
+      const result = await this.mcpManager.executeTool('narrative-history', 'getRecentTurns', { count: 3 });
+      if (result.success && Array.isArray(result.data)) {
+        return result.data.map((turn: any) => turn.narrative).filter(Boolean);
+      }
+    } catch (error) {
+      console.warn('[AgentOrchestrator] Failed to fetch narrative history:', error);
+    }
+    return [];
   }
 }

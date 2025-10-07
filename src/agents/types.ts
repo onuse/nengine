@@ -12,6 +12,7 @@ export interface AgentInput {
   mechanicalResults?: any;
   previousAttempts?: string[];
   constraints?: string[];
+  recentHistory?: string[];  // Recent narrative history for continuity
 }
 
 export interface AgentOutput {
@@ -26,7 +27,7 @@ export interface AgentOutput {
   error?: string;
 }
 
-export type AgentRole = 'variation' | 'evaluation' | 'synthesis' | 'refinement';
+export type AgentRole = 'variation' | 'evaluation' | 'synthesis' | 'refinement' | 'enhancement';
 
 export interface Agent {
   id: string;
