@@ -289,11 +289,10 @@ export class CreativeServerProvider implements LLMProvider {
       contextContent += '\n';
     }
 
-    // Recent history
+    // Recent history (use full history provided - controller manages the limit)
     if (prompt.recentHistory.length > 0) {
       contextContent += `RECENT EVENTS:\n`;
       const recentEvents = prompt.recentHistory
-        .slice(-5)
         .map(event => `- ${event.description}`)
         .join('\n');
       contextContent += recentEvents + '\n\n';

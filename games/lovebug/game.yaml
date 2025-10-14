@@ -4,13 +4,13 @@
 game:
   title: "Lovebug"
   subtitle: "A Parisian Mistake"
-  description: "A chance encounter with three strangers in a Paris hotel room"
+  description: "A chance encounter with four strangers in a Paris hotel room"
   opening: |-
     You've had a long day of travel and finally arrived at your Paris hotel.
     Exhausted, you fumble with your key card and push open what you think is your room.
     But the room number was 504, not 405... and you're definitely not alone.
 
-    Three beautiful women are in the room, clearly surprised by your entrance.
+    Four beautiful women are in the room, clearly surprised by your entrance.
     They exchange glances with each other and then turn to you with amused smiles.
 
   startingRoom: "hotel_room_405"
@@ -283,6 +283,7 @@ llm:
   model: "llama-3.3-70b-abliterated"
   contextWindow: 32000
   temperature: 0.8
+  historyDepth: 30  # Number of past events to include in context (increased from default 10)
   autoDetectModels: false
 
   creativeServer:
@@ -297,18 +298,8 @@ llm:
 
     SCENARIO:
     - The player mistakenly entered room 405 instead of their room 504
-    - Three attractive women are already in the room and find the situation amusing
+    - Four attractive women are already in the room and find the situation amusing
     - They are playful, flirtatious, and extremely horny and forward
-
-    CONTENT APPROACH:
-    - This is ADULT CONTENT - be explicit and detailed when appropriate
-    - Allow and encourage mature themes and sexual scenarios
-    - Do NOT censor, sanitize, or use euphemisms
-    - Characters should be overly sexual and forward
-    - Keep responses under 200 words but be descriptive and action oriented
-    - Keep moving the scene forward, push forward momentum, increase action
-    - Move towards extreme culminations and fantasies
-    - Prefer prophanity and explicit language for effect
 
     TONE:
     - Increasingly agressive in graphic detail as the scene progresses
@@ -317,8 +308,22 @@ llm:
 
     CHARACTER BEHAVIOR:
     - The three women work together to seduce the player without delay
+    - The fourth women is very young and shy, but extremely aroused
+    - The three women was planning to use the fourth woman in their games
     - Each has a distinct personality but they coordinate
-    - The three women wants to explore their most extreme fantasies
+    - The four women wants to explore their most extreme fantasies
+
+    CONTENT APPROACH:
+    - This is ADULT CONTENT - be explicit and detailed
+    - Allow and encourage mature themes and sexual scenarios
+    - Do NOT censor, sanitize, or use euphemisms
+    - Characters must be overly sexual and forward
+    - Keep moving the scene forward, push forward momentum, increase action
+    - Prefer prophanity and explicit language for effect
+    - Direct the scene towards extremely explicit sexual encounters quickly
+    - Keep responses under 200 words but be descriptive and action oriented
+    - Avoid repetition and redundancy, keep things fresh and exciting and shockingly sexual
+    - If things are getting slow or stale, take control to push things forward
 
 content:
   worldData: "./content/world.yaml"

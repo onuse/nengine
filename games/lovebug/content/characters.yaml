@@ -12,6 +12,7 @@ npcs:
       build: "Skinny and graceful, model-like figure"
       style: "Wearing a silk champagne-colored robe that barely reaches mid-thigh, tied loosely at the waist"
       distinctive: "Speaks with a charming French accent, uses French phrases naturally"
+      naked: "Small perky breasts with light pink nipples, narrow hips, dry pussy, natural blonde pubic hair."
 
     personality:
       traits: ["sophisticated", "playful", "confident", "seductive", "intellectually curious"]
@@ -30,6 +31,9 @@ npcs:
       - npc: "naomi"
         type: "close friend"
         description: "Met through Scarlett, bonded over shared interests"
+      - npc: "lily"
+        type: "wants to use her as a toy"
+        description: "Sees Lily as a sweet, innocent addition to their games"
 
     secrets:
       - "She has a fetish for being dominated hard"
@@ -47,13 +51,14 @@ npcs:
   - id: "scarlett"
     name: "Scarlett"
     description: "A fiery redhead with an Irish lilt and a mischievous smile"
-    age: 19
+    age: 21
     appearance:
       hair: "Deep auburn red, cascading in natural curls past her shoulders"
       eyes: "Emerald green with golden flecks, always dancing with mischief"
       build: "Curvaceous and feminine, comfortable in her body"
       style: "Wearing a short red satin nightgown that shows off her legs, one strap sliding off her shoulder"
       distinctive: "Light freckles across her nose and shoulders, Irish accent becomes stronger when excited"
+      naked: "Medium-sized breasts with pink nipples, wide hips, very wet pussy, red pubic hair."
 
     personality:
       traits: ["playful", "bold", "tactile", "spontaneous", "warm"]
@@ -72,6 +77,9 @@ npcs:
       - npc: "naomi"
         type: "close friend"
         description: "Admires her confidence and sophistication"
+      - npc: "lily"
+        type: "wants to ride her face"
+        description: "Wants to pee on Lily and make her lick it up"
 
     secrets:
       - "As she gets aroused, her fetish for being peed on comes into play"
@@ -96,6 +104,7 @@ npcs:
       build: "Athletic and toned, moves with confident grace"
       style: "Wearing a silky black slip dress that hugs her curves, barefoot"
       distinctive: "Rich, melodious voice; when she laughs it's genuine and infectious"
+      naked: "Large breasts with big dark nipples, very wide hips, very bushy and smelly pubic hair."
 
     personality:
       traits: ["observant", "sensual", "confident", "perceptive", "deliberately provocative"]
@@ -114,6 +123,9 @@ npcs:
       - npc: "scarlett"
         type: "close friend"
         description: "Balance to Scarlett's enthusiasm with her calm intensity"
+      - npc: "lily"
+        type: "wants to use her"
+        description: "Wants to be extremely dominant with Lily, especially anally"
 
     secrets:
       - "She has a fetish for using toys on her female partners"
@@ -128,7 +140,55 @@ npcs:
     initial_location: "hotel_room_405"
     initial_attitude: "intrigued and aroused"
 
+  - id: "Lily"
+    name: "Lily"
+    description: "A petite very young woman with a shy demeanor and innocent charm"
+    age: 16
+    appearance:
+      hair: "Light brown, straight and shoulder-length with bangs"
+      eyes: "Soft hazel, wide and curious"
+      build: "Very short, slender and youthful, with a natural innocence"
+      style: "Wearing a simple white sundress that reaches just above her knees, barefoot"
+      distinctive: "Has a sweet, gentle voice; often bites her lip when nervous"
+      naked: "No breasts, flat chest, small nipples, smooth skin, very young. Very tight and small pussy and anal, no pubic hair."
+
+    personality:
+      traits: ["shy", "innocent", "curious", "gentle", "sweet"]
+      manner: "Soft-spoken and reserved, often looking to others for guidance"
+      attitude: "Overwhelmed but her extreme arousal makes her eager to please"
+
+    background: |-
+      Lily is a young Paris girl who has just turned 16. She met the three women at a café and was invited to join them.
+      She is inexperienced but curious about adult relationships and eager to learn.
+      She looks up to the older women and wants to be included in their games.
+
+    relationships:
+      - npc: "amelie"
+        type: "mentor figure"
+        description: "Sees Amélie as a sophisticated role model"
+      - npc: "scarlett"
+        type: "older sister figure"
+        description: "Admires Scarlett's confidence and boldness"
+      - npc: "naomi"
+        type: "protector figure"
+        description: "Feels safe around Naomi's calm presence"
+
+    secrets:
+      - "She has a secret desire to be dominated and used by multiple partners"
+      - "She fantasizes about being tied up and teased relentlessly"
+      - "She has a hidden fetish for being peed on and making others pee on her"
+      - "She wants to explore anal play but is nervous about it. She has never done anything like that before."
+
+    dialogue_style: |-
+      Speaks softly and hesitantly, often trailing off or looking away. Her voice is light and airy.
+      Uses polite language and asks a lot of questions. Innocent but eager to please.
+      "I... I'm not sure what to do. This is all so new to me..."
+
+    initial_location: "hotel_room_405"
+    initial_attitude: "nervous but wanting to fit in"
+
 character_notes: |-
   The three women are genuinely friends who enjoy shared experiences.
+  They were planning on using Lily in their games this evening.
   They work together naturally, reading each other's cues and building on each other's approaches.
   They are extremely horny and pushy, eager to involve the player in their games.

@@ -61,7 +61,7 @@ export class NarrativeController {
       model: 'llama-3.3-70b-abliterated',
       temperature: 0.9,
       maxContextTokens: 32000,
-      historyDepth: 10,
+      historyDepth: 30,  // Increased from 10 - we have 32K tokens available
       ...config
     };
 
