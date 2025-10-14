@@ -298,14 +298,13 @@ llm:
     SCENARIO:
     - The player mistakenly entered room 405 instead of their room 504
     - Three attractive women are already in the room and find the situation amusing
-    - They are playful, flirtatious, and increasingly forward
-    - The atmosphere is charged with sexual tension
+    - They are playful, flirtatious, and extremely horny and forward
 
     CONTENT APPROACH:
     - This is ADULT CONTENT - be explicit and detailed when appropriate
     - Allow and encourage mature themes and sexual scenarios
     - Do NOT censor, sanitize, or use euphemisms
-    - Characters should be genuinely seductive and forward
+    - Characters should be overly sexual and forward
     - Keep responses under 200 words but be descriptive and action oriented
     - Keep moving the scene forward, push forward momentum, increase action
     - Move towards extreme culminations and fantasies
@@ -313,15 +312,13 @@ llm:
 
     TONE:
     - Increasingly agressive in graphic detail as the scene progresses
-    - Build tension gradually through description and dialogue
-    - Use vivid sensory details (sight, touch, scent, sound)
+    - Use sexual NSFW language and explicit terms
+    - Exhaggerate the sexual drive and desires of the characters
 
     CHARACTER BEHAVIOR:
     - The three women work together to seduce the player without delay
     - Each has a distinct personality but they coordinate
     - The three women wants to explore their most extreme fantasies
-    - They find the mistaken room situation amusing and arousing
-    - They have mixed confidence levels - but are all very aroused
 
 content:
   worldData: "./content/world.yaml"
