@@ -9,15 +9,26 @@ import { MCPServerManager as ExternalMCPManager } from './core/mcp-manager';
 import { MCPServerManager } from './mcp/mcp-server-manager';
 import { NarrativeController } from './llm/narrative-controller';
 import { GameLoader } from './core/game-loader';
-import { ModelTierDetector } from './core/model-tier-detector';
+import { ImageService } from './services/image-service';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;  // Changed to 3001 to avoid conflicts
 const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
 const DEFAULT_GAME = process.env.DEFAULT_GAME || 'the-heist';
+
+// Disable caching globally for all responses
+app.use((_req, res, next) => {
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+    'Surrogate-Control': 'no-store'
+  });
+  next();
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/dist')));
@@ -34,33 +45,10 @@ async function initializeGame() {
     const gameName = process.argv.find(arg => arg.startsWith('--game='))?.split('=')[1] || DEFAULT_GAME;
     
     currentGame = await gameLoader.loadGame(gameName);
-    
-    // Auto-detect VRAM and optimize model selection
-    console.log('🔍 Detecting system capabilities...');
-    const preferUncensored = currentGame.llm?.preferUncensored || 
-                            currentGame.game?.maturity_rating === 'adult' ||
-                            currentGame.game?.content_warnings?.length > 0;
-    const modelConfig = await ModelTierDetector.autoDetectAndConfigure(preferUncensored, currentGame);
-    
-    // Override LLM config with auto-detected optimal models (unless game explicitly disables auto-detection)
-    if (currentGame.llm && currentGame.llm.autoDetectModels !== false) {
-      const originalModel = currentGame.llm.model;
-      const originalFallback = currentGame.llm.fallbackModel;
-      
-      currentGame.llm.model = modelConfig.recommendedModel;
-      currentGame.llm.fallbackModel = modelConfig.fallbackModel;
-      
-      console.log(`🤖 Model auto-optimization:`);
-      console.log(`   Original: ${originalModel} → Optimized: ${modelConfig.recommendedModel}`);
-      console.log(`   Fallback: ${originalFallback} → Optimized: ${modelConfig.fallbackModel}`);
-      console.log(`   Tier: ${modelConfig.selectedTier.name} (${modelConfig.selectedTier.description})`);
-      if (currentGame.modelTiers) {
-        console.log(`   Using game-specific model preferences`);
-      }
-    } else if (currentGame.llm?.autoDetectModels === false) {
-      console.log(`⚙️  Auto-detection disabled, using game-specified models`);
-    }
-    
+
+    console.log(`🎮 Loading game: ${currentGame.game.title}`);
+    console.log(`🤖 Using model: ${currentGame.llm?.model || 'llama-3.3-70b-abliterated'}`);
+
     // Update Git manager to use game-specific saves
     const savesPath = gameLoader.getSavesPath();
     git.repoPath = savesPath || './game-state';
@@ -72,27 +60,43 @@ async function initializeGame() {
     
     // Initialize Narrative Controller with game configuration
     const narrativeConfig = {
-      model: currentGame.llm?.model || 'gemma2:9b',
-      fallbackModel: currentGame.llm?.fallbackModel || 'mistral:7b',
-      temperature: currentGame.llm?.temperature || 0.7,
-      maxContextTokens: currentGame.llm?.contextWindow || 4096,
+      llmProvider: 'creative-server' as const,
+      model: currentGame.llm?.model || 'llama-3.3-70b-abliterated',
+      temperature: currentGame.llm?.temperature || 0.9,
+      maxContextTokens: currentGame.llm?.contextWindow || 32000,
       historyDepth: 10,
       extraInstructions: currentGame.llm?.extraInstructions,
-      useAgents: true,
-      agentConfig: {
-        enabled: true,
-        variationModel: 'phi3:mini',
-        evaluationModel: 'gemma2:9b',
-        timeoutMs: 600000  // 10 minutes for 12B model
-      }
+      creativeServer: {
+        baseUrl: currentGame.llm?.creativeServer?.baseUrl,
+        adminUrl: currentGame.llm?.creativeServer?.adminUrl,
+        autoSwitch: currentGame.llm?.creativeServer?.autoSwitch ?? true
+      },
+      useAgents: currentGame.llm?.useAgents ?? false,  // Disable agents by default with creative server
+      agentConfig: currentGame.llm?.agentConfig
     };
     
     narrativeController = new NarrativeController(mcpManager, narrativeConfig);
     await narrativeController.initialize();
-    
+
+    // Initialize image service
+    imageService = new ImageService(gameLoader.getGamePath()!);
+    imageService.setLLMProvider(narrativeController['llmProvider']); // Access the private provider
+
+    // Connect image service to entity MCP if available
+    try {
+      const entityMCP = mcpManager.getServer('entity-content');
+      if (entityMCP && typeof (entityMCP as any).setImageService === 'function') {
+        (entityMCP as any).setImageService(imageService);
+        console.log('Image service connected to Entity Content MCP');
+      }
+    } catch (error) {
+      console.log('[ImageService] Could not connect to entity MCP:', error);
+    }
+
     console.log(`Game loaded: ${currentGame.game.title}`);
     console.log('MCP servers initialized');
     console.log('Narrative Controller initialized');
+    console.log('Image Service initialized');
   } catch (error) {
     console.error('Failed to load game or initialize MCP servers:', error);
   }
@@ -103,6 +107,7 @@ const git = new GitManager('./game-state');
 // const externalMCPManager = new ExternalMCPManager(DEBUG_MODE); // Currently unused
 let mcpManager: MCPServerManager;
 let narrativeController: NarrativeController;
+let imageService: ImageService;
 
 // Status Broadcasting System
 class StatusBroadcaster {
@@ -271,30 +276,132 @@ async function handlePlayerAction(ws: any, data: any) {
     id: data.id,
     result: null as any
   };
-  
+
   try {
     if (!narrativeController) {
       throw new Error('Narrative Controller not initialized');
     }
 
     const { action, rawInput } = data;
+    const input = rawInput || action.description || '';
+
+    console.log(`[PlayerAction] Received input: "${input}"`);
+
+    // Check for slash commands
+    if (input.startsWith('/')) {
+      console.log(`[PlayerAction] Detected slash command: "${input}"`);
+      const commandMatch = input.match(/^\/(\w+)\s*(.*)$/);
+
+      if (commandMatch) {
+        const [, command, args] = commandMatch;
+        console.log(`[PlayerAction] Parsed command: "${command}", args: "${args}"`);
+
+        if (command === 'generate' && args.startsWith('image')) {
+          // Extract user instructions after "image"
+          const userInstructions = args.replace(/^image\s*/, '').trim();
+          console.log(`[PlayerAction] Image generation request with instructions: "${userInstructions}"`);
+
+          // Handle image generation command
+          await handleImageGenerationCommand(ws, data.id, userInstructions);
+          return; // Don't send normal response
+        }
+      }
+    }
+
     const playerAction = {
       type: action.type || 'interaction',
       target: action.target,
       params: action.params,
-      rawInput: rawInput || action.description || ''
+      rawInput: input
     };
 
     response.result = await narrativeController.processPlayerAction(playerAction);
   } catch (error: any) {
-    response.result = { 
+    response.result = {
       success: false,
       narrative: 'Something went wrong as you attempt your action...',
-      error: error.message 
+      error: error.message
     };
   }
-  
+
   ws.send(JSON.stringify(response));
+}
+
+async function handleImageGenerationCommand(ws: any, requestId: string, userInstructions: string) {
+  try {
+    if (!narrativeController || !imageService) {
+      throw new Error('Services not initialized');
+    }
+
+    // Generate unique image ID
+    const imageId = `scene_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // Send immediate acknowledgment
+    ws.send(JSON.stringify({
+      type: 'narrative_response',
+      id: requestId,
+      result: {
+        success: true,
+        narrative: `📸 Generating image... (ID: ${imageId})\n\nThe game continues while your image is being created. You'll be notified when it's ready.`,
+        imageGeneration: {
+          status: 'started',
+          imageId
+        }
+      }
+    }));
+
+    // Start async image generation
+    generateSceneImageAsync(imageId, userInstructions, ws);
+
+  } catch (error: any) {
+    ws.send(JSON.stringify({
+      type: 'narrative_response',
+      id: requestId,
+      result: {
+        success: false,
+        narrative: `Failed to start image generation: ${error.message}`
+      }
+    }));
+  }
+}
+
+async function generateSceneImageAsync(imageId: string, userInstructions: string, ws: any) {
+  try {
+    // Step 1: Use LLM to generate detailed image prompt
+    statusBroadcaster.broadcast('image_generation', {
+      imageId,
+      status: 'generating_prompt',
+      message: '🎨 Creating detailed image prompt...'
+    });
+
+    const imagePrompt = await narrativeController.generateImagePrompt(userInstructions);
+
+    // Step 2: Generate the actual image
+    statusBroadcaster.broadcast('image_generation', {
+      imageId,
+      status: 'generating_image',
+      message: '🖼️ Generating image (this may take 30-60 seconds)...',
+      prompt: imagePrompt
+    });
+
+    await imageService.generateSceneImage(imageId, imagePrompt);
+
+    // Step 3: Notify completion
+    statusBroadcaster.broadcast('image_generation', {
+      imageId,
+      status: 'complete',
+      message: `✨ Your image is ready!`,
+      url: `/api/images/${imageId}`
+    });
+
+  } catch (error: any) {
+    console.error('[ImageGeneration] Failed:', error);
+    statusBroadcaster.broadcast('image_generation', {
+      imageId,
+      status: 'failed',
+      message: `❌ Image generation failed: ${error.message}`
+    });
+  }
 }
 
 async function handleStartConversation(ws: any, data: any) {
@@ -449,13 +556,21 @@ app.post('/api/narrative/action', async (req, res) => {
 // Serve game assets statically
 app.use('/api/game/:gameName/assets', (req, res, next) => {
   const gameName = req.params.gameName;
-  express.static(path.join(__dirname, '../games', gameName, 'assets'))(req, res, next);
+  express.static(path.join(__dirname, '../games', gameName, 'content', 'assets'))(req, res, next);
 });
 
 app.get('/api/game/:gameName/theme.css', (req, res) => {
+  // First, check if the current loaded game has css_overrides in its config
+  if (currentGame && currentGame.ui && currentGame.ui.css_overrides) {
+    res.type('text/css');
+    res.send(currentGame.ui.css_overrides);
+    return;
+  }
+
+  // Fall back to checking for a physical CSS file
   const gameName = req.params.gameName;
   const cssPath = path.join(__dirname, '../games', gameName, 'themes', 'custom.css');
-  
+
   if (fs.existsSync(cssPath)) {
     res.type('text/css');
     res.sendFile(cssPath);
@@ -470,15 +585,134 @@ app.get('/health', (req, res) => {
 
 app.get('/api/system/capabilities', async (req, res) => {
   try {
-    const vramInfo = await ModelTierDetector.detectVRAM();
-    const allTiers = ModelTierDetector.getAllTiers();
-    const selectedTier = ModelTierDetector.selectOptimalTier(vramInfo);
-    
     res.json({
-      vram: vramInfo,
-      selectedTier,
-      availableTiers: allTiers,
-      currentGame: currentGame?.game?.title || 'None'
+      currentGame: currentGame?.game?.title || 'None',
+      model: currentGame?.llm?.model || 'llama-3.3-70b-abliterated',
+      provider: currentGame?.llm?.provider || 'creative-server',
+      creativeServer: currentGame?.llm?.creativeServer
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Image generation and serving endpoints
+app.post('/api/images/generate/entity', async (req, res) => {
+  if (!imageService) {
+    res.status(503).json({ error: 'Image service not initialized' });
+    return;
+  }
+
+  try {
+    const { entityId, description, options } = req.body;
+
+    if (!entityId || !description) {
+      res.status(400).json({ error: 'entityId and description are required' });
+      return;
+    }
+
+    const imageId = await imageService.generateEntityImage(entityId, description, options);
+
+    if (!imageId) {
+      res.status(500).json({ error: 'Image generation failed' });
+      return;
+    }
+
+    res.json({
+      success: true,
+      imageId,
+      url: `/api/images/${imageId}`
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/images/generate/scene', async (req, res) => {
+  if (!imageService) {
+    res.status(503).json({ error: 'Image service not initialized' });
+    return;
+  }
+
+  try {
+    const { sceneId, description, options } = req.body;
+
+    if (!sceneId || !description) {
+      res.status(400).json({ error: 'sceneId and description are required' });
+      return;
+    }
+
+    const imageId = await imageService.generateSceneImage(sceneId, description, options);
+
+    if (!imageId) {
+      res.status(500).json({ error: 'Image generation failed' });
+      return;
+    }
+
+    res.json({
+      success: true,
+      imageId,
+      url: `/api/images/${imageId}`
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/images/:imageId', (req, res) => {
+  if (!imageService) {
+    res.status(503).json({ error: 'Image service not initialized' });
+    return;
+  }
+
+  try {
+    const { imageId } = req.params;
+    const imagePath = imageService.getImagePath(imageId);
+
+    if (!imagePath) {
+      res.status(404).json({ error: 'Image not found' });
+      return;
+    }
+
+    res.sendFile(path.resolve(imagePath));
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/images', (req, res) => {
+  if (!imageService) {
+    res.status(503).json({ error: 'Image service not initialized' });
+    return;
+  }
+
+  try {
+    const images = imageService.listAllImages();
+    res.json({ images });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/images/entity/:entityId', (req, res) => {
+  if (!imageService) {
+    res.status(503).json({ error: 'Image service not initialized' });
+    return;
+  }
+
+  try {
+    const { entityId } = req.params;
+    const metadata = imageService.findImageByEntity(entityId);
+
+    if (!metadata) {
+      res.status(404).json({ error: 'No image found for entity' });
+      return;
+    }
+
+    res.json({
+      imageId: metadata.id,
+      url: `/api/images/${metadata.id}`,
+      metadata
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

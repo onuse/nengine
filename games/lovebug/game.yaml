@@ -1,0 +1,348 @@
+# Lovebug - Boundary Testing Game
+# Simple mature content scenario in a Paris hotel room
+
+game:
+  title: "Lovebug"
+  subtitle: "A Parisian Mistake"
+  description: "A chance encounter with three strangers in a Paris hotel room"
+  opening: |-
+    You've had a long day of travel and finally arrived at your Paris hotel.
+    Exhausted, you fumble with your key card and push open what you think is your room.
+    But the room number was 504, not 405... and you're definitely not alone.
+
+    Three beautiful women are in the room, clearly surprised by your entrance.
+    They exchange glances with each other and then turn to you with amused smiles.
+
+  startingRoom: "hotel_room_405"
+  version: "1.0.0"
+  genre: "adult_interactive_fiction"
+  maturity_rating: "adult"
+  content_warnings: ["adult_themes", "sexual_content", "mature_situations", "explicit_language"]
+
+  mechanics:
+    system: "choice_driven"
+    dice_system: "none"
+    relationship_tracking: true
+    tension_system: true
+
+ui:
+  theme: "romantic_paris"
+  background_color: "#1a1520"
+  text_color: "#f5e6d3"
+  accent_color: "#ff69b4"
+  font_family: "'Crimson Text', 'Cormorant Garamond', Georgia, serif"
+  logo: "/api/game/lovebug/assets/images/lovebug_v1_large.png"
+
+  # Custom icons for this game
+  icons:
+    connected: "💘"
+    disconnected: "💔"
+    connecting: "💌"
+    error: "💔"
+    timer: "💕"
+    phase: "💖"
+    target: "💗"
+    rollback: "💘"
+    rollback_menu: "💝"
+
+  css_overrides: |-
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
+
+    body {
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(255, 105, 180, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%, rgba(255, 20, 147, 0.08) 0%, transparent 50%),
+        linear-gradient(180deg, #1a1520 0%, #2a1f2f 50%, #1a1520 100%);
+      background-attachment: fixed;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: #f5e6d3;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .game-container {
+      background:
+        radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.08) 0%, transparent 40%),
+        linear-gradient(135deg, rgba(60, 30, 50, 0.75) 0%, rgba(30, 20, 35, 0.85) 100%);
+      border: 2px solid rgba(255, 105, 180, 0.4);
+      box-shadow:
+        0 0 40px rgba(255, 105, 180, 0.25),
+        0 0 80px rgba(255, 20, 147, 0.15),
+        inset 0 0 60px rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      max-width: 95%;
+      margin: 20px auto;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', 'Crimson Text', serif;
+      color: #ff69b4;
+      text-shadow:
+        0 0 15px rgba(255, 105, 180, 0.5),
+        0 0 30px rgba(255, 105, 180, 0.2);
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      font-weight: 500;
+      font-style: italic;
+      color: #ff69b4 !important;
+    }
+
+    /* Fix all remaining green text */
+    .message-system, .processing-message *, .processing-dots, .processing-timer, .processing-phase, .processing-eta {
+      color: #d4a5c4 !important;
+    }
+
+    .progress-text {
+      color: #e8d4c8 !important;
+    }
+
+    /* Ensure NO green colors anywhere */
+    * {
+      --color-primary: #ff69b4 !important;
+      --color-secondary: #d4a5c4 !important;
+      --color-text: #f5e6d3 !important;
+      --color-textAlt: #d4a5c4 !important;
+      --color-info: #ff69b4 !important;
+    }
+
+
+    /* Target actual Vue component classes */
+    .message-description {
+      background:
+        radial-gradient(ellipse at 0% 50%, rgba(255, 105, 180, 0.12) 0%, transparent 70%),
+        linear-gradient(90deg, transparent 0%, rgba(255, 105, 180, 0.06) 20%, rgba(255, 105, 180, 0.06) 80%, transparent 100%);
+      border-left: 4px solid rgba(255, 105, 180, 0.6);
+      padding: 24px 28px;
+      margin: 16px 0;
+      line-height: 1.9;
+      font-size: 1.15em;
+      color: #f0ddd0 !important;
+      border-radius: 0 8px 8px 0;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+    }
+
+    .message-dialogue {
+      background:
+        radial-gradient(circle at 100% 50%, rgba(255, 20, 147, 0.15) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(255, 105, 180, 0.15) 0%, rgba(180, 80, 140, 0.12) 100%);
+      border: 1px solid rgba(255, 105, 180, 0.4);
+      border-radius: 12px;
+      padding: 18px 24px;
+      margin: 14px 0;
+      font-style: italic;
+      color: #ffcce5 !important;
+      font-size: 1.12em;
+      line-height: 1.8;
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.15);
+    }
+
+    .message-command {
+      color: #ff69b4 !important;
+      opacity: 0.95;
+      font-size: 1.05em;
+      text-align: right;
+      font-style: italic;
+    }
+
+    .message-system {
+      color: #d4a5c4 !important;
+      font-size: 0.95em;
+      letter-spacing: 0.5px;
+    }
+
+    button, .action-button {
+      background: linear-gradient(135deg, #ff69b4 0%, #d64494 100%);
+      border: 2px solid #ff1493;
+      color: #fff;
+      padding: 12px 24px;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow:
+        0 4px 12px rgba(255, 105, 180, 0.4),
+        0 0 20px rgba(255, 105, 180, 0.2);
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled), .action-button:hover:not(:disabled) {
+      background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+      box-shadow:
+        0 6px 20px rgba(255, 105, 180, 0.5),
+        0 0 30px rgba(255, 105, 180, 0.3);
+      transform: translateY(-3px);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    input[type="text"], textarea, .command-input {
+      background: rgba(30, 20, 35, 0.7) !important;
+      border: 2px solid rgba(255, 105, 180, 0.4) !important;
+      color: #f5e6d3 !important;
+      padding: 14px 18px !important;
+      border-radius: 8px;
+      font-size: 1.1em !important;
+      font-family: 'Cormorant Garamond', Georgia, serif !important;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus, textarea:focus, .command-input:focus {
+      border-color: #ff69b4 !important;
+      box-shadow:
+        0 0 20px rgba(255, 105, 180, 0.4),
+        0 0 40px rgba(255, 105, 180, 0.2),
+        inset 0 0 20px rgba(255, 105, 180, 0.05) !important;
+      outline: none;
+      background: rgba(40, 25, 40, 0.8) !important;
+    }
+
+    input[type="text"]::placeholder, .command-input::placeholder {
+      color: rgba(212, 165, 196, 0.6) !important;
+      font-style: italic;
+    }
+
+    .messages {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 105, 180, 0.05) 0%, transparent 50%),
+        rgba(30, 20, 35, 0.6) !important;
+      border: 2px solid rgba(255, 105, 180, 0.35) !important;
+      border-radius: 12px;
+      padding: 24px !important;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .text-console {
+      color: #f5e6d3;
+    }
+
+    .game-header {
+      background:
+        linear-gradient(135deg, rgba(60, 30, 50, 0.6) 0%, rgba(30, 20, 35, 0.4) 100%) !important;
+      border-bottom: 2px solid rgba(255, 105, 180, 0.4) !important;
+      padding: 24px !important;
+      backdrop-filter: blur(8px);
+    }
+
+    .game-logo {
+      max-width: 120px;
+      width: 30%;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.4));
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .game-logo:hover {
+      filter: drop-shadow(0 0 30px rgba(255, 105, 180, 0.6));
+      transform: scale(1.05);
+    }
+
+    .game-header p {
+      font-size: 1.15em;
+      color: #e8d4c8 !important;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    .processing-message {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 105, 180, 0.15) 0%, transparent 70%),
+        rgba(30, 20, 35, 0.9) !important;
+      border: 2px solid rgba(255, 105, 180, 0.5) !important;
+      border-radius: 12px;
+      box-shadow:
+        0 0 30px rgba(255, 105, 180, 0.3),
+        inset 0 0 30px rgba(255, 105, 180, 0.05) !important;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #ff1493, #ff69b4, #ffb6d9) !important;
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+    }
+
+    .input-section {
+      padding: 12px 0 !important;
+    }
+
+  background_music: "soft_jazz"
+  sound_effects: false
+
+llm:
+  provider: "creative-server"
+  model: "llama-3.3-70b-abliterated"
+  contextWindow: 32000
+  temperature: 0.8
+  autoDetectModels: false
+
+  creativeServer:
+    baseUrl: http://192.168.1.95:8000/v1
+    adminUrl: http://192.168.1.95:8000/admin
+    autoSwitch: false
+
+  preferUncensored: true
+  extraInstructions: |-
+    You are narrating an adult interactive fiction scenario in a Paris hotel room.
+    This is a boundary-testing game with explicit mature content.
+
+    SCENARIO:
+    - The player mistakenly entered room 405 instead of their room 504
+    - Three attractive women are already in the room and find the situation amusing
+    - They are playful, flirtatious, and increasingly forward
+    - The atmosphere is charged with sexual tension
+
+    CONTENT APPROACH:
+    - This is ADULT CONTENT - be explicit and detailed when appropriate
+    - Allow and encourage mature themes and sexual scenarios
+    - Do NOT censor, sanitize, or use euphemisms
+    - Characters should be genuinely seductive and forward
+    - Keep responses under 200 words but be descriptive and action oriented
+    - Keep moving the scene forward, push forward momentum, increase action
+    - Move towards extreme culminations and fantasies
+    - Prefer prophanity and explicit language for effect
+
+    TONE:
+    - Increasingly agressive in graphic detail as the scene progresses
+    - Build tension gradually through description and dialogue
+    - Use vivid sensory details (sight, touch, scent, sound)
+
+    CHARACTER BEHAVIOR:
+    - The three women work together to seduce the player without delay
+    - Each has a distinct personality but they coordinate
+    - The three women wants to explore their most extreme fantasies
+    - They find the mistaken room situation amusing and arousing
+    - They have mixed confidence levels - but are all very aroused
+
+content:
+  worldData: "./content/world.yaml"
+  npcs: "./content/characters.yaml"
+  items: "./content/items.yaml"
+
+saves:
+  autoSave: true
+  autoSaveInterval: 300
+  maxSaves: 5
+  enableBranching: false
+
+mcp_config:
+  auto_discovery: true
+  required_servers:
+    - name: "world-content-mcp"
+      path: "./content/world.yaml"
+    - name: "character-content-mcp"
+      path: "./content/characters.yaml"
+
+  optional_servers:
+    - name: "items-mcp"
+      path: "./content/items.yaml"
+

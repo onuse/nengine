@@ -64,6 +64,7 @@ export class EntityContentMCP extends BaseMCPServer {
   private itemTemplates: Map<string, ItemTemplate> = new Map();
   private dynamicEntities: Map<string, any> = new Map();
   private gamePath: string;
+  private imageService: any | null = null;
 
   constructor(gamePath: string) {
     super('entity-content-mcp', '1.0.0', ['npc-templates', 'item-templates', 'entity-generation', 'mutations']);
@@ -82,6 +83,14 @@ export class EntityContentMCP extends BaseMCPServer {
     } catch (error) {
       this.handleError('initialization failed', error);
     }
+  }
+
+  /**
+   * Set image service for automatic entity image generation
+   */
+  setImageService(imageService: any): void {
+    this.imageService = imageService;
+    this.log('Image service connected to Entity Content MCP');
   }
 
   listTools(): MCPTool[] {
@@ -317,6 +326,13 @@ export class EntityContentMCP extends BaseMCPServer {
     
     this.log(`Created dynamic NPC: ${npcId}`, npc);
     
+    // Auto-generate portrait if image service is available
+    if (this.imageService) {
+      this.generateNPCPortrait(npcId, npc).catch(err => {
+        this.warn(`Failed to generate portrait for ${npcId}: ${err.message}`);
+      });
+    }
+    
     return {
       id: npcId,
       isStatic: false
@@ -516,25 +532,26 @@ export class EntityContentMCP extends BaseMCPServer {
 
   // Data Loading
   private async loadNPCTemplates(): Promise<void> {
-    const npcsPath = path.join(this.gamePath, 'content', 'npcs.yaml');
-    
-    if (!fs.existsSync(npcsPath)) {
-      this.warn(`NPCs file not found: ${npcsPath}`);
+    // Load NPC data from characters.yaml (standard location)
+    const charactersPath = path.join(this.gamePath, 'content', 'characters.yaml');
+
+    if (!fs.existsSync(charactersPath)) {
+      this.warn(`Characters file not found: ${charactersPath}`);
       return;
     }
     
     try {
-      const content = fs.readFileSync(npcsPath, 'utf-8');
-      const npcsData = yaml.parse(content);
-      
-      if (npcsData.npcs) {
-        for (const npcData of npcsData.npcs) {
+      const content = fs.readFileSync(charactersPath, 'utf-8');
+      const charactersData = yaml.parse(content);
+
+      if (charactersData.npcs) {
+        for (const npcData of charactersData.npcs) {
           this.npcTemplates.set(npcData.id, npcData);
         }
       }
-      
+
       this.log(`Loaded NPC templates: ${this.npcTemplates.size} NPCs`);
-      
+
     } catch (error) {
       this.handleError('failed to load NPC templates', error);
     }
@@ -575,6 +592,42 @@ export class EntityContentMCP extends BaseMCPServer {
       wisdom: 10,
       charisma: 10
     };
+  }
+
+  private async generateNPCPortrait(npcId: string, npc: NPCTemplate): Promise<void> {
+    if (!this.imageService) {
+      return;
+    }
+
+    try {
+      // Build description for image generation
+      let description = npc.name;
+      
+      if (npc.personality?.traits) {
+        description += `, ${npc.personality.traits.slice(0, 3).join(', ')}`;
+      }
+      
+      // Add any appearance details from personality or knowledge
+      const visualTraits = [];
+      if (npc.personality?.appearance) {
+        visualTraits.push(npc.personality.appearance);
+      }
+      
+      if (visualTraits.length > 0) {
+        description += `, ${visualTraits.join(', ')}`;
+      }
+
+      this.log(`Generating portrait for ${npcId}: ${description}`);
+      
+      await this.imageService.generateEntityImage(npcId, description, {
+        size: '512x512',
+        steps: 20
+      });
+      
+      this.log(`Portrait generated for ${npcId}`);
+    } catch (error: any) {
+      this.warn(`Portrait generation failed for ${npcId}: ${error.message}`);
+    }
   }
 
   private mergeProperties(templates: ItemTemplate[]): Record<string, any> {

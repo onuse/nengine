@@ -333,15 +333,29 @@ export class WorldContentMCP extends BaseMCPServer {
   }
 
   getItemsInRoom(roomId: string): EntityId[] {
-    // This would typically query the state MCP server
-    // For now, return empty array as placeholder
-    return [];
+    const room = this.getRoom(roomId);
+    if (!room || !room.properties?.items) {
+      return [];
+    }
+
+    // Return items from the room's static data
+    return room.properties.items.map((itemId: string) => ({
+      id: itemId,
+      isStatic: true
+    }));
   }
 
   getNPCsInRoom(roomId: string): EntityId[] {
-    // This would typically query the state MCP server
-    // For now, return empty array as placeholder
-    return [];
+    const room = this.getRoom(roomId);
+    if (!room || !room.properties?.npcs) {
+      return [];
+    }
+
+    // Return NPCs from the room's static data
+    return room.properties.npcs.map((npcId: string) => ({
+      id: npcId,
+      isStatic: true
+    }));
   }
 
   getLighting(roomId: string): 'dark' | 'dim' | 'normal' | 'bright' {
@@ -392,7 +406,36 @@ export class WorldContentMCP extends BaseMCPServer {
       // Parse rooms
       if (this.worldData.rooms) {
         for (const roomData of this.worldData.rooms) {
-          this.rooms.set(roomData.id, roomData);
+          // Transform connections array to exits object for compatibility
+          const exits: Record<string, string> = {};
+          if (roomData.connections && Array.isArray(roomData.connections)) {
+            for (const conn of roomData.connections) {
+              if (conn.target && conn.direction) {
+                exits[conn.direction] = conn.target;
+              }
+            }
+          }
+
+          // Create properly formatted room object
+          const room: Room = {
+            id: roomData.id,
+            name: roomData.name,
+            description: roomData.description,
+            exits,
+            properties: {
+              ...roomData.properties,
+              npcs: roomData.npcs || [],
+              items: roomData.items || [],
+              clues: roomData.clues || [],
+              atmosphere: roomData.atmosphere,
+              lighting: roomData.lighting || 'normal',
+              sounds: roomData.sounds || [],
+              smells: roomData.smells || [],
+              hazards: roomData.hazards || []
+            }
+          };
+
+          this.rooms.set(roomData.id, room);
         }
       }
       

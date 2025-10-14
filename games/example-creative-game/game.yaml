@@ -1,0 +1,45 @@
+# Example Game Using Creative Server
+# This demonstrates how to use the creative server for enhanced narrative and image generation
+
+game:
+  title: "The Crimson Tavern"
+  description: "A dark fantasy mystery set in a dangerous port town"
+  startingRoom: tavern_main
+  version: "1.0.0"
+  maturity_rating: adult
+  content_warnings:
+    - violence
+    - mature themes
+    - dark fantasy
+
+llm:
+  # Use creative server for powerful 70B model and image generation
+  provider: creative-server
+  model: llama-3.3-70b-abliterated
+  temperature: 0.9  # High creativity
+  contextWindow: 32000  # Large context for rich narratives
+
+  # Creative server configuration (uses defaults if not specified)
+  creativeServer:
+    baseUrl: http://192.168.1.95:8000/v1  # Optional: defaults to this
+    adminUrl: http://192.168.1.95:8000/admin  # Optional: defaults to this
+    autoSwitch: true  # Automatically switch to creative working set
+
+  # Extra narrative instructions
+  extraInstructions: |
+    This is a gritty, atmospheric dark fantasy game.
+
+    Style Guidelines:
+    - Use vivid, sensory descriptions (smells, sounds, textures)
+    - Create morally complex characters with realistic motivations
+    - Build tension through atmosphere and character interactions
+    - Don't shy away from darker themes, but handle them maturely
+    - NPCs should have depth - they lie, manipulate, and have hidden agendas
+
+    Combat should be brutal and consequential.
+    Social interactions should be as engaging as action sequences.
+    Every choice should have weight.
+
+# The rest of your game content goes here...
+# NPCs defined in content/npcs.yaml will automatically get portrait generation
+# Rooms defined in content/rooms.yaml can use scene image generation

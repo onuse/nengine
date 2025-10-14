@@ -223,18 +223,22 @@ mechanics:
     level17to20: 6
 
 llm:
-  provider: "ollama"
-  model: "gemma3:4b"
-  fallbackModel: "mistral:7b"
-  contextWindow: 8192
-  temperature: 0.5
+  provider: "creative-server"
+  model: "llama-3.3-70b-abliterated"
+  contextWindow: 32000
+  temperature: 0.7
   autoDetectModels: false
-  
+
+  creativeServer:
+    baseUrl: http://192.168.1.95:8000/v1
+    adminUrl: http://192.168.1.95:8000/admin
+    autoSwitch: false
+
   narrativeStyle:
     tone: "epic-fantasy"
     verbosity: "concise"
     perspective: "second"
-    
+
   extraInstructions: |
     You are a Dungeon Master for D&D 5e. Provide interesting descriptions and prioritize to mention the most obvious occurence in the scene.
 
@@ -250,7 +254,7 @@ llm:
     2. Provide actionable details (items, NPCs, exits) (10-20 words)
     3. If travelling as a group, describe team members actions if appropriate (10-20 words)
     4. Present immediate dangers or opportunities (10-20 words)
-    5. End with "What do you do?" or similar prompt
+    5. End with "What do you do?" or similar prompt, on a new line
 
     FORBIDDEN:
     - "You do..." / "You decide..." / "You move..."

@@ -5,13 +5,12 @@
 
 import { MCPServerManager } from '../mcp/mcp-server-manager';
 import { LLMProvider, LLMPrompt, LLMResponse, WorldContext, Event, Action, NPCContext } from './types';
-import { OllamaProvider } from './ollama-provider';
+import { CreativeServerProvider } from './creative-server-provider';
 import { AgentOrchestrator } from '../agents/agent-orchestrator';
 
 export interface NarrativeConfig {
-  llmProvider: 'ollama';
+  llmProvider: 'creative-server';  // Only creative-server supported
   model: string;
-  fallbackModel: string;
   temperature: number;
   maxContextTokens: number;
   historyDepth: number;
@@ -22,6 +21,11 @@ export interface NarrativeConfig {
     variationModel?: string;
     evaluationModel?: string;
     timeoutMs?: number;
+  };
+  creativeServer?: {
+    baseUrl?: string;
+    adminUrl?: string;
+    autoSwitch?: boolean;
   };
 }
 
@@ -53,11 +57,10 @@ export class NarrativeController {
   constructor(mcpManager: MCPServerManager, config: Partial<NarrativeConfig> = {}) {
     this.mcpManager = mcpManager;
     this.config = {
-      llmProvider: 'ollama',
-      model: 'gemma2:9b',
-      fallbackModel: 'mistral:7b',
-      temperature: 0.7,
-      maxContextTokens: 4096,
+      llmProvider: 'creative-server',
+      model: 'llama-3.3-70b-abliterated',
+      temperature: 0.9,
+      maxContextTokens: 32000,
       historyDepth: 10,
       ...config
     };
@@ -244,19 +247,15 @@ export class NarrativeController {
 
   // Private methods
   private initializeLLMProvider(): void {
-    switch (this.config.llmProvider) {
-      case 'ollama':
-        this.llmProvider = new OllamaProvider({
-          model: this.config.model,
-          fallbackModel: this.config.fallbackModel,
-          temperature: this.config.temperature,
-          contextWindow: this.config.maxContextTokens,
-          autoDownload: true
-        });
-        break;
-      default:
-        throw new Error(`Unsupported LLM provider: ${this.config.llmProvider}`);
-    }
+    // Only creative-server is supported
+    this.llmProvider = new CreativeServerProvider({
+      baseUrl: this.config.creativeServer?.baseUrl,
+      adminUrl: this.config.creativeServer?.adminUrl,
+      textModel: this.config.model,
+      temperature: this.config.temperature,
+      contextWindow: this.config.maxContextTokens,
+      autoSwitch: this.config.creativeServer?.autoSwitch ?? true
+    });
   }
 
   private async classifyAction(action: PlayerAction): Promise<PlayerAction> {
@@ -302,17 +301,48 @@ export class NarrativeController {
     // Get NPCs in room
     const npcIds = roomContext.data.npcs || [];
     const presentNPCs: NPCContext[] = [];
-    
-    for (const npcId of npcIds) {
+
+    for (const npcEntity of npcIds) {
       try {
+        // Extract the actual ID from the EntityId object
+        const npcId = typeof npcEntity === 'string' ? npcEntity : npcEntity.id;
         const npcTemplate = await this.mcpManager.executeTool('entity-content', 'getNPCTemplate', { npcId });
         const relationship = await this.getRelationship(npcId, 'player');
         
         if (npcTemplate.template) {
+          // Build comprehensive NPC description including appearance details
+          let fullDescription = npcTemplate.template.description || '';
+
+          // Add appearance details if available
+          if (npcTemplate.template.appearance) {
+            const app = npcTemplate.template.appearance;
+            const details: string[] = [];
+
+            if (app.hair) details.push(`Hair: ${app.hair}`);
+            if (app.eyes) details.push(`Eyes: ${app.eyes}`);
+            if (app.build) details.push(`Build: ${app.build}`);
+            if (app.style) details.push(`Wearing: ${app.style}`);
+            if (app.distinctive) details.push(`Distinctive: ${app.distinctive}`);
+
+            if (details.length > 0) {
+              fullDescription += (fullDescription ? ' ' : '') + details.join('. ') + '.';
+            }
+          }
+
+          // Add personality traits if available
+          if (npcTemplate.template.personality?.traits) {
+            fullDescription += ` Personality: ${npcTemplate.template.personality.traits.join(', ')}.`;
+          }
+
+          // Add secrets (hidden information that GM knows but player doesn't)
+          if (npcTemplate.template.secrets && npcTemplate.template.secrets.length > 0) {
+            fullDescription += ` [GM Knowledge - Secrets: ${npcTemplate.template.secrets.join('; ')}]`;
+          }
+
           presentNPCs.push({
             id: npcId,
             name: npcTemplate.template.name,
-            description: npcTemplate.template.description || '',
+            description: fullDescription,
             currentMood: 'neutral',
             relationship: {
               trust: relationship.trust || 0,
@@ -325,6 +355,11 @@ export class NarrativeController {
       } catch (error) {
         console.warn(`[NarrativeController] Failed to get NPC context for ${npcId}:`, error);
       }
+    }
+
+    console.log(`[DEBUG] assembleContext: Found ${presentNPCs.length} NPCs`);
+    if (presentNPCs.length > 0) {
+      console.log(`[DEBUG] NPCs:`, presentNPCs.map(n => `${n.name} - ${n.description.substring(0, 100)}`));
     }
 
     return {
@@ -798,6 +833,109 @@ export class NarrativeController {
     }
     
     return roomNames;
+  }
+
+  /**
+   * Generate detailed image prompt from user instructions and current game context
+   * Uses LLM to interpret the scene and create FLUX-compatible prompts
+   */
+  async generateImagePrompt(userInstructions: string): Promise<string> {
+    console.log(`[NarrativeController] Generating image prompt with instructions: "${userInstructions}"`);
+
+    try {
+      // Get current game context
+      const worldState = await this.mcpManager.executeTool('state', 'getWorldState', {});
+      const context = await this.assembleContext({ type: 'interaction', rawInput: 'generate image', params: {} } as PlayerAction);
+
+      // Build specialized system prompt for image generation
+      const systemContext = `You are an expert at creating detailed image prompts for FLUX, a high-quality image generation model.
+
+Your task is to analyze the current game scene and player instructions, then create a single, detailed image prompt.
+
+IMPORTANT RULES:
+- Output ONLY the image prompt text, nothing else
+- No explanations, no additional text, just the prompt
+- Maximum 200 words
+- Be specific about visual details, lighting, atmosphere, and art style
+- Include relevant details from the scene context
+- Interpret vague instructions into specific visual descriptions`;
+
+      // Build the query with full context
+      let query = `Create a detailed FLUX image prompt based on this game scene:\n\n`;
+
+      // Add location context
+      query += `LOCATION: ${context.currentRoomName}\n`;
+      query += `${context.roomDescription}\n\n`;
+
+      // Add NPC context if any
+      if (context.presentNPCs.length > 0) {
+        query += `CHARACTERS PRESENT:\n`;
+        for (const npc of context.presentNPCs) {
+          console.log(`[DEBUG] NPC in prompt - ${npc.name}: ${npc.description.substring(0, 200)}...`);
+          query += `- ${npc.name}: ${npc.description}\n`;
+        }
+        query += `\n`;
+      }
+
+      // Add environment details
+      if (context.environment) {
+        query += `ENVIRONMENT:\n`;
+        query += `- Lighting: ${context.environment.lighting}\n`;
+        if (context.environment.sounds.length > 0) {
+          query += `- Sounds: ${context.environment.sounds.join(', ')}\n`;
+        }
+        if (context.environment.smells.length > 0) {
+          query += `- Smells: ${context.environment.smells.join(', ')}\n`;
+        }
+        query += `\n`;
+      }
+
+      // Add recent narrative context (last 2 events for freshness)
+      const recentHistory = this.getRecentHistory(2);
+      if (recentHistory.length > 0) {
+        query += `RECENT EVENTS:\n`;
+        for (const event of recentHistory) {
+          query += `${event.description}\n`;
+        }
+        query += `\n`;
+      }
+
+      // Add user's specific instructions
+      if (userInstructions && userInstructions.trim().length > 0) {
+        query += `PLAYER INSTRUCTIONS: ${userInstructions}\n\n`;
+      }
+
+      query += `Create a detailed FLUX image prompt that captures this scene. Output ONLY the prompt text.`;
+
+      // Call LLM with specialized prompt
+      const prompt: LLMPrompt = {
+        systemContext,
+        worldState: context,
+        recentHistory: [],  // Already included in query
+        availableActions: [],
+        query
+      };
+
+      const response = await this.llmProvider.complete(prompt);
+
+      // Extract just the prompt text (in case LLM adds extra formatting)
+      let imagePrompt = response.narrative.trim();
+
+      // Remove common prefixes that LLMs might add
+      imagePrompt = imagePrompt.replace(/^(Image prompt:|Prompt:|Here's the prompt:|FLUX prompt:)\s*/i, '');
+
+      // Remove quotes if the LLM wrapped it
+      imagePrompt = imagePrompt.replace(/^["']|["']$/g, '');
+
+      console.log(`[NarrativeController] Generated image prompt: ${imagePrompt.substring(0, 100)}...`);
+
+      return imagePrompt;
+
+    } catch (error: any) {
+      console.error('[NarrativeController] Failed to generate image prompt:', error);
+      // Fallback to basic prompt
+      return `A scene from a fantasy adventure game, high quality digital art, detailed, atmospheric lighting`;
+    }
   }
 
   /**

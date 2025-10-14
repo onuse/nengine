@@ -86,16 +86,42 @@ export interface LLMProvider {
   getModelInfo(): ModelCapabilities;
   isAvailable(): Promise<boolean>;
   shutdown(): Promise<void>;
+  generateImage?(prompt: string, options?: ImageGenerationOptions): Promise<ImageGenerationResult>;
+}
+
+export interface ImageGenerationOptions {
+  size?: '512x512' | '768x768' | '1024x1024';
+  steps?: number;
+  cfgScale?: number;
+  negativePrompt?: string;
+  seed?: number;
+}
+
+export interface ImageGenerationResult {
+  success: boolean;
+  imageData?: string; // base64 encoded image
+  error?: string;
+  metadata?: {
+    prompt: string;
+    size: string;
+    steps: number;
+    seed?: number;
+  };
 }
 
 export interface LLMConfig {
-  provider: 'ollama' | 'openai' | 'local';
+  provider: 'creative-server';  // Only creative-server supported
   model: string;
-  fallbackModel?: string;
   contextWindow: number;
   temperature: number;
   maxTokens: number;
   systemPrompt?: string;
+  // Creative server specific options
+  creativeServer?: {
+    baseUrl?: string;
+    adminUrl?: string;
+    autoSwitch?: boolean;
+  };
 }
 
 // Narrative generation specific types

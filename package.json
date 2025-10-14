@@ -8,6 +8,9 @@
   },
   "scripts": {
     "dev": "node node_modules/nodemon/bin/nodemon.js --exec \"node node_modules/tsx/dist/cli.mjs\" src/index.ts",
+    "dev:lovebug": "node node_modules/nodemon/bin/nodemon.js --exec \"node node_modules/tsx/dist/cli.mjs\" src/index.ts --game=lovebug",
+    "dev:heist": "node node_modules/nodemon/bin/nodemon.js --exec \"node node_modules/tsx/dist/cli.mjs\" src/index.ts --game=the-heist",
+    "dev:detective": "node node_modules/nodemon/bin/nodemon.js --exec \"node node_modules/tsx/dist/cli.mjs\" src/index.ts --game=red-lantern-detective",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

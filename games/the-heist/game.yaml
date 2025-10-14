@@ -85,20 +85,37 @@ mechanics:
 
 # LLM Configuration
 llm:
-  provider: "ollama"
-  model: "gemma2:9b"
-  fallbackModel: "mistral:7b"
-  contextWindow: 8192
-  
+  provider: "creative-server"
+  model: "llama-3.3-70b-abliterated"
+  temperature: 0.9
+  contextWindow: 32000
+
+  # Creative server configuration
+  creativeServer:
+    autoSwitch: true
+
   # Personality defaults for NPCs
   personalityDepth: "deep"  # How complex NPC personalities should be
   memoryPersistence: true   # NPCs remember past interactions
-  
+
   # Narrative style hints
   narrativeStyle:
     tone: "noir"  # noir, comedic, serious, dramatic
     verbosity: "moderate"  # terse, moderate, verbose
     perspective: "second"  # first, second, third
+
+  # Extra instructions for the heist theme
+  extraInstructions: |
+    This is a noir heist game with tension and suspense.
+
+    Style Guidelines:
+    - Use tense, atmospheric descriptions
+    - Build suspense through pacing and detail
+    - NPCs should be complex with hidden agendas
+    - Describe environmental sounds and shadows
+    - Keep the player on edge
+
+    Every decision matters. Trust is earned slowly and lost quickly.
 
 # Content paths
 content:

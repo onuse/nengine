@@ -1,0 +1,86 @@
+# Lovebug World Data
+# Paris Hotel Room Setting
+
+rooms:
+  - id: "hotel_room_405"
+    name: "Room 405"
+    description: |-
+      The door swings open to reveal an elegantly appointed Parisian hotel room bathed in soft amber light.
+      Floor-to-ceiling windows overlook the glittering city lights, the Eiffel Tower visible in the distance.
+      The room is spacious, dominated by a massive king-size bed with plush cream linens.
+
+      But you're not alone.
+
+      Three stunning women are here, lounging in various states of comfort. The air is thick with expensive perfume,
+      and soft jazz plays from a speaker somewhere. Wine bottles and glasses sit on the marble coffee table.
+      They all turn to look at you with expressions of surprise that quickly morph into something more intriguing.
+
+    atmosphere: "intimate and charged"
+    lighting: "soft amber lamplight"
+    scent: "expensive perfume and wine"
+    sound: "soft jazz music"
+
+    exits:
+      - direction: "hallway"
+        target: "hotel_hallway"
+        description: "The door to the hallway remains open behind you"
+
+    items:
+      - "hotel_key_card"
+      - "wine_bottle"
+      - "champagne_flute"
+
+    npcs:
+      - "amelie"
+      - "scarlett"
+      - "naomi"
+
+    initial_state:
+      door_locked: false
+      lights: "dim"
+      music_playing: true
+      wine_opened: true
+
+  - id: "hotel_hallway"
+    name: "Fifth Floor Hallway"
+    description: |-
+      The hotel hallway is elegantly carpeted with plush burgundy runner.
+      Soft wall sconces provide warm lighting. Room numbers are displayed in polished brass.
+      You can see room 405 behind you, and room 504 - YOUR room - is further down the hall.
+
+    atmosphere: "quiet and upscale"
+    lighting: "warm wall sconces"
+
+    exits:
+      - direction: "room_405"
+        target: "hotel_room_405"
+        description: "Back to room 405"
+      - direction: "room_504"
+        target: "your_room"
+        description: "Your actual room"
+
+  - id: "your_room"
+    name: "Room 504 - Your Room"
+    description: |-
+      Your actual hotel room. Clean, empty, and decidedly less interesting than the room you just left.
+      Your luggage sits unpacked by the door.
+
+    atmosphere: "quiet and solitary"
+    lighting: "overhead lights"
+
+    exits:
+      - direction: "hallway"
+        target: "hotel_hallway"
+        description: "Back to the hallway"
+
+world_state:
+  time_of_day: "evening"
+  date: "A Friday night in Paris"
+  season: "Spring"
+  weather: "Clear night, city lights sparkling"
+
+context:
+  setting: "Boutique hotel in the Marais district of Paris"
+  player_background: "Exhausted traveler who made a simple mistake"
+  situation: "Accidentally entered the wrong room"
+  tone: "Sophisticated, sensual, playful"

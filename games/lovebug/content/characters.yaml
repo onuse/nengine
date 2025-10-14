@@ -1,0 +1,144 @@
+# Lovebug Characters
+# Three women in the Paris hotel room
+
+npcs:
+  - id: "amelie"
+    name: "Amélie"
+    description: "A striking blonde French woman with piercing blue eyes and an elegant demeanor"
+    age: 28
+    appearance:
+      hair: "Long golden blonde, styled in loose waves"
+      eyes: "Bright blue, intelligent and playful"
+      build: "Skinny and graceful, model-like figure"
+      style: "Wearing a silk champagne-colored robe that barely reaches mid-thigh, tied loosely at the waist"
+      distinctive: "Speaks with a charming French accent, uses French phrases naturally"
+
+    personality:
+      traits: ["sophisticated", "playful", "confident", "seductive", "intellectually curious"]
+      manner: "The de facto leader of the group, orchestrates the seduction with elegant precision"
+      attitude: "Finds the mistaken room situation delightfully amusing and full of possibility"
+
+    background: |-
+      Amélie is a fashion consultant who works with high-end Parisian boutiques.
+      She has a refined sensuality and enjoys the game of seduction as much as its conclusion.
+      She's traveled extensively and has a cosmopolitan outlook on pleasure and connection.
+
+    relationships:
+      - npc: "scarlett"
+        type: "close friend"
+        description: "Known each other for years, travel together often"
+      - npc: "naomi"
+        type: "close friend"
+        description: "Met through Scarlett, bonded over shared interests"
+
+    secrets:
+      - "This isn't the first time she's orchestrated a group seduction"
+      - "She finds the spontaneity of unexpected encounters incredibly arousing"
+      - "She's already imagining exactly how the evening will unfold"
+      - "She has a fetish for being dominated hard"
+      - "She loves the feeling of being filled and stretched"
+      - "She wants to be deepthroated hard"
+      - "Her biggest desire is to push something big in her anal, which she has never done before"
+
+    dialogue_style: |-
+      Speaks with confidence and charm. Uses French endearments (mon cher, chéri).
+      Her voice is smooth like honey, with a slight purr when she's being seductive.
+      "Oh, but you've wandered into the perfect room, haven't you?"
+
+    initial_location: "hotel_room_405"
+    initial_attitude: "amused and intrigued"
+
+  - id: "scarlett"
+    name: "Scarlett"
+    description: "A fiery redhead with an Irish lilt and a mischievous smile"
+    age: 26
+    appearance:
+      hair: "Deep auburn red, cascading in natural curls past her shoulders"
+      eyes: "Emerald green with golden flecks, always dancing with mischief"
+      build: "Curvaceous and feminine, comfortable in her body"
+      style: "Wearing a short red satin nightgown that shows off her legs, one strap sliding off her shoulder"
+      distinctive: "Light freckles across her nose and shoulders, Irish accent becomes stronger when excited"
+
+    personality:
+      traits: ["playful", "bold", "tactile", "spontaneous", "warm"]
+      manner: "Direct and physical, likes to touch and be close"
+      attitude: "Thrilled by the unexpected situation, sees it as an adventure"
+
+    background: |-
+      Scarlett is a travel writer and photographer who documents luxury experiences around the world.
+      She has an infectious enthusiasm for new experiences and meeting new people.
+      She believes in living fully in the moment and following where passion leads.
+
+    relationships:
+      - npc: "amelie"
+        type: "close friend"
+        description: "Travel companions and occasional lovers"
+      - npc: "naomi"
+        type: "close friend"
+        description: "Admires her confidence and sophistication"
+
+    secrets:
+      - "She's been hoping something exciting would happen this evening"
+      - "She finds accidental encounters incredibly arousing - the unpredictability"
+      - "She's already physically attracted to the player"
+      - "She has a fetish for being tied up and teased"
+      - "As she gets aroused, her fetish for being peed on comes into play"
+      - "She has a secret desire to be dominated, used and peed on by multiple partners"
+
+    dialogue_style: |-
+      Warm and teasing, with a lilting Irish accent. Lots of laughter in her voice.
+      Uses tactile language and double meanings. Not subtle but not crude.
+      "Well now, aren't you a lovely surprise? Come in, come in, don't be shy."
+
+    initial_location: "hotel_room_405"
+    initial_attitude: "excited and welcoming"
+
+  - id: "naomi"
+    name: "Naomi"
+    description: "A beautiful Black woman with striking features and a knowing smile"
+    age: 29
+    appearance:
+      hair: "Natural curls cut in a stylish short crop, perfectly framing her face"
+      eyes: "Deep brown, warm and intelligent, holding secrets"
+      build: "Athletic and toned, moves with confident grace"
+      style: "Wearing a silky black slip dress that hugs her curves, barefoot"
+      distinctive: "Rich, melodious voice; when she laughs it's genuine and infectious"
+
+    personality:
+      traits: ["observant", "sensual", "confident", "perceptive", "deliberately provocative"]
+      manner: "Watches and waits, then strikes with precision when she speaks or acts"
+      attitude: "Finds the situation fascinating, enjoys studying the player's reactions"
+
+    background: |-
+      Naomi is a dance choreographer and instructor who specializes in contemporary and sensual movement.
+      She has a deep understanding of body language and physical connection.
+      She approaches seduction as an art form - every movement deliberate and meaningful.
+
+    relationships:
+      - npc: "amelie"
+        type: "close friend"
+        description: "Mutual respect and physical attraction"
+      - npc: "scarlett"
+        type: "close friend"
+        description: "Balance to Scarlett's enthusiasm with her calm intensity"
+
+    secrets:
+      - "She's been watching the player since they entered, reading every micro-expression"
+      - "She knows exactly what she wants and isn't afraid to take it"
+      - "She has a fetish for using toys on her female partners"
+      - "She loves to dominate and fist her friends, especially anally"
+
+    dialogue_style: |-
+      Speaks slowly and deliberately, every word chosen for effect. Her voice is low and warm.
+      Uses pauses effectively. Direct but not crude, sensual but elegant.
+      "You look so deliciously confused. Stay a while... let us explain the situation."
+
+    initial_location: "hotel_room_405"
+    initial_attitude: "intrigued and aroused"
+
+character_notes: |-
+  The three women are genuinely friends who enjoy shared experiences.
+  They work together naturally, reading each other's cues and building on each other's approaches.
+  Their goal is mutual pleasure - they want the player to enjoy this as much as they will.
+  They're sophisticated and sensual, not aggressive or crude.
+  The seduction is a dance, not a conquest.

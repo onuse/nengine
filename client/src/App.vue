@@ -3,7 +3,8 @@
     <div class="game-container" v-if="gameConfig">
       <!-- Game Header -->
       <div class="game-header">
-        <h1>{{ gameConfig?.game?.title || 'Narrative Engine' }}</h1>
+        <img v-if="gameConfig?.ui?.logo" :src="gameConfig.ui.logo" :alt="gameConfig?.game?.title" class="game-logo" />
+        <h1 v-else>{{ gameConfig?.game?.title || 'Narrative Engine' }}</h1>
         <p v-if="gameConfig?.game?.description">{{ gameConfig.game.description }}</p>
       </div>
       
@@ -22,16 +23,16 @@
               </div>
               <div class="processing-details">
                 <div class="processing-timer">
-                  ⏱️ {{ elapsedSeconds }}s elapsed
+                  {{ getIcon('timer', '⏱️') }} {{ elapsedSeconds }}s elapsed
                 </div>
                 <div v-if="currentPhase" class="processing-phase">
-                  📍 Phase: {{ currentPhase }}
+                  {{ getIcon('phase', '📍') }} Phase: {{ currentPhase }}
                 </div>
                 <div v-if="estimatedTimeRemaining" class="processing-eta">
-                  🎯 ETA: ~{{ Math.ceil(estimatedTimeRemaining / 60) }} minutes
+                  {{ getIcon('target', '🎯') }} ETA: ~{{ Math.ceil(estimatedTimeRemaining / 60) }} minutes
                 </div>
               </div>
-              <div class="processing-progress">
+              <div class="processing-progress" v-if="currentPhase && getProgressPercentage() > 0">
                 <div class="progress-bar">
                   <div class="progress-fill" :style="{ width: getProgressPercentage() + '%' }"></div>
                 </div>
@@ -53,19 +54,19 @@
               :disabled="isProcessing || gameHistory.length === 0"
               title="Rollback to previous state"
             >
-              ⏪ Rollback
+              {{ getIcon('rollback', '⏪') }} Rollback
             </button>
           </div>
 
           <!-- Rollback Menu -->
           <div v-if="showRollbackMenu" class="rollback-menu">
             <div class="rollback-header">
-              <h3>🔄 Choose a point to return to:</h3>
+              <h3>{{ getIcon('rollback_menu', '🔄') }} Choose a point to return to:</h3>
               <button @click="showRollbackMenu = false" class="close-btn">✕</button>
             </div>
             <div class="rollback-options">
               <div
-                v-for="(snapshot, index) in gameHistory.slice().reverse()"
+                v-for="snapshot in gameHistory.slice().reverse()"
                 :key="snapshot.id"
                 @click="rollbackToSnapshot(snapshot)"
                 class="rollback-option"
@@ -121,6 +122,15 @@ interface GameMessage {
   type: 'command' | 'description' | 'dialogue' | 'system' | 'error';
   text: string;
   timestamp: Date;
+  id?: string;
+}
+
+interface GameSnapshot {
+  id: string;
+  timestamp: Date;
+  messages: GameMessage[];
+  gameState: GameState;
+  description: string;
 }
 
 const messages = ref<GameMessage[]>([]);
@@ -150,6 +160,11 @@ const inputCommand = ref('');
 const messagesContainer = ref<HTMLElement>();
 
 let ws: WebSocket | null = null;
+
+// Icon helper function - returns game-specific icon or default
+const getIcon = (name: string, defaultIcon: string): string => {
+  return gameConfig.value?.ui?.icons?.[name] || defaultIcon;
+};
 
 const quickActions = computed(() => {
   if (!gameConfig.value?.mechanics?.commands) return ['look', 'inventory'];
@@ -195,22 +210,30 @@ async function loadGameConfig() {
       gameConfig.value = await response.json();
       console.log('Loaded game:', gameConfig.value?.game?.title);
       
-      // Add welcome message based on game
-      if (gameConfig.value?.game?.title) {
-        addMessage(`Welcome to ${gameConfig.value.game.title}`, 'system');
-      }
-      if (gameConfig.value?.game?.description) {
-        addMessage(gameConfig.value.game.description, 'system');
+      // Add opening message based on game (not the header description)
+      if (gameConfig.value?.game?.opening) {
+        addMessage(gameConfig.value.game.opening, 'description');
+      } else if (gameConfig.value?.game?.description) {
+        // Fallback to description if no opening is defined
+        addMessage(gameConfig.value.game.description, 'description');
       }
       
-      // Load custom CSS
-      if (gameConfig.value?.game?.id) {
+      // Load custom CSS - check for inline css_overrides first
+      if (gameConfig.value?.ui?.css_overrides) {
+        // Inject CSS directly from the config
+        const style = document.createElement('style');
+        style.textContent = gameConfig.value.ui.css_overrides;
+        document.head.appendChild(style);
+        console.log('Applied css_overrides from game config');
+      } else if (gameConfig.value?.game?.id) {
+        // Fall back to loading external CSS file
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = `/api/game/${gameConfig.value.game.id}/theme.css`;
         document.head.appendChild(link);
+        console.log('Loading external theme CSS');
       }
-      
+
       // Apply theme colors
       if (gameConfig.value?.ui?.themeConfig?.colors) {
         const root = document.documentElement;
@@ -229,13 +252,13 @@ function connectWebSocket() {
   const wsUrl = `${protocol}//${window.location.host}`;
   
   console.log('Attempting to connect to:', wsUrl);
-  addMessage('🔌 Connecting to server...');
-  
+  addMessage(`${getIcon('connecting', '🔌')} Connecting to server...`);
+
   ws = new WebSocket(wsUrl);
-  
+
   ws.onopen = () => {
     console.log('✅ Connected to server');
-    addMessage('✅ Connected to game server');
+    addMessage(`${getIcon('connected', '✅')} Connected to game server`);
     
     // Send initial "look" command to get the game state
     setTimeout(() => {
@@ -268,16 +291,16 @@ function connectWebSocket() {
   
   ws.onerror = (error) => {
     console.error('WebSocket error:', error);
-    addMessage('❌ Connection error occurred');
+    addMessage(`${getIcon('error', '❌')} Connection error occurred`);
   };
-  
+
   ws.onclose = (event) => {
     console.log('❌ Disconnected from server. Code:', event.code, 'Reason:', event.reason);
-    addMessage('❌ Disconnected from game server');
-    
+    addMessage(`${getIcon('disconnected', '❌')} Disconnected from game server`);
+
     // Only reconnect if it wasn't a manual close
     if (event.code !== 1000) {
-      addMessage('🔄 Attempting to reconnect in 3 seconds...');
+      addMessage(`${getIcon('rollback', '🔄')} Attempting to reconnect in 3 seconds...`);
       setTimeout(connectWebSocket, 3000);
     }
   };
@@ -308,9 +331,9 @@ function handleServerMessage(data: any) {
     if (data.result && data.result.narrative) {
       addMessage(data.result.narrative, 'description');
     } else if (data.result && data.result.error) {
-      addMessage(`❌ Error: ${data.result.error}`, 'error');
+      addMessage(`${getIcon('error', '❌')} Error: ${data.result.error}`, 'error');
     } else if (data.error) {
-      addMessage(`❌ Error: ${data.error}`, 'error');
+      addMessage(`${getIcon('error', '❌')} Error: ${data.error}`, 'error');
     }
   } else if (data.type === 'state') {
     Object.assign(gameState, data.state);
@@ -342,7 +365,7 @@ function handleCommand() {
       rawInput: command
     }));
   } else {
-    addMessage('❌ Not connected to server');
+    addMessage(`${getIcon('error', '❌')} Not connected to server`);
   }
 }
 
@@ -367,7 +390,7 @@ function handleAction(action: string) {
       rawInput: action.toLowerCase()
     }));
   } else {
-    addMessage('❌ Not connected to server');
+    addMessage(`${getIcon('error', '❌')} Not connected to server`);
   }
 }
 
@@ -428,7 +451,7 @@ function rollbackToSnapshot(snapshot: GameSnapshot) {
   }
 
   // Add rollback message
-  addMessage(`🔄 Rolled back to: ${snapshot.description}`, 'system');
+  addMessage(`${getIcon('rollback', '🔄')} Rolled back to: ${snapshot.description}`, 'system');
 
   showRollbackMenu.value = false;
 
@@ -593,7 +616,7 @@ body {
 
 .game-container {
   width: 100%;
-  height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--color-background);
@@ -656,6 +679,8 @@ body {
   flex-direction: column;
   padding: 15px;
   background: var(--color-background);
+  min-height: 0;
+  overflow: hidden;
 }
 
 .text-console {
