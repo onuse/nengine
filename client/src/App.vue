@@ -607,21 +607,26 @@ body {
   background: var(--color-background);
   color: var(--color-text);
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 #app {
   width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-container {
   width: 100%;
-  max-height: 100vh;
+  flex: 1;
   display: flex;
   flex-direction: column;
   background: var(--color-background);
-  border: 2px solid var(--color-border);
+  border: 0;
   overflow: hidden;
+  min-height: 0;
 }
 
 .game-header {
@@ -677,29 +682,29 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 0;
   background: var(--color-background);
   min-height: 0;
   overflow: hidden;
 }
 
 .text-console {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .messages {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-bottom: 15px;
+  margin: 15px 15px 15px 15px;
   padding: 15px;
   background: var(--color-backgroundAlt);
   border: 2px solid var(--color-border);
   border-radius: 4px;
-  min-height: 200px;
-  max-height: calc(100vh - 300px);
+  min-height: 0;
   word-wrap: break-word;
   text-align: left;
 }
@@ -746,6 +751,7 @@ body {
   display: flex;
   gap: 8px;
   align-items: stretch;
+  margin: 0 15px 15px 15px;
 }
 
 .command-input {
