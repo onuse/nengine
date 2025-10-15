@@ -51,7 +51,10 @@ export class CreativeServerProvider implements LLMProvider {
       timeout: this.config.timeout,
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      // Disable keep-alive to prevent socket hang up issues
+      httpAgent: new (require('http').Agent)({ keepAlive: false }),
+      httpsAgent: new (require('https').Agent)({ keepAlive: false })
     });
 
     this.adminClient = axios.create({
@@ -97,31 +100,64 @@ export class CreativeServerProvider implements LLMProvider {
       throw new Error('CreativeServerProvider not initialized');
     }
 
-    const formattedMessages = this.formatPromptToMessages(prompt);
     const startTime = Date.now();
 
-    // Add significant temperature variation each turn for maximum diversity
-    const tempVariation = (Math.random() - 0.5) * 0.4; // -0.2 to +0.2
-    const variedTemp = Math.max(0.8, Math.min(1.3, this.config.temperature + tempVariation + 0.2)); // Bias higher
-
     try {
-      console.log(`[CreativeServerProvider] Generating response with ${this.currentModel} (temp: ${variedTemp.toFixed(2)})...`);
+      // PHASE 1: Planning - Generate bullet points of what should happen
+      const phase1Start = Date.now();
+      console.log(`[CreativeServerProvider] Phase 1: Planning what happens next...`);
+
+      const planningMessages = this.formatPlanningPrompt(prompt);
+
+      // Use higher temperature for creative planning
+      const planningTemp = Math.min(1.2, this.config.temperature + 0.3);
+
+      const planningResponse = await this.client.post('/chat/completions', {
+        model: this.currentModel,
+        messages: planningMessages,
+        temperature: planningTemp,
+        top_p: 0.98,
+        // top_k: 100,  // Not supported by this API
+        // repetition_penalty: 1.3,  // Not supported by this API
+        frequency_penalty: 0.5,
+        presence_penalty: 0.7,  // Even higher for planning - we want NEW ideas
+        seed: Math.floor(Math.random() * 1000000),
+        max_tokens: 400  // Allow more detailed planning
+      });
+
+      const phase1Time = Date.now() - phase1Start;
+      const plan = planningResponse.data.choices[0].message.content;
+      console.log(`[CreativeServerProvider] Phase 1 completed in ${phase1Time}ms (${(phase1Time/1000).toFixed(1)}s)`);
+      console.log(`[CreativeServerProvider] Plan generated:\n${plan}`);
+
+      // PHASE 2: Narration - Write the scene based on the plan
+      const phase2Start = Date.now();
+      console.log(`[CreativeServerProvider] Phase 2: Writing narrative based on plan...`);
+
+      const narrativeMessages = this.formatNarrativePrompt(prompt, plan);
+
+      // Add significant temperature variation for narrative
+      const tempVariation = (Math.random() - 0.5) * 0.4;
+      const variedTemp = Math.max(0.8, Math.min(1.3, this.config.temperature + tempVariation + 0.2));
 
       const response = await this.client.post('/chat/completions', {
         model: this.currentModel,
-        messages: formattedMessages,
+        messages: narrativeMessages,
         temperature: variedTemp,
-        top_p: 0.98,              // HIGHER = more tokens considered (more random)
-        top_k: 100,               // HIGHER = way more token choices (more unexpected)
-        repetition_penalty: 1.3,  // STRONGER penalty = force different words
-        frequency_penalty: 0.5,   // HIGHER = strongly avoid any repetition
-        presence_penalty: 0.6,    // HIGHER = aggressively seek new topics
-        seed: Math.floor(Math.random() * 1000000)  // Random seed each time!
-        // No max_tokens - let the LLM decide when to stop naturally based on context
+        top_p: 0.98,
+        // top_k: 100,  // Not supported by this API
+        // repetition_penalty: 1.3,  // Not supported by this API
+        frequency_penalty: 0.5,
+        presence_penalty: 0.6,
+        seed: Math.floor(Math.random() * 1000000)
+        // No max_tokens - let the LLM decide when to stop naturally
       });
 
+      const phase2Time = Date.now() - phase2Start;
+      console.log(`[CreativeServerProvider] Phase 2 completed in ${phase2Time}ms (${(phase2Time/1000).toFixed(1)}s)`);
+
       const responseTime = Date.now() - startTime;
-      console.log(`[CreativeServerProvider] Response generated in ${responseTime}ms (${(responseTime/1000).toFixed(1)}s)`);
+      console.log(`[CreativeServerProvider] Two-phase generation completed in ${responseTime}ms (${(responseTime/1000).toFixed(1)}s)`);
 
       const content = response.data.choices[0].message.content;
       return this.parseResponse(content, prompt);
@@ -129,6 +165,15 @@ export class CreativeServerProvider implements LLMProvider {
     } catch (error: any) {
       const errorTime = Date.now() - startTime;
       console.error(`[CreativeServerProvider] Generation failed after ${errorTime}ms:`, error.message);
+
+      // Log more detailed error information
+      if (error.response) {
+        console.error(`[CreativeServerProvider] HTTP Status: ${error.response.status}`);
+        console.error(`[CreativeServerProvider] Response data:`, error.response.data);
+      }
+      if (error.code) {
+        console.error(`[CreativeServerProvider] Error code: ${error.code}`);
+      }
 
       if (error.response?.status === 503 && error.response?.data?.detail?.includes('No chat model')) {
         throw new Error('Creative working set is not active. Please switch to creative set or enable autoSwitch.');
@@ -337,6 +382,67 @@ export class CreativeServerProvider implements LLMProvider {
     });
 
     return messages;
+  }
+
+  private formatPlanningPrompt(prompt: LLMPrompt): any[] {
+    const messages: any[] = [];
+
+    // System message for planning
+    messages.push({
+      role: 'system',
+      content: `You are a creative story planner. Given the current situation and context, generate a bullet-point list of specific, concrete events that should happen next. Be as creative, but stick to what is absolutely appropriate for the scenario, the setting, the context and the other instructions.`
+    });
+
+    // Context for planning
+    let contextContent = '';
+
+    if (prompt.worldState) {
+      contextContent += `CURRENT SITUATION:\n`;
+      contextContent += `Location: ${prompt.worldState.currentRoomName}\n`;
+      if (prompt.worldState.presentNPCs?.length > 0) {
+        contextContent += `Characters present: ${prompt.worldState.presentNPCs.map(n => n.name).join(', ')}\n`;
+      }
+      contextContent += '\n';
+    }
+
+    // Include recent history for context
+    if (prompt.recentHistory.length > 0) {
+      contextContent += `WHAT JUST HAPPENED:\n`;
+      const lastEvent = prompt.recentHistory[prompt.recentHistory.length - 1];
+      contextContent += lastEvent.description.substring(0, 200) + '...\n\n';
+    }
+
+    messages.push({
+      role: 'user',
+      content: contextContent + `Based on the player's action: "${prompt.query}"\n\nGenerate 3-5 SPECIFIC things that should happen next. Be unexpected and creative:\n\n• `
+    });
+
+    return messages;
+  }
+
+  private formatNarrativePrompt(prompt: LLMPrompt, plan: string): any[] {
+    // Start with the FULL original formatted messages
+    const originalMessages = this.formatPromptToMessages(prompt);
+
+    // Find the last user message and enhance it with the plan
+    for (let i = originalMessages.length - 1; i >= 0; i--) {
+      if (originalMessages[i].role === 'user') {
+        const originalContent = originalMessages[i].content;
+
+        // Insert the plan BEFORE the final instruction
+        const enhancedContent = `${originalContent}\n\nWHAT MUST HAPPEN IN THIS SCENE (based on planning phase):
+───────────────────────────────────────
+${plan}
+───────────────────────────────────────
+
+CRITICAL: Your narrative MUST include ALL of the above planned events. Weave them naturally into the story - don't just list them. Make the scene dynamic with these specific events happening.`;
+
+        originalMessages[i].content = enhancedContent;
+        break;
+      }
+    }
+
+    return originalMessages;
   }
 
   private parseResponse(rawResponse: string, originalPrompt: LLMPrompt): LLMResponse {
