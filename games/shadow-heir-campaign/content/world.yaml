@@ -1,0 +1,747 @@
+# Shadow Heir - World of Faerun Through a Thief's Eyes
+# A noir heist journey through the iconic cities of the Forgotten Realms
+
+regions:
+  baldurs_gate_region:
+    name: "Baldur's Gate"
+    description: "The great port city where the Chionthar River meets the Sea of Swords. A haven for merchants, mercenaries, and those who thrive in the gray spaces between law and chaos."
+
+  sword_coast:
+    name: "The Sword Coast"
+    description: "The western coast of Faerun, stretching from Waterdeep to Amn. Trade routes, ancient ruins, and countless opportunities for those with quick fingers and quicker wits."
+
+  sword_coast_north:
+    name: "The Sword Coast North"
+    description: "The frontier region north of Waterdeep, where civilization gives way to wilderness and law becomes a suggestion."
+
+# ============================================================================
+# ACT 1: BALDUR'S GATE - THE MURDER AND THE FLIGHT
+# ============================================================================
+
+rooms:
+  # === THE OPENING: WHERE IT ALL GOES WRONG ===
+
+  - id: shadow_guild_celebration
+    name: "The Elfsong Tavern - Private Hall"
+    description: |
+      The private third-floor hall of the Elfsong Tavern pulses with celebration. Thirty members of the Shadow Thieves toast your greatest heist yet - the Silverstar Diamond, now gleaming on a pedestal at the room's center. Zara Nightwhisper, your mentor for the past decade, holds her wine glass high.
+
+      Then she stumbles. The glass shatters. Red wine spreads across the floor like blood.
+
+      She collapses into your arms, her lips already turning blue. Her hand presses something warm and crystalline into your palm. "Trust... no one..." she gasps. "Find the Gray Hand in... Waterdeep..."
+
+      Across the room, Keth Shadowblade's eyes lock onto yours above Zara's dying body. His hand moves to his blade. "YOU!" he roars. "You murdered her!"
+
+      Vex the Viper stands by the door, a smile playing at the corner of his mouth as he calls out: "Seal the exits! No one leaves!"
+
+      The crystal burns warm in your fist. Thirty thieves stare at you. Some reach for weapons. Others back toward the windows. The celebration has become your execution.
+    exits:
+      window: "elfsong_exterior_wall"
+      door: "elfsong_third_floor_hall"
+      confrontation: "guild_standoff"
+    region: "baldurs_gate_region"
+    npcs: ["zara_nightwhisper_dying", "keth_shadowblade_hostile", "vex_the_viper", "shadow_thieves_crowd"]
+    danger_level: "extreme"
+    initial_scene: true
+
+    atmosphere:
+      lighting: "warm_golden_lamplight_now_sinister"
+      sounds: "celebration_music_stops_shocked_silence_rising_accusations"
+      tension: "maximum_immediate_threat_thirty_armed_thieves"
+
+    skill_opportunities:
+      persuasion:
+        dc: 25
+        success: "You convince a few thieves you're being framed - they hesitate"
+        failure: "Your words fall on hostile ears - they see only a killer"
+      insight:
+        dc: 15
+        success: "You catch Vex's smile - HE did this, he's framing you!"
+        failure: "Everyone's expression is hostile - you can't read the room"
+      acrobatics:
+        dc: 18
+        success: "You flip the table, scatter the crowd, reach the window"
+        failure: "You're grabbed before you can move"
+      deception:
+        dc: 20
+        success: "You convince them Zara named someone else as her killer"
+        failure: "They don't believe your lies - you're cornered"
+      intimidation:
+        dc: 22
+        success: "You threaten to destroy the crystal - everyone freezes"
+        failure: "Empty threats from a cornered rat - they attack"
+
+    items_available: ["smoke_bomb_if_you_prepared", "rope_coiled_by_window", "wine_bottles_as_weapons", "silverstar_diamond_on_pedestal"]
+
+    story_notes: |
+      This is the OPENING SCENE. The player should feel:
+      - Shock and grief (mentor dying)
+      - Immediate mortal danger
+      - Betrayal (who poisoned her?)
+      - Mystery (what IS this crystal?)
+      - Urgency (must escape NOW)
+
+      Multiple escape routes possible:
+      - Fight (suicidal but possible)
+      - Talk (very hard but might split the crowd)
+      - Window escape (classic thief move)
+      - Hostage/leverage the crystal
+      - Create distraction and run
+
+      Zara's last words are cryptic:
+      - "Trust no one" - someone here betrayed her
+      - "Gray Hand" - Harper contact
+      - "Waterdeep" - your destination
+      - The crystal is Harper communication device (player doesn't know yet)
+
+  - id: elfsong_exterior_wall
+    name: "Elfsong Tavern - Third Floor Exterior"
+    description: |
+      You're clinging to the rain-slicked stone wall three stories above Baldur's Gate's Lower City. The sounds of pursuit echo from the window above - shouts, breaking furniture, Keth's voice roaring your name.
+
+      Below, the Elfsong's famous ghost still sings her haunting melody, echoing through the night. The alley below is dark but you can see movement - city watch on patrol? Or more Shadow Thieves cutting off escape?
+
+      To your left, a drain pipe runs down to street level. To your right, a balcony one floor down belongs to a merchant's room - curtains drawn but lamplight visible inside. Above, angry faces appear at the window you just climbed through.
+
+      The crystal pulses warm in your pocket. Your fingers ache from gripping the stonework. Choose quickly.
+    exits:
+      down_pipe: "elfsong_alley"
+      balcony: "merchant_balcony_room"
+      climb_up: "elfsong_rooftop"
+    region: "baldurs_gate_region"
+    danger_level: "high"
+    skill_opportunities:
+      athletics:
+        dc: 15
+        success: "You slide down the pipe with practiced ease"
+        failure: "You slip, crash loudly into barrels below - watch is alerted"
+      stealth:
+        dc: 18
+        success: "You move silently across to the balcony"
+        failure: "The merchant inside hears you, starts shouting for guards"
+      acrobatics:
+        dc: 20
+        success: "You parkour across rooftops like a shadow"
+        failure: "You misjudge the distance, take damage from fall"
+
+  - id: elfsong_alley
+    name: "Dark Alley Behind the Elfsong"
+    description: |
+      The alley reeks of piss, rotting fish, and desperation - the authentic smell of Baldur's Gate's Lower City. Shadows pool between crates and barrels. The ghost's song echoes hauntingly from above, giving the alley its name.
+
+      Two city watch patrol the street at the alley's mouth, their lanterns swinging. They haven't seen you yet. Behind you, the Elfsong's back door - service entrance, usually guarded but maybe chaos inside has pulled them away?
+
+      To your left, a sewer grate. To your right, a narrow gap between buildings leading toward the Gray Harbor docks. The crystal's warmth reminds you - they're hunting you now. Every choice matters.
+
+      The ghost sings: "Beware the smiling viper..." Zara's favorite song. A coincidence? Or a message from beyond death?
+    exits:
+      docks: "gray_harbor_docks"
+      sewers: "baldurs_gate_sewers_west"
+      shadows: "lower_city_backstreets"
+    region: "baldurs_gate_region"
+    npcs: ["city_watch_patrol_distant", "possible_beggar_witness"]
+    danger_level: "medium"
+    atmosphere:
+      lighting: "almost_pitch_black_distant_lantern_light"
+      sounds: "ghost_song_dripping_water_watch_boots_on_cobblestones"
+      mood: "paranoid_hunted_every_shadow_could_be_death"
+
+  # === BALDUR'S GATE - LOWER CITY ===
+
+  - id: gray_harbor_docks
+    name: "Gray Harbor - The Docks at Night"
+    description: |
+      The docks of Baldur's Gate never sleep, but at this hour they're the domain of smugglers, prostitutes, and those who prefer darkness to daylight. Ships creak against their moorings. Fog rolls in from the Chionthar River, thick enough to hide sins.
+
+      A dozen ships crowd the harbor - merchant vessels, fishing boats, and one black-sailed ship that flies no flag. Sailors stumble between taverns, too drunk to notice a fugitive. But the Flaming Fist has a garrison at the harbor mouth, and their torches cut through the fog like orange eyes.
+
+      A halfling dockworker eyes you nervously, then looks away - he knows trouble when he sees it. A ship's captain argues with a customs officer, their raised voices providing cover. The black-sailed ship's gangplank is unguarded...
+
+      The crystal pulses faster near the water. Why?
+    exits:
+      north: "lower_city_backstreets"
+      ship: "black_sailed_ship_deck"
+      warehouse: "smugglers_warehouse"
+      garrison: "flaming_fist_garrison"
+    region: "baldurs_gate_region"
+    npcs: ["nervous_halfling_dockworker", "black_ship_captain", "drunk_sailors", "customs_officer"]
+    danger_level: "medium"
+    services:
+      ship_passage: "if_you_can_negotiate_or_hide_aboard"
+    atmosphere:
+      lighting: "fog_torchlight_lanterns_on_ships"
+      sounds: "water_lapping_ropes_creaking_distant_songs_from_taverns"
+      opportunities: "multiple_ships_hiding_places_bribes_persuasion"
+
+  - id: lower_city_backstreets
+    name: "Lower City Backstreets"
+    description: |
+      The labyrinthine back streets of Baldur's Gate's Lower City are a thief's natural habitat. Narrow, winding passages between leaning buildings that block out the stars. Laundry lines stretch overhead like banners. Beggars sleep in doorways. Watch patrols avoid these streets after dark.
+
+      But tonight you're not the predator - you're prey. Every shadow could hide a Shadow Thief. Every corner could lead to ambush. The crystal's warmth is your only comfort, though you still don't know what it is or why Zara gave it to you.
+
+      Three paths diverge: The Blushing Mermaid tavern (neutral ground where thieves trade information), the Counting House (where you have money hidden), or deeper into the warrens toward the Outer City and possible escape.
+
+      A cat yowls. Footsteps echo from somewhere. They're searching for you.
+    exits:
+      tavern: "blushing_mermaid"
+      counting_house: "baldurs_gate_counting_house"
+      outer_city: "baldurs_gate_outer_city"
+      docks: "gray_harbor_docks"
+      sewers: "baldurs_gate_sewers_central"
+    region: "baldurs_gate_region"
+    npcs: ["beggars_who_might_inform", "possible_shadow_thief_scouts"]
+    danger_level: "high"
+    atmosphere:
+      lighting: "almost_no_light_occasional_window_glow"
+      sounds: "distant_pursuit_rats_your_own_breathing"
+      feeling: "claustrophobic_maze_hunted"
+
+  - id: blushing_mermaid
+    name: "The Blushing Mermaid"
+    description: |
+      This infamous dive tavern is neutral ground by ancient accord - no blood spilled inside, all disputes held at the door. The clientele would make a paladin weep: cutthroats, smugglers, prostitutes, fences, and informants. The ale is watered, the wine is vinegar, but the information flows like gold.
+
+      The moment you enter, conversations pause. Eyes assess you. Word travels fast in the underworld - they know about Zara. They know you're hunted. The question is: do they see you as a lucrative bounty, a potential ally, or just another corpse-to-be?
+
+      The barkeep, a scarred dwarf called Grimjaw, watches you with calculating eyes. In the corner booth, a hooded figure makes a subtle hand signal - guild sign for "talk, don't kill." But is it genuine or bait?
+
+      The crystal throbs against your chest. Someone here knows what it is.
+    exits:
+      outside: "lower_city_backstreets"
+      back_room: "mermaid_back_room"
+      basement: "smuggler_tunnels"
+    region: "baldurs_gate_region"
+    npcs: ["grimjaw_barkeep", "hooded_informant", "dangerous_patrons", "possible_vex_spy"]
+    danger_level: "medium"
+    safe_zone: "neutral_ground_no_combat_inside"
+    services:
+      information: "if_you_have_coin_or_leverage"
+      rumors: true
+      possible_allies: "if_you_convince_them"
+    atmosphere:
+      lighting: "smoky_dim_lanterns_shadows_in_corners"
+      sounds: "low_conversations_dice_clacking_suspicious_silence_when_you_enter"
+      tension: "everyone_is_armed_everyone_is_dangerous_but_rules_hold"
+
+  - id: baldurs_gate_counting_house
+    name: "The Counting House - Exterior"
+    description: |
+      The Counting House of Baldur's Gate is fortress and bank combined. Thick stone walls, iron-barred windows, and mercenary guards at every entrance. Inside lie the fortunes of merchants, nobles, and criminals alike - including the 500 gold pieces you have hidden under a false name.
+
+      But getting in won't be easy. The entrance is watched. The guards are competent. And if word has spread about you, they might have orders to detain anyone matching your description.
+
+      However, you know secrets. There's a ventilation shaft on the east wall - tight, uncomfortable, but possible. There's a sewer connection the guards don't know about. Or you could try the direct approach: disguise, bribery, or brazen confidence. You're a thief. This is what you do.
+
+      The question is: is 500 gold worth the risk of capture?
+    exits:
+      entrance: "counting_house_main_hall"
+      ventilation: "counting_house_vault_room"
+      sewers: "baldurs_gate_sewers_east"
+      away: "lower_city_backstreets"
+    region: "baldurs_gate_region"
+    npcs: ["counting_house_guards", "merchants_entering_exiting"]
+    danger_level: "high"
+    heist_opportunity: true
+    skill_opportunities:
+      stealth:
+        dc: 20
+        success: "You slip through the ventilation shaft undetected"
+        failure: "Guards hear you in the ducts, sound alarm"
+      disguise:
+        dc: 18
+        success: "You pass as a merchant's clerk, walk right in"
+        failure: "Guard recognizes the stolen clothing, you're detained"
+      persuasion:
+        dc: 16
+        success: "You bribe the guard with promise of bigger payout later"
+        failure: "Guard takes your bribe then betrays you anyway"
+
+  - id: baldurs_gate_sewers_central
+    name: "Baldur's Gate Sewers - Central Junction"
+    description: |
+      The sewers of Baldur's Gate are a city beneath the city. Brick archways two centuries old, running water carrying the filth of 100,000 souls, and darkness that hides a thousand secrets. Thieves use these tunnels. So do smugglers, cultists, and things that were human once.
+
+      This junction connects five tunnels. Rust-colored water flows ankle-deep, carrying things you don't want to identify. Phosphorescent fungi provide sickly green light. Rats watch from ledges with eyes that gleam with unnatural intelligence.
+
+      The walls are marked with thieves' cant symbols. You recognize some: "Watch patrol route," "Hidden cache," "Danger - claimed territory." But there's a new one you don't recognize - a symbol like a crystal surrounded by eyes. It glows faintly, matching the pulse of the crystal in your pocket.
+
+      Something echoes in the tunnels. Footsteps? Water? Or something worse?
+    exits:
+      west: "baldurs_gate_sewers_west"
+      east: "baldurs_gate_sewers_east"
+      north: "baldurs_gate_sewers_upper_city"
+      south: "gray_harbor_outflow"
+      down: "ancient_tunnels"
+    region: "baldurs_gate_region"
+    npcs: ["sewer_creatures", "possible_guild_hideout_nearby"]
+    danger_level: "medium"
+    atmosphere:
+      lighting: "phosphorescent_fungi_sickly_green"
+      sounds: "dripping_water_rat_scurrying_distant_echoes"
+      smell: "overwhelming_sewage_must_resist_nausea"
+    hidden_features:
+      - "thieves_cache_hidden_in_wall"
+      - "smuggler_route_to_outer_city"
+      - "ancient_symbol_that_reacts_to_crystal"
+
+  - id: ancient_tunnels
+    name: "Ancient Tunnels Beneath Baldur's Gate"
+    description: |
+      These tunnels predate Baldur's Gate by centuries - perhaps millennia. Smooth stone walls covered in faded runes that make your eyes hurt to study. The air is cold, stale, and carries a faint hum like distant machinery or sleeping magic.
+
+      The crystal in your pocket blazes with heat now, casting blue-white light that reflects off the ancient stone. The runes respond to its presence, glowing faintly. This is significant. Zara led you here - no, the crystal led you here.
+
+      At the tunnel's end, a door of black stone covered in the same symbol you saw in the sewers: a crystal surrounded by eyes. Harper magic. Zara was a Harper agent. The truth crystallizes like ice in your gut.
+
+      Everything you thought you knew was a lie. The Shadow Thieves, your whole life - cover for her true mission. And now you've inherited it.
+
+      The door's lock mechanism is arcane, not mechanical. The crystal throbs in your hand. Touch it to the door?
+    exits:
+      up: "baldurs_gate_sewers_central"
+      door: "harper_safe_house_baldurs_gate"
+    region: "baldurs_gate_region"
+    danger_level: "unknown"
+    magical: true
+    revelation_moment: true
+    atmosphere:
+      lighting: "crystal_glow_ancient_runes_pulsing"
+      sounds: "deep_magical_hum_your_heartbeat_synchronizing"
+      feeling: "threshold_moment_everything_changes_here"
+
+  - id: ambush_investigation
+    name: "Scene of the Ambush"
+    description: |
+      Examining the scene more closely, you find signs of a struggle. The horses have been dead for about a day.
+      Drag marks lead into the brush on the north side of the road. An empty leather map case lies trampled in the mud.
+      
+      A successful Investigation check might reveal goblin tracks and a hidden trail.
+    exits:
+      back: "high_road_ambush"
+      follow_tracks: "goblin_trail_start"
+    items: ["empty_map_case", "torn_saddlebag"]
+    skill_checks:
+      investigation:
+        dc: 12
+        success: "You spot small humanoid tracks - goblins! They lead north into the woods."
+        failure: "The tracks are too muddled to make out clearly."
+      survival:
+        dc: 10
+        success: "About a dozen goblins were here. They left heading north about a day ago."
+    
+  - id: goblin_trail_start
+    name: "Goblin Trail"
+    description: |
+      A narrow trail winds northwest through the dense woods. Broken branches and disturbed undergrowth mark the recent passage of several small humanoids dragging something heavy.
+      
+      The canopy overhead blocks most of the sunlight, creating deep shadows between the trees.
+    exits:
+      south: "high_road_ambush"
+      northwest: "goblin_trap_snare"
+    danger_level: "medium"
+    hidden_features:
+      - "snare_trap"
+      - "pit_trap"
+      
+  # Cragmaw Hideout Area
+  - id: cragmaw_entrance
+    name: "Cragmaw Hideout Entrance"
+    description: |
+      Following the stream, you come upon a cave entrance in a hillside five miles from the ambush site.
+      A shallow stream flows from the cave mouth, which is screened by dense briar thickets.
+      
+      A narrow, dry path runs alongside the stream, littered with well-gnawed bones.
+    exits:
+      inside: "cragmaw_cave_mouth"
+      back: "goblin_trail_end"
+    npcs: ["goblin_sentry_1", "goblin_sentry_2"]
+    
+  - id: cragmaw_cave_mouth
+    name: "Cave Mouth"
+    description: |
+      The cave mouth curves sharply to the east after about 20 feet. A stream emerges from deeper in the cave, flowing westward. The air is damp and smells of wet dog and rotting meat.
+      
+      On either side of the stream, the cavern floor is smooth but damp, rising in a gentle slope toward the back.
+    exits:
+      outside: "cragmaw_entrance"
+      east: "wolf_den"
+      northeast: "steep_passage"
+    light: "dim"
+    
+  # Phandalin - Frontier Town
+  - id: phandalin_square
+    name: "Phandalin Town Square"
+    description: |
+      The frontier town of Phandalin consists of forty or fifty simple log buildings, some built on old fieldstone foundations from a ruined older settlement. 
+      
+      The town square is unpaved, with a large notice board and a well in the center. 
+      Barthen's Provisions, the Stonehill Inn, and the Shrine of Luck are all visible from here.
+    exits:
+      north: "stonehill_inn"
+      south: "barthens_provisions"
+      east: "shrine_of_luck"
+      west: "sleeping_giant_tap"
+      road_north: "triboar_trail"
+      road_south: "high_road_south"
+    region: "sword_coast_north"
+    safe_zone: true
+    
+  - id: stonehill_inn
+    name: "The Stonehill Inn"
+    description: |
+      A large, comfortable inn at the heart of Phandalin. The common room is filled with locals nursing mugs of ale or cider, 
+      all engaged in quiet conversation. A fire crackles in the hearth, and the smell of roasting meat fills the air.
+      
+      Toblen Stonehill, the friendly innkeeper, greets you warmly.
+    exits:
+      outside: "phandalin_square"
+      upstairs: "inn_rooms"
+    npcs: ["toblen_stonehill", "inn_patron_1", "inn_patron_2"]
+    services:
+      rest: { cost: 5, type: "long_rest" }
+      food: { cost: 5, quality: "modest" }
+      rumors: true
+      
+  # Major Cities (Referenced/Distant)
+  - id: waterdeep_gates
+    name: "The Gates of Waterdeep"
+    description: |
+      The City of Splendors rises before you - Waterdeep, the crown jewel of the Sword Coast. 
+      Massive walls protect the greatest city of the North, where a hundred thousand souls make their home.
+      
+      The spires of Blackstaff Tower and the Palace of Waterdeep rise above the cityscape.
+      Trade caravans stream through the gates as the City Watch maintains order.
+    exits:
+      enter: "waterdeep_market"
+      south: "high_road_south"
+    region: "sword_coast"
+    services:
+      everything: true
+    
+  - id: waterdeep_market
+    name: "Waterdeep Market Ward"
+    description: |
+      The busiest district in Waterdeep overwhelms the senses. Merchants hawk their wares from a thousand stalls.
+      Street performers compete for coin while nobles in fine clothes brush past common laborers.
+      
+      The famous Yawning Portal Inn is nearby, built around the entrance to Undermountain.
+    exits:
+      north: "waterdeep_castle_ward"
+      south: "waterdeep_dock_ward"
+      east: "waterdeep_trades_ward"
+      west: "waterdeep_gates"
+      inn: "yawning_portal"
+    npcs: ["merchant_various", "city_watch_patrol"]
+    
+  - id: yawning_portal
+    name: "The Yawning Portal Inn"
+    description: |
+      This famous tavern and inn features a 40-foot-wide well that descends 140 feet into the first level of Undermountain.
+      Durnan, the gruff proprietor and former adventurer, watches over the well.
+      
+      Adventurers pay Durnan 1 gold piece to be lowered into the dungeon, though few return.
+    exits:
+      outside: "waterdeep_market"
+      well: "undermountain_entry"
+    npcs: ["durnan", "mirt_the_moneylender"]
+    
+  - id: neverwinter_approach
+    name: "The Road to Neverwinter"
+    description: |
+      The Jewel of the North lies ahead - Neverwinter, the city that even the harshest winters cannot defeat.
+      The city's famous Clockwork Tower chimes the hour, its mechanical precision a wonder of engineering.
+      
+      Once ruled by Lord Nasher, the city has rebuilt after the eruption of Mount Hotenow.
+    exits:
+      enter: "neverwinter_protectors_enclave"
+      south: "high_road_south"
+    region: "sword_coast_north"
+    
+  - id: baldurs_gate_approach
+    name: "Approach to Baldur's Gate"
+    description: |
+      The great port city of Baldur's Gate sprawls along the Chionthar River where it meets the Sea of Swords.
+      This gateway between the Sword Coast and the Western Heartlands teems with trade and intrigue.
+      
+      The Upper City's towers rise above the fog, while the Lower City's sprawl extends to the Gray Harbor.
+    exits:
+      enter: "baldurs_gate_basilisk"
+      north: "coast_way_north"
+    region: "sword_coast"
+    
+  # Dungeons and Dangerous Places
+  - id: wave_echo_cave_entrance
+    name: "Wave Echo Cave"
+    description: |
+      Hidden in the foothills of the Sword Mountains, this is the lost mine that the Rockseeker brothers sought.
+      The entrance is partially collapsed, but a passage remains open. From within, you hear a rhythmic booming sound,
+      like the pounding of waves against a shore - the echo that gives the cave its name.
+      
+      This was once the site of the Phandelver's Pact, where dwarves and gnomes worked alongside human spellcasters.
+    exits:
+      inside: "wave_echo_entrance_tunnel"
+      outside: "sword_mountains_foothills"
+    danger_level: "high"
+    quest_location: true
+    
+  - id: undermountain_entry
+    name: "Undermountain - Entry Well"
+    description: |
+      You descend into the legendary mega-dungeon beneath Waterdeep. Created by the mad wizard Halaster Blackcloak,
+      Undermountain is the deepest and deadliest dungeon in all Faerun.
+      
+      The room at the bottom of the well is lit by phosphorescent fungi. Graffiti from previous adventurers
+      covers the walls, most of it warnings. Passages lead off in all directions.
+    exits:
+      up: "yawning_portal"
+      north: "undermountain_hall_of_mirrors"
+      south: "undermountain_goblin_bazaar"
+      east: "undermountain_bone_throne"
+    danger_level: "extreme"
+    
+  # Wilderness Locations
+  - id: high_road_south
+    name: "The High Road"
+    description: |
+      This well-traveled road connects Waterdeep in the north to the cities of the south.
+      Merchant caravans and adventurers regularly travel this route, though bandits and monsters are constant threats.
+      
+      Mile markers indicate the distance to major settlements.
+    exits:
+      north: "high_road_ambush"
+      south: "high_road_crossroads"
+      east: "triboar_trail"
+    region: "sword_coast"
+    
+  - id: evermoors
+    name: "The Evermoors"
+    description: |
+      This vast, cold marshland stretches for miles. The bog is notorious for trolls and dangerous fey.
+      Thick mists limit visibility, and the ground squelches treacherously underfoot.
+      
+      Will-o'-wisps dance in the distance, trying to lead travelers astray.
+    exits:
+      south: "dessarin_valley"
+      east: "nether_mountains"
+    danger_level: "high"
+    environment: "swamp"
+    
+  - id: high_forest_edge
+    name: "Edge of the High Forest"
+    description: |
+      One of the oldest forests in Faerun stretches before you. Ancient trees tower overhead,
+      their canopy so thick that twilight reigns even at midday.
+      
+      This is the domain of treants, elves, and far stranger things. The Grandfather Tree,
+      the oldest living thing in the North, is said to dwell somewhere in these depths.
+    exits:
+      deeper: "high_forest_depths"
+      road: "high_road_south"
+    danger_level: "medium"
+    
+  # Iconic Faerun Locations
+  - id: candlekeep_gates
+    name: "The Gates of Candlekeep"
+    description: |
+      The fortress library of Candlekeep rises from rocky cliffs overlooking the Sea of Swords.
+      This bastion of knowledge houses the finest collection of writings in all Faerun.
+      
+      Entry requires donation of a book not already in their collection. The Avowed monks guard their knowledge jealously.
+    exits:
+      inside: "candlekeep_court_of_air"
+      road: "coast_way_south"
+    region: "sword_coast"
+    services:
+      knowledge: true
+      
+  - id: luskan_docks
+    name: "Luskan Docks"
+    description: |
+      The City of Sails is a dangerous place. This northern port is ruled by five High Captains,
+      each commanding a fleet of pirates barely held in check by mutual greed.
+      
+      The smell of tar, salt, and rotting fish permeates the air. Rough sailors eye you suspiciously.
+    exits:
+      city: "luskan_cutlass_inn"
+      sea: "sea_of_swords"
+    danger_level: "high"
+    region: "sword_coast_north"
+    
+  - id: icewind_dale_approach
+    name: "The Pass to Icewind Dale"
+    description: |
+      Beyond this mountain pass lies Icewind Dale, the frozen northernmost settled land in Faerun.
+      Ten-Towns huddles against the bitter cold, while barbarian tribes and frost giants roam the tundra.
+      
+      The wind howls through the pass, carrying snow even in summer months.
+    exits:
+      north: "ten_towns_bryn_shander"
+      south: "spine_of_world_foothills"
+    region: "icewind_dale"
+    environment: "arctic"
+    
+  - id: myth_drannor_ruins
+    name: "The Ruins of Myth Drannor"
+    description: |
+      Once the greatest city of the elves, Myth Drannor now lies in ruins, overrun by monsters.
+      Broken towers pierce the forest canopy, and ancient magic still crackles in the air.
+      
+      Devils, demons, and dragons fight over the treasures that remain. Only the foolish or desperate venture here.
+    exits:
+      flee: "cormanthor_forest"
+    danger_level: "extreme"
+    magic_level: "very_high"
+  # === ZARA'S HIDDEN APARTMENT - CLUE LOCATION ===
+  
+  - id: zaras_hidden_apartment
+    name: "Zara's Hidden Apartment"
+    description: |
+      The brass key from Zara's body opens this door. The apartment is small but well-maintained,
+      hidden above a cooper's shop in Lower City. You never knew this place existed.
+      
+      The room is neat - too neat. Everything arranged with precision. A desk, a bed, a wardrobe.
+      But your trained eye spots the signs: false panel in the wardrobe, hollow space under the floorboard,
+      secret compartment in the desk's base.
+      
+      This is where Zara kept her secrets. Her real secrets. Harper secrets.
+      
+      On the desk: her journal, bound in leather. In the wardrobe: her cloak, her lockpicks, a change of clothes.
+      Under the floorboard: emergency gold, false papers, three different identity kits.
+      In the desk: letters in code, a wooden Harper token, and maps of Baldur's Gate marking locations with Harper symbols.
+      
+      She was preparing for something. Or running from something. Or both.
+    exits:
+      door: "lower_city_backstreets"
+    region: "baldurs_gate_region"
+    safe: true
+    hidden: true
+    requires_key: "zaras_apartment_key"
+    items:
+      - "zaras_journal"
+      - "zaras_cloak"
+      - "zaras_lockpicks"
+      - "harper_safe_house_token"
+      - "emergency_gold_200gp"
+      - "false_identity_papers_3sets"
+      - "coded_letters_to_harpers"
+      - "baldurs_gate_map_harper_marked"
+    atmosphere:
+      lighting: "dust_motes_in_afternoon_sunlight"
+      mood: "quiet_revelation_the_truth_laid_bare"
+      feeling: "she_lived_two_lives_and_you_only_knew_one"
+
+  - id: harper_safe_house_baldurs_gate
+    name: "Harper Safe House - The Hidden Archive"
+    description: |
+      The black stone door opens to your crystal's touch. Blue light floods the chamber beyond.
+      
+      This is a Harper safe house - perhaps the oldest in Baldur's Gate. The room is circular,
+      carved from living stone. Ancient runes cover every surface, glowing faintly with Harper magic.
+      
+      In the center: a pedestal designed to hold the crystal. Around the walls: shelves of encoded books,
+      maps of Faerun with Harper networks marked, and supplies for agents in need.
+      
+      A magical voice echoes when you enter - Zara's voice, pre-recorded by Harper magic:
+      "If you're hearing this, I'm dead. The crystal found you, so you're my heir. Listen carefully:
+      The Zhentarim have infiltrated the Shadow Thieves. Vex the Viper is Manshoon's agent.
+      Take the crystal to the Gray Hand in Waterdeep. They'll know what to do.
+      I'm sorry I lied. But I loved you true. Now run, child. Run north and don't look back."
+      
+      The voice fades. The truth settles heavy as stone.
+    exits:
+      door: "ancient_tunnels"
+    region: "baldurs_gate_region"
+    safe: true
+    harper_location: true
+    magical: true
+    items:
+      - "harper_supplies"
+      - "encoded_books"
+      - "maps_of_harper_network"
+      - "healing_potions_3"
+      - "rations_for_long_journey"
+    services:
+      rest: "Safe long rest location"
+      information: "Harper intelligence on Zhentarim"
+      supplies: "Free supplies for Harper agents"
+    atmosphere:
+      lighting: "blue_white_crystal_glow_ancient_magic"
+      sounds: "zara_voice_echo_then_profound_silence"
+      feeling: "inheritance_burden_and_gift_intertwined"
+    revelation: "Full truth about Zara, Vex, Zhentarim, and your mission"
+
+  - id: black_sailed_ship_deck
+    name: "The Black Rose - Ship Deck"
+    description: |
+      The deck of Captain Darkwater's ship. Black sails furled, crew moving with practiced efficiency.
+      No flag, no loyalty, no questions - the perfect escape from Baldur's Gate.
+      
+      Captain Jendara Darkwater stands at the wheel, eyes sharp as she assesses you.
+      "Running from something or running to something?" she asks. "Don't answer - I don't care.
+      Passage to Waterdeep is 500 gold. Or if you're handy with a blade, work your way north.
+      We sail at dawn."
+      
+      The crystal pulses warmer near her. Why? Is she Harper? Or does she just hate Zhentarim?
+    exits:
+      gangplank: "gray_harbor_docks"
+      below: "black_rose_cargo_hold"
+      captains_cabin: "darkwater_cabin"
+    region: "baldurs_gate_region"
+    npcs: ["black_ship_captain", "black_rose_crew"]
+    services:
+      passage_to_waterdeep: "500 gold or work as crew"
+      hideout: "100 gold to hide in cargo"
+      information: "Captain knows Zhentarim routes"
+    atmosphere:
+      sounds: "rigging_creaking_waves_lapping_sailors_working"
+      smell: "salt_tar_and_freedom"
+
+  - id: baldurs_gate_outer_city
+    name: "Baldur's Gate - Outer City"
+    description: |
+      Beyond the walls lies the Outer City - ramshackle buildings, tent communities, and those too poor
+      or too wanted to live within Baldur's Gate proper. No walls here, no watch patrols.
+      Just refugees, criminals, and desperate folk trying to survive.
+      
+      This is where you disappear if you need to vanish. Where you find people who'll do anything for gold.
+      Where the roads north begin - toward Candlekeep, toward Waterdeep, toward whatever comes next.
+      
+      The choice is yours: Stay in Baldur's Gate and prove your innocence, or run north with the crystal
+      and never look back.
+    exits:
+      inner_city: "lower_city_backstreets"
+      north_road: "coast_way_north"
+      candlekeep_road: "road_to_candlekeep"
+      refugee_camp: "outer_city_refugees"
+    region: "baldurs_gate_region"
+    danger_level: "medium"
+    atmosphere:
+      lighting: "smoky_cookfires_and_desperate_faces"
+      sounds: "babies_crying_merchants_hawking_poor_goods"
+      feeling: "edge_of_civilization_where_outcasts_gather"
+
+  - id: silvers_curiosities_lower_city
+    name: "Silver's Curiosities Shop"
+    description: |
+      Marcus Silvergilt's shop is squeezed between a tanner and a tavern in Lower City.
+      The sign reads "Curiosities and Antiquities" but everyone knows it's a fence operation.
+      
+      Inside: shelves crammed with "curiosities" (stolen goods), a back room for "special clients"
+      (fencing stolen items), and Marcus himself - middle-aged, nervous eyes, but connections everywhere.
+      
+      "I heard about Zara," he says quietly when you enter. "She did me a favor once. Saved my life, truth be told.
+      So I'll do one favor for you, in her name. After that, we're square. What do you need?"
+    exits:
+      outside: "lower_city_backstreets"
+      back_room: "silvers_back_room"
+    region: "baldurs_gate_region"
+    npcs: ["marcus_the_fence"]
+    services:
+      fencing: "40% value for stolen goods"
+      forgery: "Can create false papers, letters"
+      information: "Knows who's buying, who's selling, who's hunting"
+      one_favor: "Will help once in Zara's name"
+    atmosphere:
+      lighting: "dim_cluttered_dust_motes"
+      smell: "old_books_and_nervous_sweat"
+

@@ -1,0 +1,342 @@
+# UI Assets for Faerun Campaign - Images, Sounds, and Multimedia
+# Note: These are example URLs for testing - replace with actual asset hosting in production
+
+ui_assets:
+  version: "1.0.0"
+  description: "Visual and audio assets for immersive Faerun D&D experience"
+
+  # Background Images and Textures
+  backgrounds:
+    main_background:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920"
+      description: "Ancient parchment texture"
+      type: "texture"
+      
+    panel_background:
+      url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800"  
+      description: "Dark leather book binding texture"
+      type: "texture"
+      
+    console_background:
+      url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200"
+      description: "Old manuscript pages"
+      type: "texture"
+      opacity: 0.3
+      
+    stone_texture:
+      url: "https://images.unsplash.com/photo-1517409834807-2d6b23afd7d0?w=800"
+      description: "Medieval stone wall texture"
+      type: "texture"
+      
+    wood_grain:
+      url: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800"
+      description: "Aged wooden table surface"
+      type: "texture"
+
+  # Location-Specific Artwork
+  locations:
+    tavern_interior:
+      url: "https://images.unsplash.com/photo-1558618047-3c8b155c2c8e?w=1200"
+      description: "Cozy tavern with fireplace and wooden tables"
+      context: ["stonehill_inn", "taverns", "indoor_social"]
+      
+    fantasy_forest:
+      url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600"
+      description: "Misty forest path perfect for ambushes"
+      context: ["high_forest", "forests", "wilderness"]
+      
+    medieval_city:
+      url: "https://images.unsplash.com/photo-1520637836862-4d197d17c92a?w=1600"
+      description: "Medieval city streets with cobblestones"
+      context: ["waterdeep", "baldurs_gate", "urban"]
+      
+    mountain_vista:
+      url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600"
+      description: "Dramatic mountain peaks and valleys"
+      context: ["sword_mountains", "mountains", "outdoor"]
+      
+    dungeon_corridor:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200"
+      description: "Dark stone dungeon with torch lighting"
+      context: ["cragmaw_cave", "dungeons", "underground"]
+      
+    coastal_harbor:
+      url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600"
+      description: "Medieval harbor with ships and docks"
+      context: ["waterdeep_docks", "ports", "coastal"]
+
+  # Character and NPC Portraits
+  portraits:
+    elminster:
+      url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"
+      description: "Wise old wizard with long beard and pointed hat"
+      character: "elminster"
+      
+    drizzt:
+      url: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=400"
+      description: "Dark elf ranger with dual scimitars"
+      character: "drizzt_do_urden"
+      
+    tavern_keeper:
+      url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400"
+      description: "Friendly middle-aged innkeeper"
+      character: "toblen_stonehill"
+      
+    generic_guard:
+      url: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=400"
+      description: "City guard in chainmail"
+      character_type: "guard"
+      
+    noble_lord:
+      url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"
+      description: "Well-dressed nobleman"
+      character_type: "noble"
+
+  # Monster Artwork
+  monsters:
+    dragon_red:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800"
+      description: "Massive red dragon breathing fire"
+      monster: "red_dragon"
+      
+    beholder:
+      url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600"
+      description: "Floating eye tyrant with magical rays"
+      monster: "beholder"
+      
+    goblin_horde:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=700"
+      description: "Group of goblins with crude weapons"
+      monster: "goblin"
+      
+    skeleton_warrior:
+      url: "https://images.unsplash.com/photo-1509909756405-be0199881695?w=500"
+      description: "Animated skeleton with sword and shield"
+      monster: "skeleton"
+
+  # Item Icons and Artwork
+  items:
+    magic_sword:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300"
+      description: "Glowing magical sword"
+      item_type: "magic_weapon"
+      
+    healing_potion:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200"
+      description: "Red healing potion in glass bottle"
+      item_type: "potion"
+      
+    gold_coins:
+      url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200"
+      description: "Pile of golden coins"
+      item_type: "currency"
+      
+    spell_scroll:
+      url: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=250"
+      description: "Ancient scroll with magical runes"
+      item_type: "scroll"
+
+  # UI Elements and Icons
+  ui_elements:
+    d20_icon:
+      url: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=100"
+      description: "D&D twenty-sided dice"
+      usage: "dice_rolls"
+      
+    hp_heart:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=50"
+      description: "Red heart icon for health"
+      usage: "health_display"
+      
+    mana_crystal:
+      url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=50"
+      description: "Blue crystal for spell slots"
+      usage: "spell_slots"
+      
+    xp_star:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=50"
+      description: "Golden star for experience points"
+      usage: "experience"
+      
+    inventory_bag:
+      url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80"
+      description: "Leather adventurer's pack"
+      usage: "inventory_panel"
+
+  # Atmospheric Effects
+  effects:
+    candle_flame:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100"
+      description: "Animated candle flame gif"
+      type: "animation"
+      usage: "ambient_lighting"
+      
+    dust_motes:
+      url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200"
+      description: "Floating dust particles"
+      type: "particle_effect"
+      usage: "atmosphere"
+      
+    magic_sparkles:
+      url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=150"
+      description: "Magical sparkle effects"
+      type: "particle_effect"
+      usage: "spell_casting"
+
+# Audio Assets
+audio_assets:
+  version: "1.0.0"
+  
+  # Ambient Sounds
+  ambient:
+    tavern_atmosphere:
+      url: "https://www.zapsplat.com/music/tavern-ambience-medieval-fantasy/"
+      description: "Crackling fire, murmuring voices, clinking glasses"
+      context: ["taverns", "inns", "social_areas"]
+      loop: true
+      
+    forest_ambience:
+      url: "https://www.zapsplat.com/music/forest-ambience-birds-wind/"
+      description: "Wind through trees, bird calls, rustling leaves"
+      context: ["forests", "wilderness", "outdoor"]
+      loop: true
+      
+    dungeon_drips:
+      url: "https://www.zapsplat.com/music/cave-water-drips-echo/"
+      description: "Water dripping, distant echoes, stone ambience"
+      context: ["dungeons", "caves", "underground"]
+      loop: true
+      
+    city_bustle:
+      url: "https://www.zapsplat.com/music/medieval-city-market-crowd/"
+      description: "Crowd noises, cart wheels, vendor calls"
+      context: ["cities", "markets", "urban"]
+      loop: true
+
+  # Music Tracks
+  music:
+    epic_adventure:
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      description: "Sweeping orchestral adventure theme"
+      context: ["exploration", "travel", "discovery"]
+      duration: "3:24"
+      
+    combat_intense:
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      description: "Fast-paced battle music with drums"
+      context: ["combat", "boss_fights", "danger"]
+      duration: "2:45"
+      
+    mysterious_investigation:
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      description: "Subtle, mysterious investigative theme"
+      context: ["investigation", "mystery", "stealth"]
+      duration: "4:12"
+      
+    peaceful_rest:
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      description: "Gentle, restorative melody"
+      context: ["rest", "safe_areas", "character_moments"]
+      duration: "5:30"
+
+  # Sound Effects
+  sound_effects:
+    dice_roll:
+      url: "https://www.zapsplat.com/music/dice-roll-wooden-table/"
+      description: "D20 rolling on wooden surface"
+      usage: "dice_mechanics"
+      
+    sword_clash:
+      url: "https://www.zapsplat.com/music/sword-metal-clash/"
+      description: "Metal weapon impacts"
+      usage: "melee_combat"
+      
+    spell_cast:
+      url: "https://www.zapsplat.com/music/magic-spell-cast-whoosh/"
+      description: "Magical energy discharge"
+      usage: "spellcasting"
+      
+    door_creak:
+      url: "https://www.zapsplat.com/music/old-wooden-door-creak/"
+      description: "Heavy wooden door opening"
+      usage: "exploration"
+      
+    gold_coins:
+      url: "https://www.zapsplat.com/music/coins-drop-treasure/"
+      description: "Coins clinking together"
+      usage: "treasure_found"
+      
+    level_up:
+      url: "https://www.zapsplat.com/music/achievement-level-up-chime/"
+      description: "Triumphant character progression sound"
+      usage: "character_advancement"
+
+# Dynamic Asset Loading Rules
+loading_rules:
+  # Preload critical assets
+  preload:
+    - "main_background"
+    - "panel_background" 
+    - "d20_icon"
+    - "tavern_atmosphere"
+    - "dice_roll"
+    
+  # Load assets based on context
+  context_loading:
+    entering_tavern:
+      images: ["tavern_interior"]
+      audio: ["tavern_atmosphere"]
+      
+    starting_combat:
+      images: ["monster_artwork"]
+      audio: ["combat_intense", "sword_clash"]
+      
+    entering_wilderness:
+      images: ["fantasy_forest", "mountain_vista"]
+      audio: ["forest_ambience"]
+      
+    character_levelup:
+      effects: ["magic_sparkles"]
+      audio: ["level_up"]
+
+  # Performance optimization
+  optimization:
+    lazy_load_portraits: true    # Load NPC portraits when first encountered
+    compress_backgrounds: true   # Use compressed versions for backgrounds
+    cache_frequently_used: true  # Keep common assets in memory
+    stream_music: true          # Stream longer music tracks
+
+# Asset Integration with Game Systems
+integration:
+  # Character sheet backgrounds based on class
+  character_backgrounds:
+    fighter: "stone_texture"
+    wizard: "console_background"  # Scholarly parchment
+    cleric: "panel_background"    # Divine leather
+    rogue: "wood_grain"          # Shadowy wood
+    
+  # Location-based asset switching
+  location_assets:
+    stonehill_inn: 
+      background: "tavern_interior"
+      ambient: "tavern_atmosphere"
+      
+    high_forest:
+      background: "fantasy_forest" 
+      ambient: "forest_ambience"
+      
+    waterdeep_market:
+      background: "medieval_city"
+      ambient: "city_bustle"
+
+  # Monster encounter visuals
+  encounter_assets:
+    dragon_fight:
+      background: "mountain_vista"
+      monster_art: "dragon_red"
+      music: "combat_intense"
+      
+    goblin_ambush:
+      background: "fantasy_forest"
+      monster_art: "goblin_horde" 
+      effects: ["dust_motes"]

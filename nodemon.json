@@ -1,0 +1,15 @@
+{
+  "watch": ["src", "games/*/content", "games/*/game.yaml"],
+  "ignore": [
+    "games/*/saves/**",
+    "games/*/saves/.meta.json",
+    "games/*/saves/state_*.json",
+    "games/*/generated-images/**",
+    "node_modules/**",
+    "dist/**",
+    "*.log",
+    ".git/**"
+  ],
+  "ext": "ts,json,yaml",
+  "delay": "1000"
+}

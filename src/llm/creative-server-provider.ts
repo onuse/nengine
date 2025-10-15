@@ -100,13 +100,23 @@ export class CreativeServerProvider implements LLMProvider {
     const formattedMessages = this.formatPromptToMessages(prompt);
     const startTime = Date.now();
 
+    // Add significant temperature variation each turn for maximum diversity
+    const tempVariation = (Math.random() - 0.5) * 0.4; // -0.2 to +0.2
+    const variedTemp = Math.max(0.8, Math.min(1.3, this.config.temperature + tempVariation + 0.2)); // Bias higher
+
     try {
-      console.log(`[CreativeServerProvider] Generating response with ${this.currentModel}...`);
+      console.log(`[CreativeServerProvider] Generating response with ${this.currentModel} (temp: ${variedTemp.toFixed(2)})...`);
 
       const response = await this.client.post('/chat/completions', {
         model: this.currentModel,
         messages: formattedMessages,
-        temperature: this.config.temperature
+        temperature: variedTemp,
+        top_p: 0.98,              // HIGHER = more tokens considered (more random)
+        top_k: 100,               // HIGHER = way more token choices (more unexpected)
+        repetition_penalty: 1.3,  // STRONGER penalty = force different words
+        frequency_penalty: 0.5,   // HIGHER = strongly avoid any repetition
+        presence_penalty: 0.6,    // HIGHER = aggressively seek new topics
+        seed: Math.floor(Math.random() * 1000000)  // Random seed each time!
         // No max_tokens - let the LLM decide when to stop naturally based on context
       });
 
@@ -291,11 +301,17 @@ export class CreativeServerProvider implements LLMProvider {
 
     // Recent history (use full history provided - controller manages the limit)
     if (prompt.recentHistory.length > 0) {
-      contextContent += `RECENT EVENTS:\n`;
+      contextContent += `PREVIOUS NARRATIVE (what has already been described - DO NOT REPEAT):\n`;
+      contextContent += `───────────────────────────────────────\n`;
       const recentEvents = prompt.recentHistory
-        .map(event => `- ${event.description}`)
-        .join('\n');
-      contextContent += recentEvents + '\n\n';
+        .map((event, index) => {
+          const turnNum = prompt.recentHistory.length - index;
+          return `[${turnNum} turns ago]\n${event.description}`;
+        })
+        .join('\n\n───────────────────────────────────────\n\n');
+      contextContent += recentEvents + '\n';
+      contextContent += `───────────────────────────────────────\n\n`;
+      contextContent += `IMPORTANT: The above narrative has already been told. Your response must be FRESH and DIFFERENT. Do not reuse the same descriptions, phrases, or scenarios. Move the story forward with NEW content.\n\n`;
     }
 
     // Available actions
@@ -317,7 +333,7 @@ export class CreativeServerProvider implements LLMProvider {
     // The actual query
     messages.push({
       role: 'user',
-      content: prompt.query + '\n\nRespond with vivid, immersive narrative. Include dialogue if NPCs speak. Describe sensory details and atmosphere.'
+      content: prompt.query + '\n\nRespond with vivid, immersive narrative that is FRESH and ORIGINAL. Do not repeat or rephrase content from previous turns. Include dialogue if NPCs speak. Describe NEW sensory details, NEW actions, and NEW atmosphere. Move the story forward with novel content.'
     });
 
     return messages;

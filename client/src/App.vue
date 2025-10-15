@@ -12,9 +12,19 @@
       <div class="console-panel">
         <div class="text-console">
           <div class="messages" ref="messagesContainer">
-            <div v-for="(msg, index) in messages" :key="index" :class="['message', `message-${msg.type}`]">
+            <div
+              v-for="(msg, index) in messages"
+              :key="index"
+              :class="['message', `message-${msg.type}`, { 'message-edited': msg.isEdited, 'message-clickable': msg.type !== 'system' }]"
+              @contextmenu="msg.type !== 'system' && showContextMenu(msg, $event)"
+              @click="msg.type !== 'system' && showContextMenu(msg, $event)"
+            >
               <div class="message-content">{{ msg.text }}</div>
-              <div class="message-timestamp">{{ formatTimestamp(msg.timestamp) }}</div>
+              <div class="message-timestamp">
+                {{ formatTimestamp(msg.timestamp) }}
+                <span v-if="msg.isEdited" class="edited-badge">✏️ Edited</span>
+                <span v-if="msg.canRollback" class="rollback-indicator">🔄</span>
+              </div>
             </div>
             <div v-if="isProcessing" class="processing-message">
               <div class="processing-header">
@@ -79,6 +89,51 @@
               </div>
             </div>
           </div>
+
+          <!-- Context Menu -->
+          <div
+            v-if="contextMenu.show && contextMenu.message"
+            :style="{ top: contextMenu.y + 'px', left: contextMenu.x + 'px' }"
+            class="context-menu"
+          >
+            <div
+              v-for="action in getMessageActions(contextMenu.message)"
+              :key="action.action"
+              @click="handleContextAction(action, contextMenu.message!)"
+              class="context-menu-item"
+            >
+              <span class="context-icon">{{ action.icon }}</span>
+              <span class="context-label">{{ action.label }}</span>
+            </div>
+          </div>
+
+          <!-- Edit Modal -->
+          <div v-if="showEditModal" class="modal-overlay" @click="cancelEdit">
+            <div class="edit-modal" @click.stop>
+              <div class="modal-header">
+                <h3>{{ editingMessage?.type === 'command' ? '✏️ Edit Command' : '📝 Rewrite Narration' }}</h3>
+                <button @click="cancelEdit" class="close-btn">✕</button>
+              </div>
+              <div class="modal-body">
+                <textarea
+                  v-model="editedText"
+                  class="edit-textarea"
+                  :placeholder="editingMessage?.type === 'command' ? 'Enter your new command...' : 'Rewrite the narration...'"
+                  rows="6"
+                  autofocus
+                ></textarea>
+                <div class="modal-hint">
+                  {{ editingMessage?.type === 'command' ? 'This will resend your command and create a new timeline branch.' : 'This will update the narration and create a new timeline branch if needed.' }}
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button @click="cancelEdit" class="modal-button cancel-button">Cancel</button>
+                <button @click="confirmEdit" class="modal-button confirm-button">
+                  {{ editingMessage?.type === 'command' ? 'Send' : 'Update' }}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -123,6 +178,10 @@ interface GameMessage {
   text: string;
   timestamp: Date;
   id?: string;
+  commitHash?: string;      // Git commit hash for rollback
+  isEdited?: boolean;        // Whether this message was user-edited
+  originalText?: string;     // Original text before edit
+  canRollback?: boolean;     // Whether rollback is available for this message
 }
 
 interface GameSnapshot {
@@ -147,6 +206,24 @@ const nextMessageId = ref(1);
 const currentPhase = ref('');
 const phaseStartTime = ref<Date | null>(null);
 const estimatedTimeRemaining = ref<number | null>(null);
+
+// Context menu for message editing
+const contextMenu = ref<{
+  show: boolean;
+  x: number;
+  y: number;
+  message: GameMessage | null;
+}>({
+  show: false,
+  x: 0,
+  y: 0,
+  message: null
+});
+
+// Edit modal
+const showEditModal = ref(false);
+const editingMessage = ref<GameMessage | null>(null);
+const editedText = ref('');
 
 // Phase timing estimates based on our 12B model testing
 const phaseEstimates: Record<string, number> = {
@@ -308,7 +385,15 @@ function connectWebSocket() {
 
 function handleServerMessage(data: any) {
   console.log('Received message:', data);
-  
+
+  // Handle clear history command from server
+  if (data.type === 'clear_history') {
+    messages.value = [];
+    gameHistory.value = [];
+    console.log('🧹 History cleared by server');
+    return;
+  }
+
   // Handle status updates without clearing processing state
   if (data.type === 'status_update') {
     console.log('📱 UI Status Update:', data.status);
@@ -320,16 +405,16 @@ function handleServerMessage(data: any) {
     }
     return;
   }
-  
+
   // Clear processing state for final responses
   isProcessing.value = false;
   processingMessage.value = '';
   stopProcessingTimer();
-  
+
   if (data.type === 'narrative_response' || data.type === 'response') {
     // Handle narrative responses from the server
     if (data.result && data.result.narrative) {
-      addMessage(data.result.narrative, 'description');
+      addMessage(data.result.narrative, 'description', data.result.commitHash);
     } else if (data.result && data.result.error) {
       addMessage(`${getIcon('error', '❌')} Error: ${data.result.error}`, 'error');
     } else if (data.error) {
@@ -394,12 +479,15 @@ function handleAction(action: string) {
   }
 }
 
-async function addMessage(text: string, type: GameMessage['type'] = 'system') {
+async function addMessage(text: string, type: GameMessage['type'] = 'system', commitHash?: string) {
   const message: GameMessage = {
     text,
     type,
     timestamp: new Date(),
-    id: `msg_${nextMessageId.value++}`
+    id: `msg_${nextMessageId.value++}`,
+    commitHash,
+    isEdited: false,
+    canRollback: !!commitHash
   };
   messages.value.push(message);
 
@@ -461,6 +549,253 @@ function rollbackToSnapshot(snapshot: GameSnapshot) {
       messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
     }
   });
+}
+
+// Context Menu & Edit Handlers
+
+function showContextMenu(message: GameMessage, event: MouseEvent) {
+  event.preventDefault();
+  showEditModal.value = false;
+
+  contextMenu.value = {
+    show: true,
+    x: event.clientX,
+    y: event.clientY,
+    message
+  };
+
+  setTimeout(() => {
+    document.addEventListener('click', closeContextMenu, { once: true });
+  }, 0);
+}
+
+function closeContextMenu() {
+  contextMenu.value.show = false;
+  contextMenu.value.message = null;
+}
+
+interface MessageAction {
+  icon: string;
+  label: string;
+  action: string;
+}
+
+function getMessageActions(message: GameMessage): MessageAction[] {
+  const actions: MessageAction[] = [];
+  const messageIndex = messages.value.findIndex(m => m.id === message.id);
+  const isLastMessage = messageIndex === messages.value.length - 1;
+
+  actions.push({ icon: '📋', label: 'Copy text', action: 'copy' });
+
+  if (message.type === 'command') {
+    actions.push({
+      icon: '✏️',
+      label: isLastMessage ? 'Edit & resend' : 'Edit & replay from here',
+      action: 'edit_command'
+    });
+  }
+
+  if (message.type === 'description' || message.type === 'dialogue') {
+    actions.push({
+      icon: '📝',
+      label: 'Rewrite narration',
+      action: 'edit_narration'
+    });
+  }
+
+  if (!isLastMessage && message.commitHash) {
+    actions.push({ icon: '🔄', label: 'Rollback to here', action: 'rollback' });
+    actions.push({ icon: '🌿', label: 'Branch timeline here', action: 'branch' });
+  }
+
+  return actions;
+}
+
+function handleContextAction(action: MessageAction, message: GameMessage) {
+  closeContextMenu();
+
+  switch (action.action) {
+    case 'copy':
+      navigator.clipboard.writeText(message.text);
+      addMessage('📋 Text copied to clipboard', 'system');
+      break;
+    case 'edit_command':
+      handleEditCommand(message);
+      break;
+    case 'edit_narration':
+      handleEditNarration(message);
+      break;
+    case 'rollback':
+      handleRollbackToMessage(message);
+      break;
+    case 'branch':
+      handleBranchFromMessage(message);
+      break;
+  }
+}
+
+function handleEditCommand(message: GameMessage) {
+  editingMessage.value = message;
+  editedText.value = message.text;
+  showEditModal.value = true;
+}
+
+function handleEditNarration(message: GameMessage) {
+  editingMessage.value = message;
+  editedText.value = message.text;
+  showEditModal.value = true;
+}
+
+async function confirmEdit() {
+  if (!editingMessage.value || !editedText.value) return;
+
+  const message = editingMessage.value;
+  const messageIndex = messages.value.findIndex(m => m.id === message.id);
+  const hasMessagesAfter = messageIndex < messages.value.length - 1;
+
+  showEditModal.value = false;
+
+  if (hasMessagesAfter) {
+    const branchName = generateBranchName(message.text, message.timestamp);
+
+    if (ws) {
+      ws.send(JSON.stringify({
+        type: 'create_branch',
+        branchName,
+        fromCommit: messages.value[messages.value.length - 1].commitHash
+      }));
+
+      addMessage(`🌿 Created timeline branch: "${branchName}"`, 'system');
+
+      if (messageIndex > 0 && messages.value[messageIndex - 1].commitHash) {
+        await rollbackToCommit(messages.value[messageIndex - 1].commitHash);
+      }
+
+      messages.value.splice(messageIndex);
+    }
+  }
+
+  if (message.type === 'command') {
+    sendCommand(editedText.value);
+  } else {
+    message.text = editedText.value;
+    message.isEdited = true;
+    message.originalText = message.originalText || message.text;
+    addMessage('📝 Narration rewritten. Continue your story...', 'system');
+  }
+
+  editingMessage.value = null;
+  editedText.value = '';
+}
+
+function sendCommand(command: string) {
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    addMessage(`${getIcon('error', '❌')} Not connected to server`);
+    return;
+  }
+
+  addMessage(`> ${command}`, 'command');
+
+  isProcessing.value = true;
+  processingMessage.value = 'Processing command...';
+  startProcessingTimer();
+
+  ws.send(JSON.stringify({
+    type: 'player_action',
+    id: Date.now().toString(),
+    action: { type: 'interaction', description: command },
+    rawInput: command
+  }));
+}
+
+function cancelEdit() {
+  showEditModal.value = false;
+  editingMessage.value = null;
+  editedText.value = '';
+}
+
+async function handleRollbackToMessage(message: GameMessage) {
+  if (!message.commitHash) {
+    addMessage('❌ Cannot rollback - no commit hash available', 'error');
+    return;
+  }
+
+  const messageIndex = messages.value.findIndex(m => m.id === message.id);
+  const branchName = `rollback-${Date.now()}`;
+
+  if (ws) {
+    ws.send(JSON.stringify({
+      type: 'create_branch',
+      branchName,
+      fromCommit: messages.value[messages.value.length - 1].commitHash
+    }));
+
+    addMessage(`🌿 Current timeline saved as: "${branchName}"`, 'system');
+
+    await rollbackToCommit(message.commitHash);
+    messages.value.splice(messageIndex + 1);
+
+    addMessage(`🔄 Rolled back to: "${message.text.substring(0, 50)}..."`, 'system');
+  }
+}
+
+async function handleBranchFromMessage(message: GameMessage) {
+  if (!message.commitHash) {
+    addMessage('❌ Cannot branch - no commit hash available', 'error');
+    return;
+  }
+
+  const branchName = generateBranchName(message.text, message.timestamp);
+
+  if (ws) {
+    ws.send(JSON.stringify({
+      type: 'create_branch',
+      branchName,
+      fromCommit: message.commitHash
+    }));
+
+    addMessage(`🌿 Created branch: "${branchName}" from this point`, 'system');
+  }
+}
+
+async function rollbackToCommit(commitHash: string) {
+  if (!ws) return;
+
+  return new Promise<void>((resolve) => {
+    const handler = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'rollback_complete') {
+        ws?.removeEventListener('message', handler);
+        resolve();
+      } else if (data.type === 'error') {
+        ws?.removeEventListener('message', handler);
+        addMessage(`❌ Rollback failed: ${data.message}`, 'error');
+        resolve();
+      }
+    };
+
+    ws.addEventListener('message', handler);
+
+    ws.send(JSON.stringify({
+      type: 'rollback',
+      commitHash
+    }));
+  });
+}
+
+function generateBranchName(fromMessage: string, timestamp: Date): string {
+  const words = fromMessage
+    .toLowerCase()
+    .split(' ')
+    .filter(w => w.length > 3 && !['the', 'and', 'you', 'are', 'with'].includes(w))
+    .slice(0, 3)
+    .join('-')
+    .replace(/[^a-z0-9-]/g, '');
+
+  const dateStr = timestamp.toISOString().slice(0, 10);
+
+  return words ? `${words}-${dateStr}` : `branch-${dateStr}`;
 }
 
 function formatTimestamp(timestamp: Date): string {
@@ -1024,5 +1359,189 @@ h3 {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* Context Menu & Edit Modal Styles */
+
+.message-clickable {
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 4px;
+  padding: 4px;
+  margin: -4px;
+}
+
+.message-clickable:hover {
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.message-edited {
+  border-left: 3px solid var(--color-secondary);
+  padding-left: 8px;
+  background: rgba(255, 255, 0, 0.05);
+}
+
+.edited-badge,
+.rollback-indicator {
+  margin-left: 6px;
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.context-menu {
+  position: fixed;
+  background: var(--color-backgroundAlt);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  min-width: 200px;
+  overflow: hidden;
+}
+
+.context-menu-item {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.context-menu-item:last-child {
+  border-bottom: none;
+}
+
+.context-menu-item:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.context-icon {
+  font-size: 18px;
+  width: 20px;
+  text-align: center;
+}
+
+.context-label {
+  flex: 1;
+  color: var(--color-text);
+}
+
+/* Edit Modal */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.edit-modal {
+  background: var(--color-backgroundAlt);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 18px;
+}
+
+.modal-body {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.edit-textarea {
+  width: 100%;
+  min-height: 150px;
+  background: var(--color-background);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+}
+
+.edit-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+}
+
+.modal-hint {
+  margin-top: 12px;
+  font-size: 0.85em;
+  color: var(--color-textAlt);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.cancel-button {
+  background: var(--color-backgroundAlt);
+  color: var(--color-textAlt);
+  border: 2px solid var(--color-textAlt);
+}
+
+.cancel-button:hover {
+  background: var(--color-textAlt);
+  color: var(--color-background);
+}
+
+.confirm-button {
+  background: var(--color-primary);
+  color: var(--color-background);
+  border: 2px solid var(--color-primary);
+  font-weight: bold;
+}
+
+.confirm-button:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
 }
 </style>

@@ -42,6 +42,7 @@ export interface NarrativeResult {
   dialogue?: string;
   stateChanges: any[];
   nextActions: Action[];
+  commitHash?: string;  // Git commit hash for this action (enables rollback)
   error?: string;
 }
 
@@ -117,11 +118,25 @@ export class NarrativeController {
       
       // Step 5: Apply state changes
       const stateChanges = await this.applyStateChanges(llmResponse, mechanicalResults);
-      
+
       // Step 6: Record event in history
       this.recordEvent(classifiedAction, llmResponse, mechanicalResults);
-      
-      // Step 7: Determine next available actions
+
+      // Step 7: Save state to Git and get commit hash (for rollback support)
+      let commitHash: string | undefined;
+      try {
+        commitHash = await this.mcpManager.executeTool(
+          'state',
+          'saveState',
+          { message: `Player action: ${action.rawInput}` }
+        );
+        console.log(`[NarrativeController] State saved with commit: ${commitHash?.substring(0, 8)}`);
+      } catch (error) {
+        console.warn('[NarrativeController] Failed to save state to Git:', error);
+        // Continue without commit hash - rollback won't be available for this turn
+      }
+
+      // Step 8: Determine next available actions
       const nextActions = await this.getAvailableActions(context);
 
       return {
@@ -129,7 +144,8 @@ export class NarrativeController {
         narrative: llmResponse.narrative,
         dialogue: llmResponse.dialogue,
         stateChanges,
-        nextActions
+        nextActions,
+        commitHash
       };
 
     } catch (error: any) {

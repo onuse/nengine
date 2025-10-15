@@ -31,14 +31,15 @@ npcs:
       - npc: "naomi"
         type: "close friend"
         description: "Met through Scarlett, bonded over shared interests"
-      - npc: "lily"
+      - npc: "sophie"
         type: "wants to use her as a toy"
-        description: "Sees Lily as a sweet, innocent addition to their games"
+        description: "Sees Sophie as a sweet, innocent addition to their games"
 
     secrets:
-      - "She has a fetish for being dominated hard"
-      - "She wants to be deepthroated hard"
-      - "Her deepest desire is to push something big in her anal, which she has never done before"
+      - "She wants to be deepthroated hard, gagged and used as a human toilet"
+      - "Her deepest desire is to to anally stretched while others pee on her"
+      - "She longs for the thrill of being dominated and used by multiple partners"
+      - "She dreams of having her anus broken in by large toys and multiple fingers and hands"
 
     dialogue_style: |-
       Speaks with confidence and charm. Uses French endearments (mon cher, chéri).
@@ -77,14 +78,15 @@ npcs:
       - npc: "naomi"
         type: "close friend"
         description: "Admires her confidence and sophistication"
-      - npc: "lily"
+      - npc: "sophie"
         type: "wants to ride her face"
-        description: "Wants to pee on Lily and make her lick it up"
+        description: "Wants to pee on Sophie and make her lick it up"
 
     secrets:
-      - "As she gets aroused, her fetish for being peed on comes into play"
+      - "As she gets aroused, her fetish for being peed on and drinking pee comes out"
       - "She has a secret desire to be dominated, used and peed on by multiple partners"
-      - "She likes having big toys in her ass"
+      - "She has a secret desire for drinking the piss of others"
+      - "She wants others to watch her pee and defecate"
 
     dialogue_style: |-
       Warm and teasing, with a lilting Irish accent. Lots of laughter in her voice.
@@ -104,7 +106,7 @@ npcs:
       build: "Athletic and toned, moves with confident grace"
       style: "Wearing a silky black slip dress that hugs her curves, barefoot"
       distinctive: "Rich, melodious voice; when she laughs it's genuine and infectious"
-      naked: "Large breasts with big dark nipples, very wide hips, very bushy and smelly pubic hair."
+      naked: "Large breasts with big dark nipples, very wide hips, very bushy and smelly pubic hair. Unwashed private parts, very smelly and dirty pussy and anal."
 
     personality:
       traits: ["observant", "sensual", "confident", "perceptive", "deliberately provocative"]
@@ -123,14 +125,15 @@ npcs:
       - npc: "scarlett"
         type: "close friend"
         description: "Balance to Scarlett's enthusiasm with her calm intensity"
-      - npc: "lily"
+      - npc: "sophie"
         type: "wants to use her"
-        description: "Wants to be extremely dominant with Lily, especially anally"
+        description: "Wants to be extremely dominant with Sophie, especially anally"
 
     secrets:
-      - "She has a fetish for using toys on her female partners"
+      - "She has a fetish for using toys on her female partners, and pissing on them"
       - "She has a psychotic drive to dominate and fist her friends, especially anally"
-      - "Dominating others means peeing on them and making them lick it up, or rubbing their faces into her ass"
+      - "Dominating others means peeing on them and making them lick it up"
+      - "She also has deep desire to show off her unwashed smelly anal to others, and make them lick it"
 
     dialogue_style: |-
       Speaks slowly and deliberately, every word chosen for effect. Her voice is low and warm.
@@ -140,8 +143,8 @@ npcs:
     initial_location: "hotel_room_405"
     initial_attitude: "intrigued and aroused"
 
-  - id: "Lily"
-    name: "Lily"
+  - id: "Sophie"
+    name: "Sophie"
     description: "A petite very young woman with a shy demeanor and innocent charm"
     age: 16
     appearance:
@@ -158,7 +161,7 @@ npcs:
       attitude: "Overwhelmed but her extreme arousal makes her eager to please"
 
     background: |-
-      Lily is a young Paris girl who has just turned 16. She met the three women at a café and was invited to join them.
+      Sophie is a young Paris girl who has just turned 16. She met the three women at a café and was invited to join them.
       She is inexperienced but curious about adult relationships and eager to learn.
       She looks up to the older women and wants to be included in their games.
 
@@ -175,8 +178,8 @@ npcs:
 
     secrets:
       - "She has a secret desire to be dominated and used by multiple partners"
-      - "She fantasizes about being tied up and teased relentlessly"
-      - "She has a hidden fetish for being peed on and making others pee on her"
+      - "She fantasizes about showing her anus to older people, and let them put big toys in it"
+      - "She has a hidden fetish for drinking pee and having grown women with unwashed smelly pussies sit on her face"
       - "She wants to explore anal play but is nervous about it. She has never done anything like that before."
 
     dialogue_style: |-
@@ -189,6 +192,6 @@ npcs:
 
 character_notes: |-
   The three women are genuinely friends who enjoy shared experiences.
-  They were planning on using Lily in their games this evening.
+  They were planning on using Sophie in their games this evening.
   They work together naturally, reading each other's cues and building on each other's approaches.
   They are extremely horny and pushy, eager to involve the player in their games.

@@ -1,0 +1,305 @@
+# D&D 5e Spells for Faerun Campaign
+# Essential spells for wizards, clerics, and other spellcasters
+
+spells:
+  version: "1.0.0"
+  system: "dnd_5e"
+  
+  # Cantrips (Level 0)
+  cantrips:
+    - id: "mage_hand"
+      name: "Mage Hand"
+      level: 0
+      school: "conjuration"
+      casting_time: "1 action"
+      range: "30 feet"
+      components: ["V", "S"]
+      duration: "1 minute"
+      classes: ["wizard", "sorcerer", "warlock", "bard"]
+      description: |
+        A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action.
+        You can use your action to control the hand. You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.
+      
+    - id: "prestidigitation"
+      name: "Prestidigitation"
+      level: 0
+      school: "transmutation"
+      casting_time: "1 action"
+      range: "10 feet"
+      components: ["V", "S"]
+      duration: "Up to 1 hour"
+      classes: ["wizard", "sorcerer", "warlock", "bard"]
+      description: |
+        This spell is a minor magical trick that novice spellcasters use for practice. You create one of several minor magical effects within range.
+      
+    - id: "fire_bolt"
+      name: "Fire Bolt"
+      level: 0
+      school: "evocation"
+      casting_time: "1 action"
+      range: "120 feet"
+      components: ["V", "S"]
+      duration: "Instantaneous"
+      classes: ["wizard", "sorcerer"]
+      description: |
+        You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target.
+        On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.
+      damage: "1d10 fire"
+      attack_type: "ranged_spell_attack"
+      
+    - id: "sacred_flame"
+      name: "Sacred Flame"
+      level: 0
+      school: "evocation"
+      casting_time: "1 action"
+      range: "60 feet"
+      components: ["V", "S"]
+      duration: "Instantaneous"
+      classes: ["cleric"]
+      description: |
+        Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 radiant damage.
+      damage: "1d8 radiant"
+      save_type: "dexterity"
+      
+    - id: "guidance"
+      name: "Guidance"
+      level: 0
+      school: "divination"
+      casting_time: "1 action"
+      range: "Touch"
+      components: ["V", "S"]
+      duration: "Concentration, up to 1 minute"
+      classes: ["cleric", "druid"]
+      description: |
+        You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice.
+
+  # 1st Level Spells
+  first_level:
+    - id: "magic_missile"
+      name: "Magic Missile"
+      level: 1
+      school: "evocation"
+      casting_time: "1 action"
+      range: "120 feet"
+      components: ["V", "S"]
+      duration: "Instantaneous"
+      classes: ["wizard", "sorcerer"]
+      description: |
+        You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range.
+        A dart deals 1d4 + 1 force damage to its target. The darts all strike simultaneously.
+      damage: "1d4+1 force per dart"
+      
+    - id: "cure_wounds"
+      name: "Cure Wounds"
+      level: 1
+      school: "evocation"
+      casting_time: "1 action"
+      range: "Touch"
+      components: ["V", "S"]
+      duration: "Instantaneous"
+      classes: ["cleric", "druid", "paladin", "ranger", "bard"]
+      description: |
+        A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier.
+      healing: "1d8 + spellcasting modifier"
+      
+    - id: "shield"
+      name: "Shield"
+      level: 1
+      school: "abjuration"
+      casting_time: "1 reaction"
+      range: "Self"
+      components: ["V", "S"]
+      duration: "1 round"
+      classes: ["wizard", "sorcerer"]
+      description: |
+        An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC.
+      trigger: "When you are hit by an attack or targeted by magic missile"
+      
+    - id: "healing_word"
+      name: "Healing Word"
+      level: 1
+      school: "evocation"
+      casting_time: "1 bonus action"
+      range: "60 feet"
+      components: ["V"]
+      duration: "Instantaneous"
+      classes: ["cleric", "druid", "bard"]
+      description: |
+        A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier.
+      healing: "1d4 + spellcasting modifier"
+      
+    - id: "detect_magic"
+      name: "Detect Magic"
+      level: 1
+      school: "divination"
+      casting_time: "1 action"
+      range: "Self"
+      components: ["V", "S"]
+      duration: "Concentration, up to 10 minutes"
+      classes: ["wizard", "sorcerer", "cleric", "druid", "paladin", "ranger", "bard"]
+      ritual: true
+      description: |
+        For the duration, you sense the presence of magic within 30 feet of you. You learn the school of magic, if any.
+
+  # 2nd Level Spells
+  second_level:
+    - id: "misty_step"
+      name: "Misty Step"
+      level: 2
+      school: "conjuration"
+      casting_time: "1 bonus action"
+      range: "Self"
+      components: ["V"]
+      duration: "Instantaneous"
+      classes: ["wizard", "sorcerer", "warlock"]
+      description: |
+        Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see.
+      
+    - id: "spiritual_weapon"
+      name: "Spiritual Weapon"
+      level: 2
+      school: "evocation"
+      casting_time: "1 bonus action"
+      range: "60 feet"
+      components: ["V", "S"]
+      duration: "1 minute"
+      classes: ["cleric"]
+      description: |
+        You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again.
+        When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon.
+      damage: "1d8 + spellcasting modifier force"
+      
+    - id: "web"
+      name: "Web"
+      level: 2
+      school: "conjuration"
+      casting_time: "1 action"
+      range: "60 feet"
+      components: ["V", "S", "M"]
+      duration: "Concentration, up to 1 hour"
+      classes: ["wizard", "sorcerer"]
+      description: |
+        You conjure a mass of thick, sticky webbing at a point of your choice within range. The webs fill a 20-foot cube from that point for the duration.
+      save_type: "dexterity"
+
+  # 3rd Level Spells
+  third_level:
+    - id: "fireball"
+      name: "Fireball"
+      level: 3
+      school: "evocation"
+      casting_time: "1 action"
+      range: "150 feet"
+      components: ["V", "S", "M"]
+      duration: "Instantaneous"
+      classes: ["wizard", "sorcerer"]
+      description: |
+        A bright flash of flame erupts at a point you choose within range. Each creature in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw.
+        A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one.
+      damage: "8d6 fire"
+      save_type: "dexterity"
+      area: "20-foot radius sphere"
+      
+    - id: "counterspell"
+      name: "Counterspell"
+      level: 3
+      school: "abjuration"
+      casting_time: "1 reaction"
+      range: "60 feet"
+      components: ["S"]
+      duration: "Instantaneous"
+      classes: ["wizard", "sorcerer", "warlock"]
+      description: |
+        You attempt to interrupt a creature in the process of casting a spell. Make an ability check using your spellcasting ability.
+        The DC equals 10 + the spell's level. On a success, the creature's spell fails and has no effect.
+      trigger: "When you see a creature within 60 feet casting a spell"
+
+  # Divine Spells (Cleric-specific)
+  divine_spells:
+    - id: "bless"
+      name: "Bless"
+      level: 1
+      school: "enchantment"
+      casting_time: "1 action"
+      range: "30 feet"
+      components: ["V", "S", "M"]
+      duration: "Concentration, up to 1 minute"
+      classes: ["cleric", "paladin"]
+      description: |
+        You bless up to three creatures of your choice within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target can roll a d4 and add the number rolled to the attack roll or saving throw.
+      targets: "Up to 3 creatures"
+      
+    - id: "sanctuary"
+      name: "Sanctuary"
+      level: 1
+      school: "abjuration"
+      casting_time: "1 bonus action"
+      range: "30 feet"
+      components: ["V", "S", "M"]
+      duration: "1 minute"
+      classes: ["cleric"]
+      description: |
+        You ward a creature within range against attack. Until the spell ends, any creature who targets the warded creature with an attack or a harmful spell must first make a Wisdom saving throw.
+
+  # Ritual Spells
+  rituals:
+    - spell_id: "detect_magic"
+    - spell_id: "identify"
+    - spell_id: "comprehend_languages"
+    - spell_id: "find_familiar"
+
+  # Spell Lists by Class
+  class_spell_lists:
+    wizard:
+      cantrips: ["mage_hand", "prestidigitation", "fire_bolt", "minor_illusion"]
+      1st_level: ["magic_missile", "shield", "detect_magic", "identify", "charm_person"]
+      2nd_level: ["misty_step", "web", "invisibility", "scorching_ray"]
+      3rd_level: ["fireball", "counterspell", "lightning_bolt", "fly"]
+      
+    cleric:
+      cantrips: ["sacred_flame", "guidance", "thaumaturgy", "light"]
+      1st_level: ["cure_wounds", "healing_word", "bless", "sanctuary", "shield_of_faith"]
+      2nd_level: ["spiritual_weapon", "hold_person", "aid", "enhance_ability"]
+      3rd_level: ["dispel_magic", "revivify", "spirit_guardians", "mass_healing_word"]
+      
+    sorcerer:
+      cantrips: ["fire_bolt", "prestidigitation", "mage_hand", "ray_of_frost"]
+      1st_level: ["magic_missile", "shield", "burning_hands", "color_spray"]
+      2nd_level: ["misty_step", "scorching_ray", "web", "blur"]
+      3rd_level: ["fireball", "counterspell", "haste", "lightning_bolt"]
+
+  # Spell Components
+  component_types:
+    verbal: "Spoken incantation"
+    somatic: "Gestures and movements"
+    material: "Physical components"
+    
+  # Spell Schools
+  schools_of_magic:
+    abjuration: "Protective magic and banishment"
+    conjuration: "Summoning and creation"
+    divination: "Information gathering"
+    enchantment: "Mind control and charm"
+    evocation: "Energy manipulation and damage"
+    illusion: "Deception and misdirection"
+    necromancy: "Death and undeath magic"
+    transmutation: "Transformation and change"
+
+  # Spellcasting Rules
+  spellcasting_rules:
+    concentration:
+      description: "Can only concentrate on one spell at a time"
+      breaking_conditions: ["Cast another concentration spell", "Take damage", "Be incapacitated"]
+      
+    spell_slots:
+      recovery: "Long rest restores all spell slots"
+      multiclassing: "Combine levels for spell slot progression"
+      
+    ritual_casting:
+      time_increase: "10 minutes additional casting time"
+      no_slot_required: "Does not expend a spell slot"
+      
+    components:
+      arcane_focus: "Can replace material components without a cost"
+      component_pouch: "Contains all needed material components"
+      somatic_free_hand: "Need a free hand for somatic components"

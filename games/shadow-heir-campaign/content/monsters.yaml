@@ -1,0 +1,3169 @@
+# D&D 5e Monsters and Creatures for Faerun Campaign
+
+monsters:
+  # Basic Low-Level Monsters
+  goblin:
+    name: "Goblin"
+    type: "humanoid"
+    subtype: "goblinoid"
+    size: "small"
+    alignment: "neutral_evil"
+    challenge_rating: "1/4"
+    experience: 50
+    
+    stats:
+      armor_class: 15
+      hit_points: 7
+      hit_dice: "2d6"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 8
+      dexterity: 14
+      constitution: 10
+      intelligence: 10
+      wisdom: 8
+      charisma: 8
+      
+    skills:
+      stealth: 6
+      
+    senses:
+      darkvision: 60
+      passive_perception: 9
+      
+    languages: ["common", "goblin"]
+    
+    traits:
+      nimble_escape:
+        name: "Nimble Escape"
+        description: "Can take Disengage or Hide as bonus action"
+        
+    actions:
+      scimitar:
+        name: "Scimitar"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "slashing"
+        
+      shortbow:
+        name: "Shortbow"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "piercing"
+        range: { normal: 80, long: 320 }
+        
+    loot:
+      - { item: "scimitar", chance: 90 }
+      - { item: "shortbow", chance: 70 }
+      - { item: "20_arrows", chance: 70 }
+      - { currency: "copper", dice: "2d6" }
+      - { currency: "silver", dice: "1d4" }
+      
+    habitat: ["forests", "hills", "caves", "ruins"]
+    tactics: "Pack fighters who use hit-and-run tactics"
+    
+  hobgoblin:
+    name: "Hobgoblin"
+    type: "humanoid"
+    subtype: "goblinoid"
+    size: "medium"
+    alignment: "lawful_evil"
+    challenge_rating: "1/2"
+    experience: 100
+    
+    stats:
+      armor_class: 18
+      hit_points: 11
+      hit_dice: "2d8+2"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 13
+      dexterity: 12
+      constitution: 12
+      intelligence: 10
+      wisdom: 10
+      charisma: 9
+      
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    languages: ["common", "goblin"]
+    
+    traits:
+      martial_advantage:
+        name: "Martial Advantage"
+        description: "Deal extra 2d6 damage when ally is within 5 feet of target"
+        
+    actions:
+      longsword:
+        name: "Longsword"
+        attack_bonus: 3
+        damage: "1d8+1"
+        damage_type: "slashing"
+        versatile: "1d10+1"
+        
+      longbow:
+        name: "Longbow"
+        attack_bonus: 3
+        damage: "1d8+1"
+        damage_type: "piercing"
+        range: { normal: 150, long: 600 }
+        
+    loot:
+      - { item: "chain_mail", chance: 80 }
+      - { item: "longsword", chance: 90 }
+      - { item: "longbow", chance: 60 }
+      - { currency: "silver", dice: "2d10" }
+      - { currency: "gold", dice: "1d6" }
+
+  bugbear:
+    name: "Bugbear"
+    type: "humanoid"
+    subtype: "goblinoid"
+    size: "medium"
+    alignment: "chaotic_evil"
+    challenge_rating: 1
+    experience: 200
+    
+    stats:
+      armor_class: 16
+      hit_points: 27
+      hit_dice: "5d8+5"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 15
+      dexterity: 14
+      constitution: 13
+      intelligence: 8
+      wisdom: 11
+      charisma: 9
+      
+    skills:
+      stealth: 6
+      survival: 2
+      
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    languages: ["common", "goblin"]
+    
+    traits:
+      brute:
+        name: "Brute"
+        description: "Deal one extra die of damage with melee weapons"
+        
+      surprise_attack:
+        name: "Surprise Attack"
+        description: "Extra 2d6 damage if target hasn't acted yet"
+        
+    actions:
+      morningstar:
+        name: "Morningstar"
+        attack_bonus: 4
+        damage: "2d8+2"
+        damage_type: "piercing"
+        
+      javelin:
+        name: "Javelin"
+        attack_bonus: 4
+        damage: "2d6+2"
+        damage_type: "piercing"
+        range: { normal: 30, long: 120 }
+
+  # Iconic D&D Monsters
+  beholder:
+    name: "Beholder"
+    type: "aberration"
+    size: "large"
+    alignment: "lawful_evil"
+    challenge_rating: 13
+    experience: 10000
+    legendary: true
+    
+    stats:
+      armor_class: 18
+      hit_points: 180
+      hit_dice: "19d12+76"
+      speed: { fly: 20, hover: true }
+      
+    ability_scores:
+      strength: 10
+      dexterity: 14
+      constitution: 18
+      intelligence: 17
+      wisdom: 15
+      charisma: 17
+      
+    saving_throws:
+      intelligence: 8
+      wisdom: 7
+      charisma: 8
+      
+    skills:
+      perception: 12
+      
+    condition_immunities: ["prone"]
+    
+    senses:
+      darkvision: 120
+      passive_perception: 22
+      
+    languages: ["deep_speech", "undercommon"]
+    
+    traits:
+      antimagic_cone:
+        name: "Antimagic Cone"
+        description: "150-foot cone of antimagic from central eye"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 5
+        damage: "4d6+5"
+        damage_type: "piercing"
+        
+      eye_rays:
+        name: "Eye Rays"
+        description: "Shoots three random eye rays"
+        rays:
+          - "charm_ray"
+          - "paralyzing_ray"
+          - "fear_ray"
+          - "slowing_ray"
+          - "enervation_ray"
+          - "telekinetic_ray"
+          - "sleep_ray"
+          - "petrification_ray"
+          - "disintegration_ray"
+          - "death_ray"
+          
+    legendary_actions: 3
+    lair_actions: true
+    
+    habitat: ["underdark", "ancient_ruins", "magical_locations"]
+    tactics: "Hover above enemies using eye rays, antimagic cone to disable spellcasters"
+
+  mind_flayer:
+    name: "Mind Flayer"
+    type: "aberration"
+    size: "medium"
+    alignment: "lawful_evil"
+    challenge_rating: 7
+    experience: 2900
+    
+    stats:
+      armor_class: 15
+      hit_points: 71
+      hit_dice: "13d8+13"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 11
+      dexterity: 12
+      constitution: 12
+      intelligence: 19
+      wisdom: 17
+      charisma: 17
+      
+    saving_throws:
+      intelligence: 7
+      wisdom: 6
+      charisma: 6
+      
+    skills:
+      arcana: 7
+      deception: 6
+      insight: 6
+      perception: 6
+      persuasion: 6
+      stealth: 4
+      
+    senses:
+      blindsight: 60
+      darkvision: 120
+      passive_perception: 16
+      
+    languages: ["deep_speech", "undercommon", "telepathy_120"]
+    
+    traits:
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells and magical effects"
+        
+    actions:
+      tentacles:
+        name: "Tentacles"
+        attack_bonus: 7
+        damage: "2d10+4"
+        damage_type: "psychic"
+        special: "Grapple and stun on hit"
+        
+      extract_brain:
+        name: "Extract Brain"
+        description: "Kill helpless humanoid and extract brain"
+        requirements: "Grappled, stunned, or willing target"
+        
+      mind_blast:
+        name: "Mind Blast (Recharge 5-6)"
+        description: "60-foot cone, Intelligence save or stunned"
+        save_dc: 15
+        
+    spells:
+      level: 5
+      save_dc: 15
+      attack_bonus: 7
+      spells:
+        - { level: 1, spells: ["detect_thoughts"] }
+        - { level: 2, spells: ["levitate", "suggestion"] }
+        - { level: 3, spells: ["dominate_person"] }
+        
+    habitat: ["underdark", "elder_brain_pools"]
+    tactics: "Use mind blast, then extract brains from stunned victims"
+
+  dragon_red_young:
+    name: "Young Red Dragon"
+    type: "dragon"
+    subtype: "chromatic"
+    size: "large"
+    alignment: "chaotic_evil"
+    challenge_rating: 10
+    experience: 5900
+    
+    stats:
+      armor_class: 18
+      hit_points: 178
+      hit_dice: "17d12+68"
+      speed: { walk: 40, climb: 40, fly: 80 }
+      
+    ability_scores:
+      strength: 23
+      dexterity: 10
+      constitution: 19
+      intelligence: 14
+      wisdom: 11
+      charisma: 19
+      
+    saving_throws:
+      dexterity: 4
+      constitution: 8
+      wisdom: 4
+      charisma: 8
+      
+    skills:
+      deception: 8
+      perception: 8
+      stealth: 4
+      
+    damage_immunities: ["fire"]
+    
+    senses:
+      blindsight: 30
+      darkvision: 120
+      passive_perception: 18
+      
+    languages: ["common", "draconic"]
+    
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Bite and two claw attacks"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 10
+        damage: "2d10+6"
+        damage_type: "piercing"
+        additional: "1d6 fire"
+        
+      claw:
+        name: "Claw"
+        attack_bonus: 10
+        damage: "2d6+6"
+        damage_type: "slashing"
+        
+      fire_breath:
+        name: "Fire Breath (Recharge 5-6)"
+        description: "30-foot cone of fire"
+        damage: "16d6"
+        damage_type: "fire"
+        save: "dexterity"
+        save_dc: 17
+        
+    habitat: ["mountains", "volcanic_regions", "ancient_ruins"]
+    hoard: ["large_treasure_hoard"]
+    tactics: "Breath weapon, then aerial attacks with bite and claw"
+
+  # Underdark Creatures
+  drow:
+    name: "Drow"
+    type: "humanoid"
+    subtype: "elf"
+    size: "medium"
+    alignment: "neutral_evil"
+    challenge_rating: "1/4"
+    experience: 50
+    
+    stats:
+      armor_class: 15
+      hit_points: 13
+      hit_dice: "3d8"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 10
+      dexterity: 14
+      constitution: 10
+      intelligence: 11
+      wisdom: 11
+      charisma: 12
+      
+    skills:
+      perception: 2
+      stealth: 4
+      
+    senses:
+      darkvision: 120
+      passive_perception: 12
+      
+    languages: ["elvish", "undercommon"]
+    
+    traits:
+      fey_ancestry:
+        name: "Fey Ancestry"
+        description: "Advantage on saves against charm, immune to sleep"
+        
+      innate_spellcasting:
+        name: "Innate Spellcasting"
+        spells:
+          at_will: ["dancing_lights"]
+          once_per_day: ["faerie_fire", "darkness"]
+          
+      sunlight_sensitivity:
+        name: "Sunlight Sensitivity"
+        description: "Disadvantage in bright light"
+        
+    actions:
+      shortsword:
+        name: "Shortsword"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "piercing"
+        
+      hand_crossbow:
+        name: "Hand Crossbow"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "piercing"
+        poison: "unconsciousness_1_hour"
+        
+    loot:
+      - { item: "studded_leather", chance: 80 }
+      - { item: "shortsword", chance: 90 }
+      - { item: "hand_crossbow", chance: 70 }
+      - { item: "drow_poison", quantity: "1d4" }
+
+  # Faerun-Specific Creatures
+  zhentarim_thug:
+    name: "Zhentarim Thug"
+    type: "humanoid"
+    subtype: "human"
+    size: "medium"
+    alignment: "neutral_evil"
+    challenge_rating: "1/2"
+    experience: 100
+    
+    stats:
+      armor_class: 12
+      hit_points: 32
+      hit_dice: "5d8+10"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 15
+      dexterity: 11
+      constitution: 14
+      intelligence: 10
+      wisdom: 10
+      charisma: 11
+      
+    skills:
+      intimidation: 2
+      
+    senses:
+      passive_perception: 10
+      
+    languages: ["common"]
+    
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two melee attacks or two ranged attacks"
+        
+      mace:
+        name: "Mace"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "bludgeoning"
+        
+      heavy_crossbow:
+        name: "Heavy Crossbow"
+        attack_bonus: 2
+        damage: "1d10"
+        damage_type: "piercing"
+        range: { normal: 100, long: 400 }
+        
+    organization: "zhentarim"
+    loot:
+      - { item: "leather_armor", chance: 80 }
+      - { item: "mace", chance: 90 }
+      - { currency: "gold", dice: "2d10" }
+      - { item: "zhentarim_badge", chance: 30 }
+
+  purple_dragon_knight:
+    name: "Purple Dragon Knight"
+    type: "humanoid"
+    subtype: "human"
+    size: "medium"
+    alignment: "lawful_good"
+    challenge_rating: 3
+    experience: 700
+    
+    stats:
+      armor_class: 18
+      hit_points: 52
+      hit_dice: "8d8+16"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 16
+      dexterity: 11
+      constitution: 14
+      intelligence: 11
+      wisdom: 11
+      charisma: 15
+      
+    skills:
+      history: 2
+      intimidation: 4
+      
+    senses:
+      passive_perception: 10
+      
+    languages: ["common"]
+    
+    traits:
+      rallying_cry:
+        name: "Rallying Cry"
+        description: "Grant temporary hit points to allies"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two longsword attacks"
+        
+      longsword:
+        name: "Longsword"
+        attack_bonus: 5
+        damage: "1d8+3"
+        damage_type: "slashing"
+        versatile: "1d10+3"
+        
+      javelin:
+        name: "Javelin"
+        attack_bonus: 5
+        damage: "1d6+3"
+        damage_type: "piercing"
+        range: { normal: 30, long: 120 }
+        
+    organization: "cormyr"
+    equipment: ["plate_armor", "purple_dragon_sword", "shield"]
+
+  # Planar Creatures
+  imp:
+    name: "Imp"
+    type: "fiend"
+    subtype: "devil"
+    size: "tiny"
+    alignment: "lawful_evil"
+    challenge_rating: 1
+    experience: 200
+    
+    stats:
+      armor_class: 13
+      hit_points: 10
+      hit_dice: "3d4+3"
+      speed: { walk: 20, fly: 40 }
+      
+    ability_scores:
+      strength: 6
+      dexterity: 17
+      constitution: 13
+      intelligence: 11
+      wisdom: 12
+      charisma: 14
+      
+    skills:
+      deception: 4
+      insight: 3
+      persuasion: 4
+      stealth: 5
+      
+    damage_resistances: ["cold", "bludgeoning_piercing_slashing_nonmagical"]
+    damage_immunities: ["fire", "poison"]
+    condition_immunities: ["poisoned"]
+    
+    senses:
+      darkvision: 120
+      passive_perception: 11
+      
+    languages: ["infernal", "common"]
+    
+    traits:
+      shapechanger:
+        name: "Shapechanger"
+        forms: ["rat", "raven", "spider", "true_form"]
+        
+      devil_sight:
+        name: "Devil's Sight"
+        description: "See normally in magical darkness"
+        
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells"
+        
+    actions:
+      sting:
+        name: "Sting (Bite in Beast Form)"
+        attack_bonus: 5
+        damage: "1d4+3"
+        damage_type: "piercing"
+        poison: "3d6 poison damage"
+        save_dc: 11
+        
+      invisibility:
+        name: "Invisibility"
+        description: "Turn invisible until attacks or concentration ends"
+        
+    familiar: true
+    habitat: ["nine_hells", "summoned"]
+
+  # Iconic Faerun Monsters
+  flameskull:
+    name: "Flameskull"
+    type: "undead"
+    size: "tiny"
+    alignment: "neutral_evil"
+    challenge_rating: 4
+    experience: 1100
+    
+    stats:
+      armor_class: 13
+      hit_points: 40
+      hit_dice: "9d4+18"
+      speed: { fly: 40, hover: true }
+      
+    ability_scores:
+      strength: 1
+      dexterity: 17
+      constitution: 14
+      intelligence: 16
+      wisdom: 10
+      charisma: 11
+      
+    skills:
+      arcana: 5
+      perception: 2
+      
+    damage_resistances: ["lightning", "necrotic", "piercing"]
+    damage_immunities: ["cold", "fire", "poison"]
+    condition_immunities: ["charmed", "frightened", "paralyzed", "poisoned", "prone"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 12
+      
+    languages: ["common"]
+    
+    traits:
+      illumination:
+        name: "Illumination"
+        description: "Sheds bright light in 15-foot radius"
+        
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells"
+        
+      rejuvenation:
+        name: "Rejuvenation"
+        description: "Reforms in 1 hour unless holy water is sprinkled on remains"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two fire ray attacks"
+        
+      fire_ray:
+        name: "Fire Ray"
+        attack_bonus: 5
+        damage: "3d6"
+        damage_type: "fire"
+        range: 30
+        
+    spells:
+      level: 5
+      save_dc: 13
+      spells:
+        - { level: 1, spells: ["mage_armor", "magic_missile"] }
+        - { level: 2, spells: ["blur", "flaming_sphere"] }
+        - { level: 3, spells: ["fireball"] }
+        
+    habitat: ["ancient_ruins", "wizard_towers", "crypts"]
+    creation: "Created by evil wizards from their own skulls"
+
+  # CR 0 - Harmless Creatures
+  rat:
+    name: "Rat"
+    type: "beast"
+    size: "tiny"
+    alignment: "unaligned"
+    challenge_rating: 0
+    experience: 10
+    
+    stats:
+      armor_class: 10
+      hit_points: 1
+      hit_dice: "1d4-1"
+      speed: { walk: 20 }
+      
+    ability_scores:
+      strength: 2
+      dexterity: 11
+      constitution: 9
+      intelligence: 2
+      wisdom: 10
+      charisma: 4
+      
+    senses:
+      darkvision: 30
+      passive_perception: 10
+      
+    traits:
+      keen_smell:
+        name: "Keen Smell"
+        description: "Advantage on Wisdom (Perception) checks relying on smell"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 0
+        damage: 1
+        damage_type: "piercing"
+        
+    habitat: ["cities", "sewers", "dungeons", "ruins"]
+    tactics: "Flee when threatened, swarm in large numbers"
+
+  cat:
+    name: "Cat"
+    type: "beast"
+    size: "tiny"
+    alignment: "unaligned"
+    challenge_rating: 0
+    experience: 10
+    
+    stats:
+      armor_class: 12
+      hit_points: 2
+      hit_dice: "1d4"
+      speed: { walk: 40, climb: 30 }
+      
+    ability_scores:
+      strength: 3
+      dexterity: 15
+      constitution: 10
+      intelligence: 3
+      wisdom: 12
+      charisma: 7
+      
+    skills:
+      perception: 3
+      stealth: 4
+      
+    senses:
+      passive_perception: 13
+      
+    traits:
+      keen_smell:
+        name: "Keen Smell"
+        description: "Advantage on Wisdom (Perception) checks relying on smell"
+        
+    actions:
+      claws:
+        name: "Claws"
+        attack_bonus: 0
+        damage: 1
+        damage_type: "slashing"
+        
+    habitat: ["cities", "villages", "temples"]
+    tactics: "Flee or hide when threatened"
+
+  commoner:
+    name: "Commoner"
+    type: "humanoid"
+    subtype: "human"
+    size: "medium"
+    alignment: "neutral"
+    challenge_rating: 0
+    experience: 10
+    
+    stats:
+      armor_class: 10
+      hit_points: 4
+      hit_dice: "1d8"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 10
+      dexterity: 10
+      constitution: 10
+      intelligence: 10
+      wisdom: 10
+      charisma: 10
+      
+    senses:
+      passive_perception: 10
+      
+    languages: ["common"]
+    
+    actions:
+      club:
+        name: "Club"
+        attack_bonus: 2
+        damage: "1d4"
+        damage_type: "bludgeoning"
+        
+    habitat: ["cities", "villages", "farms", "roads"]
+    occupations: ["farmer", "merchant", "innkeeper", "laborer"]
+
+  # CR 1/8 Creatures
+  bandit:
+    name: "Bandit"
+    type: "humanoid"
+    subtype: "human"
+    size: "medium"
+    alignment: "chaotic_evil"
+    challenge_rating: "1/8"
+    experience: 25
+    
+    stats:
+      armor_class: 12
+      hit_points: 11
+      hit_dice: "2d8+2"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 11
+      dexterity: 12
+      constitution: 12
+      intelligence: 10
+      wisdom: 10
+      charisma: 10
+      
+    senses:
+      passive_perception: 10
+      
+    languages: ["common"]
+    
+    actions:
+      scimitar:
+        name: "Scimitar"
+        attack_bonus: 3
+        damage: "1d6+1"
+        damage_type: "slashing"
+        
+      light_crossbow:
+        name: "Light Crossbow"
+        attack_bonus: 3
+        damage: "1d8+1"
+        damage_type: "piercing"
+        range: { normal: 80, long: 320 }
+        
+    loot:
+      - { item: "leather_armor", chance: 70 }
+      - { item: "scimitar", chance: 80 }
+      - { currency: "silver", dice: "2d6" }
+      
+    habitat: ["forests", "roads", "hideouts"]
+    tactics: "Group ambush tactics, hit and run"
+
+  guard:
+    name: "Guard"
+    type: "humanoid"
+    subtype: "human"
+    size: "medium"
+    alignment: "lawful_neutral"
+    challenge_rating: "1/8"
+    experience: 25
+    
+    stats:
+      armor_class: 16
+      hit_points: 11
+      hit_dice: "2d8+2"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 13
+      dexterity: 12
+      constitution: 12
+      intelligence: 10
+      wisdom: 11
+      charisma: 10
+      
+    skills:
+      perception: 2
+      
+    senses:
+      passive_perception: 12
+      
+    languages: ["common"]
+    
+    actions:
+      spear:
+        name: "Spear"
+        attack_bonus: 3
+        damage: "1d6+1"
+        damage_type: "piercing"
+        versatile: "1d8+1"
+        
+    loot:
+      - { item: "chain_shirt", chance: 90 }
+      - { item: "spear", chance: 90 }
+      - { item: "shield", chance: 80 }
+      - { currency: "silver", dice: "1d10" }
+      
+    habitat: ["cities", "towns", "fortresses", "roads"]
+    organization: "city_watch"
+
+  stirge:
+    name: "Stirge"
+    type: "beast"
+    size: "tiny"
+    alignment: "unaligned"
+    challenge_rating: "1/8"
+    experience: 25
+    
+    stats:
+      armor_class: 14
+      hit_points: 2
+      hit_dice: "1d4"
+      speed: { walk: 10, fly: 40 }
+      
+    ability_scores:
+      strength: 4
+      dexterity: 16
+      constitution: 11
+      intelligence: 2
+      wisdom: 8
+      charisma: 6
+      
+    senses:
+      darkvision: 60
+      passive_perception: 9
+      
+    traits:
+      blood_drain:
+        name: "Blood Drain"
+        description: "Attach to creature and drain 1d4+3 HP per turn"
+        
+    actions:
+      blood_drain:
+        name: "Blood Drain"
+        attack_bonus: 5
+        damage: "1d4+3"
+        damage_type: "piercing"
+        special: "Attach on hit, automatic damage each turn"
+        
+    habitat: ["swamps", "caves", "ruins", "forests"]
+    tactics: "Swarm tactics, attach to drain blood"
+
+  # CR 1/4 Creatures  
+  skeleton:
+    name: "Skeleton"
+    type: "undead"
+    size: "medium"
+    alignment: "lawful_evil"
+    challenge_rating: "1/4"
+    experience: 50
+    
+    stats:
+      armor_class: 13
+      hit_points: 13
+      hit_dice: "2d8+4"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 10
+      dexterity: 14
+      constitution: 15
+      intelligence: 6
+      wisdom: 8
+      charisma: 5
+      
+    damage_vulnerabilities: ["bludgeoning"]
+    damage_immunities: ["poison"]
+    condition_immunities: ["exhaustion", "poisoned"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 9
+      
+    languages: ["understands_creator_language"]
+    
+    actions:
+      shortsword:
+        name: "Shortsword"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "piercing"
+        
+      shortbow:
+        name: "Shortbow"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "piercing"
+        range: { normal: 80, long: 320 }
+        
+    loot:
+      - { item: "shortsword", chance: 60 }
+      - { item: "shortbow", chance: 40 }
+      - { item: "arrows_20", chance: 40 }
+      
+    habitat: ["crypts", "ruins", "battlefields", "necromancer_lairs"]
+    tactics: "Organized formations, follow commands precisely"
+
+  zombie:
+    name: "Zombie"
+    type: "undead"
+    size: "medium"
+    alignment: "neutral_evil"
+    challenge_rating: "1/4"
+    experience: 50
+    
+    stats:
+      armor_class: 8
+      hit_points: 22
+      hit_dice: "3d8+9"
+      speed: { walk: 20 }
+      
+    ability_scores:
+      strength: 13
+      dexterity: 6
+      constitution: 16
+      intelligence: 3
+      wisdom: 6
+      charisma: 5
+      
+    saving_throws:
+      wisdom: 0
+      
+    damage_immunities: ["poison"]
+    condition_immunities: ["poisoned"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 8
+      
+    languages: ["understands_creator_language"]
+    
+    traits:
+      undead_fortitude:
+        name: "Undead Fortitude"
+        description: "If damage reduces to 0 HP, make Constitution save (DC 5 + damage) to drop to 1 HP instead"
+        
+    actions:
+      slam:
+        name: "Slam"
+        attack_bonus: 3
+        damage: "1d6+1"
+        damage_type: "bludgeoning"
+        
+    habitat: ["graveyards", "plague_sites", "necromancer_lairs"]
+    tactics: "Shamble forward relentlessly, swarm enemies"
+
+  wolf:
+    name: "Wolf"
+    type: "beast"
+    size: "medium"
+    alignment: "unaligned"
+    challenge_rating: "1/4"
+    experience: 50
+    
+    stats:
+      armor_class: 13
+      hit_points: 11
+      hit_dice: "2d8+2"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 12
+      dexterity: 15
+      constitution: 12
+      intelligence: 3
+      wisdom: 12
+      charisma: 6
+      
+    skills:
+      perception: 3
+      stealth: 4
+      
+    senses:
+      passive_perception: 13
+      
+    traits:
+      keen_hearing_smell:
+        name: "Keen Hearing and Smell"
+        description: "Advantage on Perception checks relying on hearing or smell"
+        
+      pack_tactics:
+        name: "Pack Tactics"
+        description: "Advantage on attacks when ally within 5 feet of target"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 4
+        damage: "2d4+2"
+        damage_type: "piercing"
+        special: "Target must make DC 11 Strength save or be knocked prone"
+        
+    habitat: ["forests", "hills", "mountains"]
+    tactics: "Pack hunters, surround and knock prone"
+
+  # CR 1/2 Creatures
+  orc:
+    name: "Orc"
+    type: "humanoid"
+    subtype: "orc"
+    size: "medium"
+    alignment: "chaotic_evil"
+    challenge_rating: "1/2"
+    experience: 100
+    
+    stats:
+      armor_class: 13
+      hit_points: 15
+      hit_dice: "2d8+6"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 16
+      dexterity: 12
+      constitution: 16
+      intelligence: 7
+      wisdom: 11
+      charisma: 10
+      
+    skills:
+      intimidation: 2
+      
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    languages: ["common", "orc"]
+    
+    traits:
+      aggressive:
+        name: "Aggressive"
+        description: "Can move up to speed toward hostile creature as bonus action"
+        
+    actions:
+      greataxe:
+        name: "Greataxe"
+        attack_bonus: 5
+        damage: "1d12+3"
+        damage_type: "slashing"
+        
+      javelin:
+        name: "Javelin"
+        attack_bonus: 5
+        damage: "1d6+3"
+        damage_type: "piercing"
+        range: { normal: 30, long: 120 }
+        
+    loot:
+      - { item: "hide_armor", chance: 80 }
+      - { item: "greataxe", chance: 90 }
+      - { currency: "silver", dice: "1d10" }
+      
+    habitat: ["mountains", "forests", "strongholds"]
+    tactics: "Charge aggressively with greataxes"
+
+  warhorse:
+    name: "Warhorse"
+    type: "beast"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: "1/2"
+    experience: 100
+    
+    stats:
+      armor_class: 11
+      hit_points: 19
+      hit_dice: "3d10+3"
+      speed: { walk: 60 }
+      
+    ability_scores:
+      strength: 18
+      dexterity: 12
+      constitution: 13
+      intelligence: 2
+      wisdom: 12
+      charisma: 7
+      
+    senses:
+      passive_perception: 11
+      
+    traits:
+      trampling_charge:
+        name: "Trampling Charge"
+        description: "If moves 20+ feet and hits with hooves, target makes DC 14 Strength save or knocked prone"
+        
+    actions:
+      hooves:
+        name: "Hooves"
+        attack_bonus: 6
+        damage: "2d6+4"
+        damage_type: "bludgeoning"
+        
+    habitat: ["plains", "stables", "battlefields"]
+    uses: ["mount", "cavalry"]
+
+  # CR 1 Creatures
+  dire_wolf:
+    name: "Dire Wolf"
+    type: "beast"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: 1
+    experience: 200
+    
+    stats:
+      armor_class: 14
+      hit_points: 37
+      hit_dice: "5d10+10"
+      speed: { walk: 50 }
+      
+    ability_scores:
+      strength: 17
+      dexterity: 15
+      constitution: 15
+      intelligence: 3
+      wisdom: 12
+      charisma: 7
+      
+    skills:
+      perception: 3
+      stealth: 4
+      
+    senses:
+      passive_perception: 13
+      
+    traits:
+      keen_hearing_smell:
+        name: "Keen Hearing and Smell"
+        description: "Advantage on Perception checks relying on hearing or smell"
+        
+      pack_tactics:
+        name: "Pack Tactics"
+        description: "Advantage on attacks when ally within 5 feet of target"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 5
+        damage: "2d6+3"
+        damage_type: "piercing"
+        special: "DC 13 Strength save or knocked prone"
+        
+    habitat: ["forests", "arctic", "mountains"]
+    tactics: "Alpha pack hunters, coordinate to surround prey"
+
+  ghoul:
+    name: "Ghoul"
+    type: "undead"
+    size: "medium"
+    alignment: "chaotic_evil"
+    challenge_rating: 1
+    experience: 200
+    
+    stats:
+      armor_class: 12
+      hit_points: 22
+      hit_dice: "5d8"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 13
+      dexterity: 15
+      constitution: 10
+      intelligence: 7
+      wisdom: 10
+      charisma: 6
+      
+    damage_immunities: ["poison"]
+    condition_immunities: ["charmed", "exhaustion", "poisoned"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    languages: ["common"]
+    
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 2
+        damage: "2d6+2"
+        damage_type: "piercing"
+        
+      claws:
+        name: "Claws"
+        attack_bonus: 4
+        damage: "2d4+2"
+        damage_type: "slashing"
+        special: "DC 10 Constitution save or paralyzed for 1 minute"
+        
+    habitat: ["graveyards", "crypts", "battlefields"]
+    tactics: "Paralyze with claws, then feast with bite attacks"
+
+  # CR 2 Creatures
+  brown_bear:
+    name: "Brown Bear"
+    type: "beast"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: 2
+    experience: 450
+    
+    stats:
+      armor_class: 11
+      hit_points: 34
+      hit_dice: "4d10+12"
+      speed: { walk: 40, climb: 30 }
+      
+    ability_scores:
+      strength: 19
+      dexterity: 10
+      constitution: 16
+      intelligence: 2
+      wisdom: 13
+      charisma: 7
+      
+    skills:
+      perception: 3
+      
+    senses:
+      passive_perception: 13
+      
+    traits:
+      keen_smell:
+        name: "Keen Smell"
+        description: "Advantage on Perception checks relying on smell"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "One bite and one claw attack"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 6
+        damage: "1d8+4"
+        damage_type: "piercing"
+        
+      claws:
+        name: "Claws"
+        attack_bonus: 6
+        damage: "2d6+4"
+        damage_type: "slashing"
+        
+    habitat: ["forests", "hills", "caves"]
+    tactics: "Territorial, attacks when threatened or protecting cubs"
+
+  ogre:
+    name: "Ogre"
+    type: "giant"
+    size: "large"
+    alignment: "chaotic_evil"
+    challenge_rating: 2
+    experience: 450
+    
+    stats:
+      armor_class: 11
+      hit_points: 59
+      hit_dice: "7d10+21"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 19
+      dexterity: 8
+      constitution: 16
+      intelligence: 5
+      wisdom: 7
+      charisma: 7
+      
+    senses:
+      darkvision: 60
+      passive_perception: 8
+      
+    languages: ["common", "giant"]
+    
+    actions:
+      greatclub:
+        name: "Greatclub"
+        attack_bonus: 6
+        damage: "2d8+4"
+        damage_type: "bludgeoning"
+        
+      javelin:
+        name: "Javelin"
+        attack_bonus: 6
+        damage: "2d6+4"
+        damage_type: "piercing"
+        range: { normal: 30, long: 120 }
+        
+    loot:
+      - { item: "greatclub", chance: 80 }
+      - { currency: "silver", dice: "2d10" }
+      - { currency: "gold", dice: "1d6" }
+      
+    habitat: ["hills", "forests", "caves", "ruins"]
+    tactics: "Brute force attacks, throws javelins first"
+
+  ghast:
+    name: "Ghast"
+    type: "undead"
+    size: "medium"
+    alignment: "chaotic_evil"
+    challenge_rating: 2
+    experience: 450
+    
+    stats:
+      armor_class: 13
+      hit_points: 36
+      hit_dice: "8d8"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 16
+      dexterity: 17
+      constitution: 10
+      intelligence: 11
+      wisdom: 10
+      charisma: 8
+      
+    damage_immunities: ["poison"]
+    damage_resistances: ["necrotic"]
+    condition_immunities: ["charmed", "exhaustion", "poisoned"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    languages: ["common"]
+    
+    traits:
+      stench:
+        name: "Stench"
+        description: "Creatures within 5 feet must make DC 10 Constitution save or poisoned until start of next turn"
+        
+      turn_defiance:
+        name: "Turn Defiance"
+        description: "Advantage on saves against turn undead"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 3
+        damage: "2d8+3"
+        damage_type: "piercing"
+        
+      claws:
+        name: "Claws"
+        attack_bonus: 5
+        damage: "2d6+3"
+        damage_type: "slashing"
+        special: "DC 10 Constitution save or paralyzed for 1 minute"
+        
+    habitat: ["ancient_crypts", "battlefields", "plague_sites"]
+    tactics: "Lead ghouls, use stench to weaken enemies before clawing"
+
+  # CR 3 Creatures
+  owlbear:
+    name: "Owlbear"
+    type: "monstrosity"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: 3
+    experience: 700
+    
+    stats:
+      armor_class: 13
+      hit_points: 59
+      hit_dice: "7d10+21"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 20
+      dexterity: 12
+      constitution: 17
+      intelligence: 3
+      wisdom: 12
+      charisma: 7
+      
+    skills:
+      perception: 3
+      
+    senses:
+      darkvision: 60
+      passive_perception: 13
+      
+    traits:
+      keen_sight_smell:
+        name: "Keen Sight and Smell"
+        description: "Advantage on Perception checks relying on sight or smell"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "One beak and one claw attack"
+        
+      beak:
+        name: "Beak"
+        attack_bonus: 7
+        damage: "1d10+5"
+        damage_type: "piercing"
+        
+      claws:
+        name: "Claws"
+        attack_bonus: 7
+        damage: "2d8+5"
+        damage_type: "slashing"
+        
+    habitat: ["forests", "caves", "temperate_hills"]
+    tactics: "Territorial predator, charges with beak then claws"
+    ecology: "Magical hybrid created by wizards, now breeds naturally"
+
+  phase_spider:
+    name: "Phase Spider"
+    type: "monstrosity"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: 3
+    experience: 700
+    
+    stats:
+      armor_class: 13
+      hit_points: 32
+      hit_dice: "5d10+5"
+      speed: { walk: 30, climb: 30 }
+      
+    ability_scores:
+      strength: 15
+      dexterity: 15
+      constitution: 12
+      intelligence: 6
+      wisdom: 10
+      charisma: 6
+      
+    skills:
+      stealth: 6
+      
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    traits:
+      ethereal_jaunt:
+        name: "Ethereal Jaunt"
+        description: "Bonus action to shift between Material and Ethereal planes"
+        
+      spider_climb:
+        name: "Spider Climb"
+        description: "Can climb on walls and ceilings"
+        
+      web_sense:
+        name: "Web Sense"
+        description: "Know exact location of creatures in contact with webs"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 4
+        damage: "1d10+2"
+        damage_type: "piercing"
+        poison: "3d6 poison damage, DC 11 Constitution save for half"
+        
+    habitat: ["ethereal_plane", "deep_forests", "ancient_ruins"]
+    tactics: "Phase in, bite, phase out before retaliation"
+
+  # CR 4 Creatures
+  ettin:
+    name: "Ettin"
+    type: "giant"
+    size: "large"
+    alignment: "chaotic_evil"
+    challenge_rating: 4
+    experience: 1100
+    
+    stats:
+      armor_class: 12
+      hit_points: 85
+      hit_dice: "10d10+30"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 21
+      dexterity: 8
+      constitution: 17
+      intelligence: 6
+      wisdom: 10
+      charisma: 8
+      
+    skills:
+      perception: 4
+      
+    senses:
+      darkvision: 60
+      passive_perception: 14
+      
+    languages: ["giant", "orc"]
+    
+    traits:
+      two_heads:
+        name: "Two Heads"
+        description: "Advantage on saves against blind, charm, deafen, fright, stun, and unconscious"
+        
+      wakeful:
+        name: "Wakeful"
+        description: "While one head sleeps, the other is awake"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two battleaxe attacks"
+        
+      battleaxe:
+        name: "Battleaxe"
+        attack_bonus: 7
+        damage: "2d8+5"
+        damage_type: "slashing"
+        versatile: "2d10+5"
+        
+      rock:
+        name: "Rock"
+        attack_bonus: 7
+        damage: "2d10+5"
+        damage_type: "bludgeoning"
+        range: { normal: 60, long: 240 }
+        
+    loot:
+      - { item: "battleaxe", quantity: 2, chance: 80 }
+      - { currency: "gold", dice: "2d10" }
+      
+    habitat: ["hills", "mountains", "caves"]
+    tactics: "Throw rocks at range, dual-wield battleaxes in melee"
+
+  # CR 5 Creatures
+  hill_giant:
+    name: "Hill Giant"
+    type: "giant"
+    size: "huge"
+    alignment: "chaotic_evil"
+    challenge_rating: 5
+    experience: 1800
+    
+    stats:
+      armor_class: 13
+      hit_points: 105
+      hit_dice: "10d12+40"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 21
+      dexterity: 8
+      constitution: 19
+      intelligence: 5
+      wisdom: 9
+      charisma: 6
+      
+    skills:
+      perception: 2
+      
+    senses:
+      passive_perception: 12
+      
+    languages: ["giant"]
+    
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two greatclub attacks"
+        
+      greatclub:
+        name: "Greatclub"
+        attack_bonus: 8
+        damage: "3d8+5"
+        damage_type: "bludgeoning"
+        
+      rock:
+        name: "Rock"
+        attack_bonus: 8
+        damage: "3d10+5"
+        damage_type: "bludgeoning"
+        range: { normal: 60, long: 240 }
+        
+    loot:
+      - { item: "giant_greatclub", chance: 70 }
+      - { currency: "gold", dice: "4d10" }
+      - { item: "gems", dice: "1d4", value: "50gp_each" }
+      
+    habitat: ["hills", "mountains", "badlands"]
+    tactics: "Throw rocks first, charge with greatclub when enemies close"
+
+  troll:
+    name: "Troll"
+    type: "giant"
+    size: "large"
+    alignment: "chaotic_evil"
+    challenge_rating: 5
+    experience: 1800
+    
+    stats:
+      armor_class: 15
+      hit_points: 84
+      hit_dice: "8d10+40"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 18
+      dexterity: 13
+      constitution: 20
+      intelligence: 7
+      wisdom: 9
+      charisma: 7
+      
+    skills:
+      perception: 2
+      
+    senses:
+      darkvision: 60
+      passive_perception: 12
+      
+    languages: ["giant"]
+    
+    traits:
+      keen_smell:
+        name: "Keen Smell"
+        description: "Advantage on Perception checks relying on smell"
+        
+      regeneration:
+        name: "Regeneration"
+        description: "Regains 10 HP at start of turn; dies only if starts turn with 0 HP and doesn't regenerate"
+        weakness: "Doesn't regenerate if took acid or fire damage since last turn"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "One bite and two claw attacks"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 7
+        damage: "1d6+4"
+        damage_type: "piercing"
+        
+      claw:
+        name: "Claw"
+        attack_bonus: 7
+        damage: "2d6+4"
+        damage_type: "slashing"
+        
+    habitat: ["swamps", "mountains", "caves", "ruins"]
+    tactics: "Regenerate while fighting, focus fire/acid users first"
+    weakness: ["fire", "acid"]
+
+  # CR 6-8 Creatures
+  medusa:
+    name: "Medusa"
+    type: "monstrosity"
+    size: "medium"
+    alignment: "lawful_evil"
+    challenge_rating: 6
+    experience: 2300
+    
+    stats:
+      armor_class: 15
+      hit_points: 127
+      hit_dice: "17d8+51"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 10
+      dexterity: 15
+      constitution: 16
+      intelligence: 12
+      wisdom: 13
+      charisma: 15
+      
+    skills:
+      deception: 5
+      insight: 4
+      perception: 4
+      stealth: 5
+      
+    senses:
+      darkvision: 60
+      passive_perception: 14
+      
+    languages: ["common"]
+    
+    traits:
+      petrifying_gaze:
+        name: "Petrifying Gaze"
+        description: "Creature that starts turn within 30 feet and can see medusa makes DC 14 Constitution save or begin turning to stone"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Three melee attacks or two ranged attacks"
+        
+      snake_hair:
+        name: "Snake Hair"
+        attack_bonus: 5
+        damage: "1d4+2"
+        damage_type: "piercing"
+        poison: "4d6 poison damage, DC 14 Constitution save for half"
+        
+      shortsword:
+        name: "Shortsword"
+        attack_bonus: 5
+        damage: "1d6+2"
+        damage_type: "piercing"
+        
+      longbow:
+        name: "Longbow"
+        attack_bonus: 5
+        damage: "1d8+2"
+        damage_type: "piercing"
+        poison: "4d6 poison damage"
+        range: { normal: 150, long: 600 }
+        
+    habitat: ["ancient_ruins", "caves", "lairs_with_statues"]
+    tactics: "Force eye contact for petrification, attack from range"
+    loot:
+      - { item: "petrified_victims", description: "May contain valuable items" }
+
+  wyvern:
+    name: "Wyvern"
+    type: "dragon"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: 6
+    experience: 2300
+    
+    stats:
+      armor_class: 13
+      hit_points: 110
+      hit_dice: "13d10+39"
+      speed: { walk: 20, fly: 80 }
+      
+    ability_scores:
+      strength: 19
+      dexterity: 10
+      constitution: 16
+      intelligence: 5
+      wisdom: 12
+      charisma: 6
+      
+    skills:
+      perception: 4
+      
+    senses:
+      darkvision: 60
+      passive_perception: 14
+      
+    languages: ["draconic"]
+    
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "One bite and one stinger attack"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 7
+        damage: "2d6+4"
+        damage_type: "piercing"
+        
+      claws:
+        name: "Claws"
+        attack_bonus: 7
+        damage: "2d8+4"
+        damage_type: "slashing"
+        
+      stinger:
+        name: "Stinger"
+        attack_bonus: 7
+        damage: "2d6+4"
+        damage_type: "piercing"
+        poison: "7d6 poison damage, DC 15 Constitution save for half"
+        
+    habitat: ["mountains", "hills", "cliffs"]
+    tactics: "Aerial combat, poison stinger then bite and claw"
+    mount: "Can be trained as mount by experienced riders"
+
+  # CR 9 Creatures
+  fire_giant:
+    name: "Fire Giant"
+    type: "giant"
+    size: "huge"
+    alignment: "lawful_evil"
+    challenge_rating: 9
+    experience: 5000
+    
+    stats:
+      armor_class: 18
+      hit_points: 162
+      hit_dice: "13d12+78"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 25
+      dexterity: 9
+      constitution: 23
+      intelligence: 10
+      wisdom: 14
+      charisma: 13
+      
+    saving_throws:
+      dexterity: 3
+      constitution: 10
+      charisma: 5
+      
+    skills:
+      athletics: 11
+      perception: 6
+      
+    damage_immunities: ["fire"]
+    
+    senses:
+      passive_perception: 16
+      
+    languages: ["giant"]
+    
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two greatsword attacks"
+        
+      greatsword:
+        name: "Greatsword"
+        attack_bonus: 11
+        damage: "6d6+7"
+        damage_type: "slashing"
+        
+      rock:
+        name: "Rock"
+        attack_bonus: 11
+        damage: "4d10+7"
+        damage_type: "bludgeoning"
+        range: { normal: 60, long: 240 }
+        
+    loot:
+      - { item: "plate_armor", chance: 90 }
+      - { item: "giant_greatsword", chance: 80 }
+      - { currency: "gold", dice: "4d10" }
+      - { item: "fire_gems", dice: "2d4" }
+      
+    habitat: ["volcanic_regions", "fire_plane", "forges"]
+    tactics: "Throw rocks at range, devastating melee with greatsword"
+    organization: "militaristic_clans"
+
+  # CR 10 Creatures
+  stone_giant:
+    name: "Stone Giant"
+    type: "giant"
+    size: "huge"
+    alignment: "neutral"
+    challenge_rating: 7
+    experience: 2900
+    
+    stats:
+      armor_class: 17
+      hit_points: 126
+      hit_dice: "11d12+55"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 23
+      dexterity: 15
+      constitution: 20
+      intelligence: 10
+      wisdom: 12
+      charisma: 9
+      
+    saving_throws:
+      dexterity: 5
+      constitution: 8
+      wisdom: 4
+      
+    skills:
+      athletics: 12
+      perception: 4
+      
+    senses:
+      darkvision: 60
+      passive_perception: 14
+      
+    languages: ["giant"]
+    
+    traits:
+      stone_camouflage:
+        name: "Stone Camouflage"
+        description: "Advantage on Dexterity (Stealth) checks in rocky terrain"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two greatclub attacks"
+        
+      greatclub:
+        name: "Greatclub"
+        attack_bonus: 9
+        damage: "3d8+6"
+        damage_type: "bludgeoning"
+        
+      rock:
+        name: "Rock"
+        attack_bonus: 9
+        damage: "4d10+6"
+        damage_type: "bludgeoning"
+        range: { normal: 60, long: 240 }
+        special: "If target is Large or smaller, DC 17 Dexterity save or knocked prone"
+        
+    reactions:
+      rock_catching:
+        name: "Rock Catching"
+        description: "Can catch and redirect ranged weapon attacks"
+        
+    habitat: ["mountains", "caverns", "stone_monuments"]
+    tactics: "Stone throw with knockdown, patient strategic combat"
+    culture: "Artists and dreamers, prefer non-violence"
+
+  # CR 11-13 Creatures
+  adult_red_dragon:
+    name: "Adult Red Dragon"
+    type: "dragon"
+    subtype: "chromatic"
+    size: "huge"
+    alignment: "chaotic_evil"
+    challenge_rating: 17
+    experience: 18000
+    legendary: true
+    
+    stats:
+      armor_class: 19
+      hit_points: 256
+      hit_dice: "19d12+133"
+      speed: { walk: 40, climb: 40, fly: 80 }
+      
+    ability_scores:
+      strength: 27
+      dexterity: 10
+      constitution: 25
+      intelligence: 16
+      wisdom: 13
+      charisma: 21
+      
+    saving_throws:
+      dexterity: 6
+      constitution: 13
+      wisdom: 7
+      charisma: 11
+      
+    skills:
+      deception: 11
+      perception: 13
+      stealth: 6
+      
+    damage_immunities: ["fire"]
+    
+    senses:
+      blindsight: 60
+      darkvision: 120
+      passive_perception: 23
+      
+    languages: ["common", "draconic"]
+    
+    traits:
+      legendary_resistance:
+        name: "Legendary Resistance (3/Day)"
+        description: "If fails saving throw, can choose to succeed instead"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Frightful Presence, then bite and two claw attacks"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 14
+        damage: "2d10+8"
+        damage_type: "piercing"
+        additional: "2d6 fire"
+        
+      claw:
+        name: "Claw"
+        attack_bonus: 14
+        damage: "2d6+8"
+        damage_type: "slashing"
+        
+      tail:
+        name: "Tail"
+        attack_bonus: 14
+        damage: "2d8+8"
+        damage_type: "bludgeoning"
+        
+      frightful_presence:
+        name: "Frightful Presence"
+        description: "Each creature within 120 feet makes DC 19 Wisdom save or frightened for 1 minute"
+        
+      fire_breath:
+        name: "Fire Breath (Recharge 5-6)"
+        description: "60-foot cone of fire"
+        damage: "18d6"
+        damage_type: "fire"
+        save: "dexterity"
+        save_dc: 21
+        
+    legendary_actions: 3
+    legendary_action_list:
+      - "Detect"
+      - "Tail Attack"
+      - "Wing Attack (Costs 2 Actions)"
+      
+    lair_actions: true
+    habitat: ["mountains", "volcanic_lairs", "ancient_ruins"]
+    hoard: ["massive_treasure_hoard"]
+    tactics: "Aerial superiority, breath weapon, then melee devastation"
+
+  lich:
+    name: "Lich"
+    type: "undead"
+    size: "medium"
+    alignment: "evil"
+    challenge_rating: 21
+    experience: 33000
+    legendary: true
+    
+    stats:
+      armor_class: 17
+      hit_points: 135
+      hit_dice: "18d8+54"
+      speed: { walk: 30 }
+      
+    ability_scores:
+      strength: 11
+      dexterity: 16
+      constitution: 16
+      intelligence: 20
+      wisdom: 14
+      charisma: 16
+      
+    saving_throws:
+      constitution: 10
+      intelligence: 12
+      wisdom: 9
+      
+    skills:
+      arcana: 19
+      history: 12
+      insight: 9
+      perception: 9
+      
+    damage_resistances: ["cold", "lightning", "necrotic"]
+    damage_immunities: ["poison", "bludgeoning_piercing_slashing_nonmagical"]
+    condition_immunities: ["charmed", "exhaustion", "frightened", "paralyzed", "poisoned"]
+    
+    senses:
+      truesight: 120
+      passive_perception: 19
+      
+    languages: ["common", "plus_up_to_five_others"]
+    
+    traits:
+      legendary_resistance:
+        name: "Legendary Resistance (3/Day)"
+        description: "Can choose to succeed failed saving throw"
+        
+      rejuvenation:
+        name: "Rejuvenation"
+        description: "Reforms in 1d10 days unless phylactery destroyed"
+        
+      turn_resistance:
+        name: "Turn Resistance"
+        description: "Advantage on saves against turn undead"
+        
+    actions:
+      paralyzing_touch:
+        name: "Paralyzing Touch"
+        attack_bonus: 12
+        damage: "3d6"
+        damage_type: "cold"
+        special: "DC 18 Constitution save or paralyzed for 1 minute"
+        
+    spells:
+      level: 18
+      save_dc: 20
+      attack_bonus: 12
+      spell_slots:
+        - { level: 1, slots: 4 }
+        - { level: 2, slots: 3 }
+        - { level: 3, slots: 3 }
+        - { level: 4, slots: 3 }
+        - { level: 5, slots: 3 }
+        - { level: 6, slots: 1 }
+        - { level: 7, slots: 1 }
+        - { level: 8, slots: 1 }
+        - { level: 9, slots: 1 }
+      prepared_spells:
+        cantrips: ["mage_hand", "minor_illusion", "prestidigitation", "ray_of_frost"]
+        level_1: ["detect_magic", "magic_missile", "shield", "dissonant_whispers"]
+        level_2: ["detect_thoughts", "invisibility", "mirror_image", "misty_step"]
+        level_3: ["animate_dead", "counterspell", "dispel_magic", "fireball"]
+        level_4: ["blight", "dimension_door"]
+        level_5: ["cloudkill", "scrying"]
+        level_6: ["disintegrate"]
+        level_7: ["finger_of_death"]
+        level_8: ["dominate_monster"]
+        level_9: ["power_word_kill"]
+        
+    legendary_actions: 3
+    lair_actions: true
+    phylactery: "Hidden magical item containing soul"
+    
+    habitat: ["ancient_towers", "forgotten_dungeons", "demiplane_lairs"]
+    tactics: "Powerful spellcasting, paralyzing touch, legendary actions"
+    creation: "Powerful wizard who achieved undeath through dark rituals"
+
+  # CR 16-20 Creatures
+  tarrasque:
+    name: "Tarrasque"
+    type: "monstrosity"
+    subtype: "titan"
+    size: "gargantuan"
+    alignment: "unaligned"
+    challenge_rating: 30
+    experience: 155000
+    legendary: true
+    
+    stats:
+      armor_class: 25
+      hit_points: 676
+      hit_dice: "33d20+330"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 30
+      dexterity: 11
+      constitution: 30
+      intelligence: 3
+      wisdom: 11
+      charisma: 11
+      
+    saving_throws:
+      intelligence: 5
+      wisdom: 9
+      charisma: 9
+      
+    damage_immunities: ["fire", "poison", "bludgeoning_piercing_slashing_nonmagical"]
+    condition_immunities: ["charmed", "frightened", "paralyzed", "poisoned"]
+    
+    senses:
+      blindsight: 120
+      passive_perception: 10
+      
+    traits:
+      legendary_resistance:
+        name: "Legendary Resistance (3/Day)"
+        description: "Can choose to succeed failed saving throw"
+        
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells and magical effects"
+        
+      reflective_carapace:
+        name: "Reflective Carapace"
+        description: "Targeted spells reflect back at caster"
+        
+      siege_monster:
+        name: "Siege Monster"
+        description: "Double damage to objects and structures"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Bite, two claw, one horn, and one tail attack"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 19
+        damage: "4d12+10"
+        damage_type: "piercing"
+        special: "DC 20 Dexterity save or swallowed"
+        
+      claw:
+        name: "Claw"
+        attack_bonus: 19
+        damage: "4d8+10"
+        damage_type: "slashing"
+        
+      horns:
+        name: "Horns"
+        attack_bonus: 19
+        damage: "4d10+10"
+        damage_type: "piercing"
+        
+      tail:
+        name: "Tail"
+        attack_bonus: 19
+        damage: "4d6+10"
+        damage_type: "bludgeoning"
+        special: "DC 20 Strength save or knocked prone"
+        
+      frightful_presence:
+        name: "Frightful Presence"
+        description: "Each creature within 120 feet makes DC 17 Wisdom save or frightened"
+        
+      swallow:
+        name: "Swallow"
+        description: "Swallowed creature takes 16d6 acid damage per turn"
+        escape_dc: 20
+        
+    legendary_actions: 3
+    
+    habitat: ["material_plane_depths", "emerges_rarely"]
+    tactics: "Unstoppable force of destruction, swallows enemies whole"
+    mythology: "World-ending creature of immense power"
+    weakness: "Can be put to sleep with wish spell"
+
+  # CR 21+ Avatar-Level Threats
+  empyrean:
+    name: "Empyrean"
+    type: "celestial"
+    subtype: "titan"
+    size: "huge"
+    alignment: "chaotic_good_or_evil"
+    challenge_rating: 23
+    experience: 50000
+    legendary: true
+    
+    stats:
+      armor_class: 22
+      hit_points: 313
+      hit_dice: "19d12+190"
+      speed: { walk: 50, fly: 50, swim: 50 }
+      
+    ability_scores:
+      strength: 30
+      dexterity: 21
+      constitution: 30
+      intelligence: 21
+      wisdom: 22
+      charisma: 27
+      
+    saving_throws:
+      strength: 17
+      intelligence: 12
+      wisdom: 13
+      charisma: 15
+      
+    skills:
+      insight: 13
+      persuasion: 15
+      
+    damage_resistances: ["bludgeoning_piercing_slashing_nonmagical"]
+    damage_immunities: ["necrotic", "poison"]
+    condition_immunities: ["charmed", "exhaustion", "frightened", "paralyzed", "petrified", "poisoned", "stunned"]
+    
+    senses:
+      truesight: 120
+      passive_perception: 16
+      
+    languages: ["all", "telepathy_120"]
+    
+    traits:
+      legendary_resistance:
+        name: "Legendary Resistance (3/Day)"
+        description: "Can choose to succeed failed saving throw"
+        
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells and magical effects"
+        
+      magic_weapons:
+        name: "Magic Weapons"
+        description: "Weapon attacks are magical"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two melee attacks"
+        
+      maul:
+        name: "Maul"
+        attack_bonus: 17
+        damage: "6d6+10"
+        damage_type: "bludgeoning"
+        additional: "2d6 radiant_or_necrotic"
+        
+      bolt:
+        name: "Bolt"
+        attack_bonus: 12
+        damage: "4d12"
+        damage_type: "radiant_or_necrotic"
+        range: 600
+        
+    spells:
+      innate_level: 8
+      save_dc: 23
+      at_will: ["greater_restoration", "pass_without_trace", "water_breathing", "water_walk"]
+      once_per_day_each: ["commune", "dispel_evil_and_good", "earthquake", "fire_storm", "plane_shift"]
+      
+    legendary_actions: 3
+    
+    habitat: ["upper_planes", "lower_planes", "prime_material"]
+    role: "Divine agent or fallen celestial"
+    motivation: "Cosmic-level goals and schemes"
+
+  ancient_red_dragon:
+    name: "Ancient Red Dragon"
+    type: "dragon"
+    subtype: "chromatic"
+    size: "gargantuan"
+    alignment: "chaotic_evil"
+    challenge_rating: 24
+    experience: 62000
+    legendary: true
+    
+    stats:
+      armor_class: 22
+      hit_points: 546
+      hit_dice: "28d20+252"
+      speed: { walk: 40, climb: 40, fly: 80 }
+      
+    ability_scores:
+      strength: 30
+      dexterity: 10
+      constitution: 29
+      intelligence: 18
+      wisdom: 15
+      charisma: 23
+      
+    saving_throws:
+      dexterity: 7
+      constitution: 16
+      wisdom: 9
+      charisma: 13
+      
+    skills:
+      deception: 13
+      perception: 16
+      stealth: 7
+      
+    damage_immunities: ["fire"]
+    
+    senses:
+      blindsight: 60
+      darkvision: 120
+      passive_perception: 26
+      
+    languages: ["common", "draconic"]
+    
+    traits:
+      legendary_resistance:
+        name: "Legendary Resistance (3/Day)"
+        description: "Can choose to succeed failed saving throw"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Frightful Presence, then bite and two claw attacks"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 17
+        damage: "2d10+10"
+        damage_type: "piercing"
+        additional: "2d6 fire"
+        
+      claw:
+        name: "Claw"
+        attack_bonus: 17
+        damage: "2d6+10"
+        damage_type: "slashing"
+        
+      tail:
+        name: "Tail"
+        attack_bonus: 17
+        damage: "2d8+10"
+        damage_type: "bludgeoning"
+        
+      frightful_presence:
+        name: "Frightful Presence"
+        description: "Each creature within 120 feet makes DC 21 Wisdom save or frightened"
+        
+      fire_breath:
+        name: "Fire Breath (Recharge 5-6)"
+        description: "90-foot cone of fire"
+        damage: "26d6"
+        damage_type: "fire"
+        save: "dexterity"
+        save_dc: 24
+        
+    spells:
+      level: 1
+      save_dc: 21
+      spells_known: ["charm_person", "detect_magic", "speak_with_animals", "suggestion"]
+      
+    legendary_actions: 3
+    lair_actions: true
+    regional_effects: true
+    
+    habitat: ["volcanic_mountains", "ancient_lairs"]
+    hoard: ["legendary_treasure_hoard"]
+    tactics: "Ancient cunning, devastating breath weapon, legendary spellcasting"
+
+  # Demon Lords - CR 21+ Extraplanar Threats
+  balor:
+    name: "Balor"
+    type: "fiend"
+    subtype: "demon"
+    size: "huge"
+    alignment: "chaotic_evil"
+    challenge_rating: 19
+    experience: 22000
+    legendary: true
+    
+    stats:
+      armor_class: 19
+      hit_points: 262
+      hit_dice: "17d12+153"
+      speed: { walk: 40, fly: 80 }
+      
+    ability_scores:
+      strength: 26
+      dexterity: 15
+      constitution: 28
+      intelligence: 20
+      wisdom: 16
+      charisma: 22
+      
+    saving_throws:
+      strength: 14
+      constitution: 16
+      wisdom: 10
+      
+    damage_resistances: ["cold", "lightning", "bludgeoning_piercing_slashing_nonmagical"]
+    damage_immunities: ["fire", "poison"]
+    condition_immunities: ["poisoned"]
+    
+    senses:
+      truesight: 120
+      passive_perception: 13
+      
+    languages: ["abyssal", "telepathy_120"]
+    
+    traits:
+      death_throes:
+        name: "Death Throes"
+        description: "Explodes on death dealing 20d6 fire damage in 30-foot radius"
+        
+      fire_aura:
+        name: "Fire Aura"
+        description: "5d6 fire damage to creatures starting turn within 5 feet"
+        
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells and magical effects"
+        
+      magic_weapons:
+        name: "Magic Weapons"
+        description: "Weapon attacks are magical"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two attacks: longsword and whip"
+        
+      longsword:
+        name: "+3 Longsword"
+        attack_bonus: 17
+        damage: "3d8+11"
+        damage_type: "slashing"
+        additional: "3d8 lightning"
+        special: "If target is flammable, ignites"
+        
+      whip:
+        name: "Whip"
+        attack_bonus: 17
+        damage: "2d6+8"
+        damage_type: "slashing"
+        additional: "3d6 fire"
+        special: "Pull target up to 25 feet"
+        reach: 30
+        
+      teleport:
+        name: "Teleport"
+        description: "Teleport up to 120 feet"
+        
+    legendary_actions: 3
+    
+    habitat: ["abyss", "summoned_to_prime"]
+    role: "Demon general, destroyer of armies"
+    tactics: "Fire aura, devastating melee attacks, death explosion"
+
+  # Faerun-Specific High-CR Threats
+  dracolich:
+    name: "Adult Blue Dracolich"
+    type: "undead"
+    size: "huge"
+    alignment: "lawful_evil"
+    challenge_rating: 17
+    experience: 18000
+    legendary: true
+    
+    stats:
+      armor_class: 19
+      hit_points: 225
+      hit_dice: "18d12+108"
+      speed: { walk: 40, fly: 80 }
+      
+    ability_scores:
+      strength: 25
+      dexterity: 10
+      constitution: 23
+      intelligence: 16
+      wisdom: 15
+      charisma: 19
+      
+    saving_throws:
+      constitution: 12
+      wisdom: 8
+      charisma: 10
+      
+    skills:
+      perception: 14
+      stealth: 5
+      
+    damage_resistances: ["necrotic"]
+    damage_immunities: ["lightning", "poison"]
+    condition_immunities: ["charmed", "exhaustion", "frightened", "paralyzed", "poisoned"]
+    
+    senses:
+      blindsight: 60
+      darkvision: 120
+      passive_perception: 24
+      
+    languages: ["common", "draconic"]
+    
+    traits:
+      legendary_resistance:
+        name: "Legendary Resistance (3/Day)"
+        description: "Can choose to succeed failed saving throw"
+        
+      magic_resistance:
+        name: "Magic Resistance"
+        description: "Advantage on saves against spells and magical effects"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Frightful Presence, then bite and two claw attacks"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 13
+        damage: "2d10+7"
+        damage_type: "piercing"
+        additional: "1d10 lightning"
+        
+      claw:
+        name: "Claw"
+        attack_bonus: 13
+        damage: "2d6+7"
+        damage_type: "slashing"
+        
+      tail:
+        name: "Tail"
+        attack_bonus: 13
+        damage: "2d8+7"
+        damage_type: "bludgeoning"
+        
+      frightful_presence:
+        name: "Frightful Presence"
+        description: "Each creature within 120 feet makes DC 18 Wisdom save or frightened"
+        
+      lightning_breath:
+        name: "Lightning Breath (Recharge 5-6)"
+        description: "90-foot line of lightning"
+        damage: "12d10"
+        damage_type: "lightning"
+        save: "dexterity"
+        save_dc: 20
+        
+    legendary_actions: 3
+    lair_actions: true
+    
+    habitat: ["ancient_ruins", "underdark_lairs", "desecrated_sites"]
+    creation: "Dragon transformed by Cult of the Dragon"
+    tactics: "Undead dragon with lightning breath and necromantic powers"
+
+  # Additional Mid-Level Threats
+  displacer_beast:
+    name: "Displacer Beast"
+    type: "monstrosity"
+    size: "large"
+    alignment: "lawful_evil"
+    challenge_rating: 3
+    experience: 700
+    
+    stats:
+      armor_class: 13
+      hit_points: 85
+      hit_dice: "10d10+30"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 18
+      dexterity: 15
+      constitution: 16
+      intelligence: 6
+      wisdom: 12
+      charisma: 8
+      
+    senses:
+      darkvision: 60
+      passive_perception: 11
+      
+    traits:
+      avoidance:
+        name: "Avoidance"
+        description: "If subjected to effect allowing save for half damage, takes no damage on success"
+        
+      displacement:
+        name: "Displacement"
+        description: "Projects illusion making it appear 3 feet away; attack rolls have disadvantage"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two tentacle attacks"
+        
+      tentacle:
+        name: "Tentacle"
+        attack_bonus: 6
+        damage: "1d6+4"
+        damage_type: "bludgeoning"
+        additional: "1d6 piercing"
+        reach: 10
+        
+    habitat: ["feywild", "forests", "hills"]
+    tactics: "Use displacement for defense, flank with tentacles"
+
+  # Low-Level Underdark Creatures
+  duergar:
+    name: "Duergar"
+    type: "humanoid"
+    subtype: "dwarf"
+    size: "medium"
+    alignment: "lawful_evil"
+    challenge_rating: 1
+    experience: 200
+    
+    stats:
+      armor_class: 16
+      hit_points: 26
+      hit_dice: "4d8+8"
+      speed: { walk: 25 }
+      
+    ability_scores:
+      strength: 14
+      dexterity: 11
+      constitution: 14
+      intelligence: 11
+      wisdom: 10
+      charisma: 9
+      
+    damage_resistances: ["poison"]
+    
+    senses:
+      darkvision: 120
+      passive_perception: 10
+      
+    languages: ["dwarvish", "undercommon"]
+    
+    traits:
+      duergar_resilience:
+        name: "Duergar Resilience"
+        description: "Advantage on saves against poison, spells, and illusions"
+        
+      sunlight_sensitivity:
+        name: "Sunlight Sensitivity"
+        description: "Disadvantage on attacks and Perception in sunlight"
+        
+    actions:
+      enlarge:
+        name: "Enlarge (Recharges on Short/Long Rest)"
+        description: "Become Large for 1 minute, advantage on Strength checks/saves, extra 1d4 damage"
+        
+      war_pick:
+        name: "War Pick"
+        attack_bonus: 4
+        damage: "1d8+2"
+        damage_type: "piercing"
+        
+      javelin:
+        name: "Javelin"
+        attack_bonus: 4
+        damage: "1d6+2"
+        damage_type: "piercing"
+        range: { normal: 30, long: 120 }
+        
+      invisibility:
+        name: "Invisibility (Recharges on Short/Long Rest)"
+        description: "Turn invisible until attacks or casts spell"
+        
+    loot:
+      - { item: "scale_mail", chance: 80 }
+      - { item: "war_pick", chance: 90 }
+      - { item: "shield", chance: 70 }
+      
+    habitat: ["underdark", "duergar_cities"]
+    organization: "underdark_clans"
+
+  # Elemental Creatures
+  fire_elemental:
+    name: "Fire Elemental"
+    type: "elemental"
+    size: "large"
+    alignment: "neutral"
+    challenge_rating: 5
+    experience: 1800
+    
+    stats:
+      armor_class: 13
+      hit_points: 102
+      hit_dice: "12d10+36"
+      speed: { walk: 50 }
+      
+    ability_scores:
+      strength: 10
+      dexterity: 17
+      constitution: 16
+      intelligence: 6
+      wisdom: 10
+      charisma: 7
+      
+    damage_resistances: ["bludgeoning_piercing_slashing_nonmagical"]
+    damage_immunities: ["fire", "poison"]
+    condition_immunities: ["exhaustion", "grappled", "paralyzed", "petrified", "poisoned", "prone", "restrained", "unconscious"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 10
+      
+    languages: ["ignan"]
+    
+    traits:
+      fire_form:
+        name: "Fire Form"
+        description: "Can move through space as narrow as 1 inch, ignites flammables"
+        
+      illumination:
+        name: "Illumination"
+        description: "Sheds bright light 30 feet, dim light 30 feet beyond"
+        
+      water_susceptibility:
+        name: "Water Susceptibility"
+        description: "Takes 1 cold damage for each 5 feet moved in water or each gallon poured on it"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two touch attacks"
+        
+      touch:
+        name: "Touch"
+        attack_bonus: 6
+        damage: "2d6+3"
+        damage_type: "fire"
+        special: "Ignites flammable objects"
+        
+    habitat: ["elemental_plane_fire", "volcanic_regions", "summoned"]
+    tactics: "Engulf in flames, ignite surroundings"
+
+  # Additional Classic D&D Monsters for Complete Coverage
+  gelatinous_cube:
+    name: "Gelatinous Cube"
+    type: "ooze"
+    size: "large"
+    alignment: "unaligned"
+    challenge_rating: 2
+    experience: 450
+    
+    stats:
+      armor_class: 6
+      hit_points: 84
+      hit_dice: "8d10+40"
+      speed: { walk: 15 }
+      
+    ability_scores:
+      strength: 14
+      dexterity: 3
+      constitution: 20
+      intelligence: 1
+      wisdom: 6
+      charisma: 1
+      
+    condition_immunities: ["blinded", "charmed", "deafened", "exhaustion", "frightened", "prone"]
+    
+    senses:
+      blindsight: 60
+      passive_perception: 8
+      
+    traits:
+      ooze_cube:
+        name: "Ooze Cube"
+        description: "Takes up entire 10-foot cube space"
+        
+      transparent:
+        name: "Transparent"
+        description: "DC 15 Perception to notice when motionless"
+        
+    actions:
+      pseudopod:
+        name: "Pseudopod"
+        attack_bonus: 4
+        damage: "3d6"
+        damage_type: "acid"
+        
+      engulf:
+        name: "Engulf"
+        description: "Move through creatures' spaces; DC 12 Dexterity save or engulfed"
+        damage_per_turn: "3d6 acid"
+        
+    loot:
+      - { description: "Items consumed by previous victims", chance: 60 }
+      
+    habitat: ["dungeons", "sewers", "underground_passages"]
+    tactics: "Block corridors, engulf creatures, dissolve equipment"
+
+  rust_monster:
+    name: "Rust Monster"
+    type: "monstrosity"
+    size: "medium"
+    alignment: "unaligned"
+    challenge_rating: "1/2"
+    experience: 100
+    
+    stats:
+      armor_class: 14
+      hit_points: 27
+      hit_dice: "5d8+5"
+      speed: { walk: 40 }
+      
+    ability_scores:
+      strength: 13
+      dexterity: 12
+      constitution: 13
+      intelligence: 2
+      wisdom: 13
+      charisma: 6
+      
+    senses:
+      darkvision: 60
+      passive_perception: 11
+      
+    traits:
+      iron_scent:
+        name: "Iron Scent"
+        description: "Can pinpoint location of ferrous metal within 30 feet"
+        
+      rust_metal:
+        name: "Rust Metal"
+        description: "Nonmagical ferrous metal corrodes when touched"
+        
+    actions:
+      bite:
+        name: "Bite"
+        attack_bonus: 3
+        damage: "1d8+1"
+        damage_type: "piercing"
+        
+      antennae:
+        name: "Antennae"
+        description: "Touch corrodes nonmagical ferrous metal"
+        
+    habitat: ["dungeons", "ruins", "underground"]
+    tactics: "Seek out metal equipment, destroy weapons and armor"
+    threat: "Equipment destruction rather than direct combat"
+
+  mimic:
+    name: "Mimic"
+    type: "monstrosity"
+    subtype: "shapechanger"
+    size: "medium"
+    alignment: "neutral"
+    challenge_rating: 2
+    experience: 450
+    
+    stats:
+      armor_class: 12
+      hit_points: 58
+      hit_dice: "9d8+18"
+      speed: { walk: 15 }
+      
+    ability_scores:
+      strength: 17
+      dexterity: 12
+      constitution: 15
+      intelligence: 5
+      wisdom: 13
+      charisma: 8
+      
+    skills:
+      stealth: 5
+      
+    damage_immunities: ["acid"]
+    condition_immunities: ["prone"]
+    
+    senses:
+      darkvision: 60
+      passive_perception: 11
+      
+    traits:
+      shapechanger:
+        name: "Shapechanger"
+        description: "Can mimic any object of similar size"
+        
+      adhesive:
+        name: "Adhesive (Object Form Only)"
+        description: "Creatures touching are grappled (escape DC 13)"
+        
+      false_appearance:
+        name: "False Appearance (Object Form Only)"
+        description: "Indistinguishable from ordinary object"
+        
+      grappler:
+        name: "Grappler"
+        description: "Advantage on attacks against grappled creatures"
+        
+    actions:
+      pseudopod:
+        name: "Pseudopod"
+        attack_bonus: 5
+        damage: "1d8+3"
+        damage_type: "bludgeoning"
+        special: "Target is grappled if Large or smaller"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 5
+        damage: "1d8+3"
+        damage_type: "piercing"
+        additional: "1d8 acid"
+        
+    habitat: ["dungeons", "treasure_rooms", "anywhere_with_objects"]
+    tactics: "Perfect ambush predator, disguise as valuable objects"
+
+  # Aquatic and Specialized Environment Monsters
+  sahuagin:
+    name: "Sahuagin"
+    type: "humanoid"
+    subtype: "sahuagin"
+    size: "medium"
+    alignment: "lawful_evil"
+    challenge_rating: "1/2"
+    experience: 100
+    
+    stats:
+      armor_class: 12
+      hit_points: 22
+      hit_dice: "4d8+4"
+      speed: { walk: 30, swim: 40 }
+      
+    ability_scores:
+      strength: 13
+      dexterity: 11
+      constitution: 12
+      intelligence: 12
+      wisdom: 13
+      charisma: 9
+      
+    skills:
+      perception: 5
+      
+    senses:
+      darkvision: 120
+      passive_perception: 15
+      
+    languages: ["sahuagin"]
+    
+    traits:
+      blood_frenzy:
+        name: "Blood Frenzy"
+        description: "Advantage on melee attacks against wounded creatures"
+        
+      limited_amphibiousness:
+        name: "Limited Amphibiousness"
+        description: "Can breathe air and water, needs water every 4 hours"
+        
+      shark_telepathy:
+        name: "Shark Telepathy"
+        description: "Telepathic communication with sharks within 120 feet"
+        
+    actions:
+      multiattack:
+        name: "Multiattack"
+        description: "Two attacks: one with bite and one with claws or spear"
+        
+      bite:
+        name: "Bite"
+        attack_bonus: 3
+        damage: "1d4+1"
+        damage_type: "piercing"
+        
+      claws:
+        name: "Claws"
+        attack_bonus: 3
+        damage: "1d4+1"
+        damage_type: "slashing"
+        
+      spear:
+        name: "Spear"
+        attack_bonus: 3
+        damage: "1d6+1"
+        damage_type: "piercing"
+        versatile: "1d8+1"
+        range: { normal: 20, long: 60 }
+        
+    habitat: ["coastal_waters", "underwater_cities"]
+    organization: "aquatic_empire"
+    tactics: "Coordinate with sharks, blood frenzy against wounded"

@@ -1,0 +1,344 @@
+# Advanced UI Layout Configuration for Faerun Campaign
+# Demonstrates rich D&D-specific interface elements
+
+ui_layout:
+  version: "1.0.0"
+  name: "Forgotten Realms Immersive Layout"
+  description: "Rich D&D interface with atmospheric elements"
+
+  # Main layout structure
+  layout:
+    type: "advanced_fantasy"
+    template: "medieval_manuscript"
+    
+    # Screen dimensions and responsive breakpoints
+    breakpoints:
+      mobile: 768
+      tablet: 1024  
+      desktop: 1440
+      ultrawide: 2560
+    
+    # Global spacing and margins
+    spacing:
+      panel_gap: 8
+      inner_padding: 12
+      border_width: 3
+      
+  # Panel definitions with fantasy styling
+  panels:
+    # Main story/game text area
+    narrative_scroll:
+      name: "Story Scroll"
+      position: "center-left"
+      size: { width: "50%", height: "70%" }
+      styling:
+        background: "parchment_texture"
+        border: "decorative_border"
+        font: "main"
+        margin: "illuminated_initial"  # Fancy first letters
+      features:
+        - typewriter_text
+        - ink_blot_animations
+        - scrollable_history
+        - context_highlighting
+      content_types: ["narrative", "dialogue", "descriptions"]
+      
+    # Character information panel
+    character_codex:
+      name: "Character Codex"
+      position: "right-top"
+      size: { width: "25%", height: "45%" }
+      styling:
+        background: "leather_binding"
+        accent_color: "gold"
+        border: "metal_studs"
+      tabs:
+        - name: "Character Sheet"
+          icon: "character_portrait"
+          content: "stats_display"
+        - name: "Inventory"
+          icon: "leather_pouch" 
+          content: "item_grid"
+        - name: "Spells"
+          icon: "spell_book"
+          content: "spell_list"
+        - name: "Journal"
+          icon: "quill_pen"
+          content: "quest_log"
+      features:
+        - animated_stat_changes
+        - drag_drop_items
+        - spell_slot_visualization
+        - xp_progress_bar
+        
+    # Party status and companions
+    party_banner:
+      name: "Party Banner"
+      position: "right-bottom"
+      size: { width: "25%", height: "25%" }
+      styling:
+        background: "heraldic_banner"
+        layout: "horizontal_cards"
+      content:
+        - character_portraits
+        - health_bars
+        - status_conditions
+        - initiative_order
+      features:
+        - hover_details
+        - condition_tooltips
+        - animated_health_changes
+        
+    # Action buttons and commands
+    action_grimoire:
+      name: "Action Grimoire"
+      position: "center-bottom"
+      size: { width: "50%", height: "15%" }
+      styling:
+        background: "spell_book_pages"
+        layout: "tabbed_sections"
+      tabs:
+        - name: "Movement"
+          commands: ["north", "south", "east", "west", "up", "down"]
+          style: "directional_compass"
+        - name: "Actions"  
+          commands: ["attack", "cast", "use", "search", "hide"]
+          style: "action_buttons"
+        - name: "Social"
+          commands: ["talk", "persuade", "intimidate", "insight"]
+          style: "dialogue_options"
+      features:
+        - contextual_availability
+        - hotkey_indicators
+        - animation_previews
+        
+    # Environmental context panel
+    location_vista:
+      name: "Location Vista"
+      position: "top-center"
+      size: { width: "75%", height: "15%" }
+      styling:
+        background: "location_artwork"
+        overlay: "atmospheric_effects"
+        border: "ornate_frame"
+      content:
+        - location_name
+        - environmental_description
+        - weather_effects
+        - time_of_day
+        - notable_features
+      features:
+        - dynamic_backgrounds
+        - weather_animations
+        - lighting_transitions
+        
+    # Dice and mechanics display
+    dice_alcove:
+      name: "Dice Alcove"
+      position: "left-bottom"
+      size: { width: "20%", height: "20%" }
+      styling:
+        background: "wooden_dice_tray"
+        accent: "brass_inlay"
+      content:
+        - recent_rolls
+        - advantage_disadvantage_indicator
+        - modifier_display
+        - roll_history
+      features:
+        - 3d_dice_animations
+        - roll_sound_effects
+        - critical_celebration
+        
+    # Notification and status area  
+    herald_banner:
+      name: "Herald's Banner"
+      position: "top-right" 
+      size: { width: "25%", height: "10%" }
+      styling:
+        background: "scroll_unfurling"
+        animation: "banner_wave"
+      content:
+        - experience_gained
+        - level_up_notifications
+        - quest_updates
+        - achievement_unlocks
+      features:
+        - slide_in_notifications
+        - celebration_effects
+        - auto_dismiss_timer
+
+  # Specialized D&D UI Elements
+  dnd_widgets:
+    # Health and resource tracking
+    vitality_orb:
+      type: "health_display"
+      style: "glowing_orb"
+      colors:
+        full: "#32CD32"    # Lime green
+        injured: "#FFD700" # Gold
+        critical: "#DC143C" # Crimson
+      animations:
+        - pulse_on_damage
+        - healing_glow
+        - death_save_flicker
+        
+    # Spell slot visualization
+    arcane_reservoir:
+      type: "spell_slots"
+      style: "magical_gems"
+      layout: "by_spell_level"
+      colors:
+        available: "#4169E1"    # Royal blue
+        expended: "#2F4F4F"     # Dark slate gray
+        recovering: "#9370DB"   # Medium purple
+      animations:
+        - casting_drain
+        - rest_restoration
+        - slot_shimmer
+        
+    # Experience progress
+    legend_chronicle:
+      type: "experience_bar"
+      style: "illuminated_manuscript"
+      milestones:
+        - level_thresholds
+        - ability_score_improvements  
+        - proficiency_bonus_increases
+      celebrations:
+        - level_up_fanfare
+        - golden_particle_burst
+        - achievement_scroll_unfurl
+        
+    # Initiative tracker for combat
+    battle_standard:
+      type: "initiative_order"
+      style: "military_banners"
+      layout: "vertical_list"
+      features:
+        - drag_reorder
+        - current_turn_highlight
+        - delayed_actions_indicator
+        - condition_duration_countdown
+
+  # Atmospheric and Immersion Features
+  atmospheric_elements:
+    # Particle effects
+    dust_motes:
+      type: "ambient_particles"
+      density: "low"
+      movement: "gentle_float"
+      areas: ["indoor_locations"]
+      
+    magical_sparkles:
+      type: "magical_particles"  
+      trigger: "spellcasting"
+      intensity: "spell_level_based"
+      colors: ["gold", "blue", "purple"]
+      
+    candlelight_flicker:
+      type: "lighting_effect"
+      areas: ["taverns", "indoor"]
+      intensity: "subtle"
+      warmth: "orange_glow"
+      
+    # Dynamic backgrounds
+    parallax_scenery:
+      type: "background_layers"
+      layers: 3
+      movement: "subtle_drift"
+      context: "outdoor_locations"
+      
+    weather_overlay:
+      type: "weather_effects"
+      conditions: ["rain", "snow", "fog", "sunbeams"]
+      intensity: "location_appropriate"
+      
+    # Audio integration
+    positional_audio:
+      type: "3d_sound"
+      sources: ["crackling_fire", "distant_voices", "footsteps"]
+      falloff: "realistic"
+      
+    ambient_soundscape:
+      type: "environmental_audio"
+      tracks: ["tavern_atmosphere", "forest_ambience", "dungeon_echoes"]
+      mixing: "dynamic_crossfade"
+
+  # Interactive Elements
+  interactions:
+    # Hover effects
+    element_highlighting:
+      type: "mouseover_effects"
+      style: "golden_glow"
+      delay: 500  # milliseconds
+      
+    # Click animations
+    button_feedback:
+      type: "click_response"
+      animation: "medieval_button_press"
+      sound: "parchment_rustle"
+      
+    # Drag and drop
+    item_manipulation:
+      type: "dnd_interaction"
+      preview: "ghosted_item"
+      valid_targets: "highlighted_border"
+      invalid_feedback: "red_x_overlay"
+      
+    # Tooltips and information
+    lore_tooltips:
+      type: "context_information"
+      style: "aged_scroll_popup" 
+      trigger: "hover_delay"
+      content: ["item_descriptions", "spell_details", "location_lore"]
+
+  # Responsive Design Rules
+  responsive_behavior:
+    mobile:
+      layout: "stacked_panels"
+      hidden_elements: ["atmospheric_particles", "complex_animations"]
+      simplified_ui: true
+      
+    tablet:
+      layout: "two_column"
+      reduced_particles: true
+      condensed_panels: true
+      
+    desktop:
+      layout: "full_fantasy"
+      all_features: true
+      
+    ultrawide:
+      layout: "expanded_vista"
+      additional_panels: ["extended_party_info", "detailed_environment"]
+      enhanced_artwork: true
+
+  # Performance Optimization
+  performance:
+    # LOD (Level of Detail) system
+    detail_levels:
+      low: 
+        - disable_particles
+        - static_backgrounds
+        - simple_animations
+      medium:
+        - reduced_particles
+        - basic_animations
+        - compressed_textures
+      high:
+        - full_particles
+        - complex_animations
+        - high_resolution_assets
+        
+    # Dynamic loading
+    asset_streaming:
+      preload: ["critical_ui_elements", "current_location_art"]
+      lazy_load: ["character_portraits", "monster_artwork"]
+      cache_size: "50MB"
+      
+    # Frame rate optimization
+    animation_culling:
+      off_screen: "pause_animations"
+      background_tabs: "reduce_frequency"
+      low_fps_mode: "disable_non_essential"

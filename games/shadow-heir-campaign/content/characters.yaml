@@ -1,0 +1,312 @@
+# Player Character Templates for Faerun Campaign
+# Pre-built characters for quick starts and testing
+
+character_templates:
+  fighter_human:
+    name: "Gareth Ironbane"
+    description: "A veteran soldier from Cormyr's Purple Dragon Knights"
+    race: "human"
+    class: "fighter"
+    level: 3
+    background: "soldier"
+    
+    ability_scores:
+      strength: 16
+      dexterity: 14
+      constitution: 15
+      intelligence: 10
+      wisdom: 13
+      charisma: 12
+      
+    skills:
+      - "athletics"
+      - "intimidation"
+      - "history"
+      - "survival"
+      
+    starting_equipment:
+      - "chain_mail"
+      - "longsword"
+      - "shield"
+      - "javelin"
+      - "healing_potion"
+      
+    hit_points: 28
+    armor_class: 18
+    proficiency_bonus: 2
+    
+    class_features:
+      - "fighting_style_defense"
+      - "second_wind"
+      - "action_surge"
+      - "martial_archetype_champion"
+    
+    backstory: |
+      Born in the kingdom of Cormyr, Gareth served with distinction in the Purple Dragon Knights
+      before seeking adventure in the wider world of Faerun.
+
+  wizard_elf:
+    name: "Lyralei Moonwhisper"
+    description: "A high elf scholar from Evereska"
+    race: "elf"
+    subrace: "high_elf"
+    class: "wizard"
+    level: 3
+    background: "sage"
+    
+    ability_scores:
+      strength: 8
+      dexterity: 15
+      constitution: 14
+      intelligence: 16
+      wisdom: 12
+      charisma: 10
+      
+    skills:
+      - "arcana"
+      - "history"
+      - "investigation"
+      - "insight"
+      
+    starting_equipment:
+      - "spellbook"
+      - "component_pouch"
+      - "dagger"
+      - "quarterstaff"
+      - "scholar_pack"
+      
+    hit_points: 20
+    armor_class: 12
+    proficiency_bonus: 2
+    
+    spellcasting:
+      spell_save_dc: 13
+      spell_attack_bonus: 5
+      cantrips_known: 4
+      spells_known: 8
+      spell_slots:
+        1st: 4
+        2nd: 2
+        
+    spells:
+      cantrips: ["mage_hand", "prestidigitation", "minor_illusion", "fire_bolt"]
+      1st_level: ["magic_missile", "shield", "detect_magic", "identify"]
+      2nd_level: ["misty_step", "web"]
+      
+    backstory: |
+      A prodigy from the ancient elven city of Evereska, Lyralei seeks forgotten magical knowledge
+      in the ruins and libraries of the Sword Coast.
+
+  cleric_dwarf:
+    name: "Brother Thorek Stoneprayer"
+    description: "A shield dwarf cleric of Moradin"
+    race: "dwarf"
+    subrace: "mountain_dwarf"
+    class: "cleric"
+    level: 3
+    background: "acolyte"
+    
+    ability_scores:
+      strength: 14
+      dexterity: 10
+      constitution: 16
+      intelligence: 12
+      wisdom: 16
+      charisma: 8
+      
+    skills:
+      - "insight"
+      - "religion"
+      - "medicine"
+      - "history"
+      
+    starting_equipment:
+      - "chain_mail"
+      - "warhammer"
+      - "shield"
+      - "holy_symbol"
+      - "priest_pack"
+      
+    hit_points: 27
+    armor_class: 18
+    proficiency_bonus: 2
+    
+    divine_domain: "forge"
+    
+    spellcasting:
+      spell_save_dc: 13
+      spell_attack_bonus: 5
+      cantrips_known: 3
+      spells_prepared: 4
+      spell_slots:
+        1st: 4
+        2nd: 2
+        
+    spells:
+      cantrips: ["sacred_flame", "guidance", "mending"]
+      domain_spells: ["identify", "searing_smite", "heat_metal", "magic_weapon"]
+      prepared: ["cure_wounds", "healing_word", "bless", "spiritual_weapon"]
+      
+    backstory: |
+      A devoted follower of Moradin the Forgefather, Thorek left his clan's halls to spread
+      his god's teachings among the surface world.
+
+  rogue_halfling:
+    name: "Pip Lightfingers"
+    description: "A lightfoot halfling with a mysterious past"
+    race: "halfling"
+    subrace: "lightfoot"
+    class: "rogue"
+    level: 3
+    background: "criminal"
+    
+    ability_scores:
+      strength: 8
+      dexterity: 17
+      constitution: 14
+      intelligence: 13
+      wisdom: 12
+      charisma: 15
+      
+    skills:
+      - "stealth"
+      - "sleight_of_hand"
+      - "thieves_tools"
+      - "deception"
+      - "acrobatics"
+      - "perception"
+      
+    starting_equipment:
+      - "studded_leather"
+      - "shortsword"
+      - "dagger"
+      - "thieves_tools"
+      - "burglar_pack"
+      
+    hit_points: 24
+    armor_class: 14
+    proficiency_bonus: 2
+    
+    class_features:
+      - "expertise"
+      - "sneak_attack_2d6"
+      - "thieves_cant"
+      - "cunning_action"
+      - "roguish_archetype_thief"
+      
+    backstory: |
+      Once part of a thieves' guild in Waterdeep, Pip seeks redemption and adventure
+      in the frontier lands beyond the great city.
+
+  ranger_human:
+    name: "Mira Swiftarrow"
+    description: "A human ranger from the High Forest"
+    race: "human"
+    class: "ranger"
+    level: 3
+    background: "outlander"
+    
+    ability_scores:
+      strength: 14
+      dexterity: 16
+      constitution: 15
+      intelligence: 11
+      wisdom: 15
+      charisma: 10
+      
+    skills:
+      - "survival"
+      - "athletics"
+      - "animal_handling"
+      - "nature"
+      - "perception"
+      - "stealth"
+      
+    starting_equipment:
+      - "studded_leather"
+      - "longbow"
+      - "shortsword"
+      - "handaxe"
+      - "explorer_pack"
+      - "arrows"
+      
+    hit_points: 28
+    armor_class: 14
+    proficiency_bonus: 2
+    
+    favored_enemy: "humanoids"
+    natural_explorer: "forest"
+    
+    spellcasting:
+      spell_save_dc: 12
+      spell_attack_bonus: 4
+      spells_known: 3
+      spell_slots:
+        1st: 3
+        
+    spells:
+      1st_level: ["hunter_mark", "cure_wounds", "speak_with_animals"]
+      
+    backstory: |
+      Raised by the treants of the High Forest, Mira serves as a guardian of the wild places,
+      protecting them from civilization's encroachment.
+
+  paladin_dragonborn:
+    name: "Bahamut's Chosen Aerdrie"
+    description: "A gold dragonborn paladin devoted to justice"
+    race: "dragonborn"
+    draconic_ancestry: "gold"
+    class: "paladin"
+    level: 3
+    background: "noble"
+    
+    ability_scores:
+      strength: 16
+      dexterity: 10
+      constitution: 14
+      intelligence: 12
+      wisdom: 13
+      charisma: 16
+      
+    skills:
+      - "history"
+      - "persuasion"
+      - "athletics"
+      - "religion"
+      
+    starting_equipment:
+      - "chain_mail"
+      - "longsword"
+      - "shield"
+      - "javelin"
+      - "diplomat_pack"
+      - "holy_symbol"
+      
+    hit_points: 28
+    armor_class: 18
+    proficiency_bonus: 2
+    
+    sacred_oath: "devotion"
+    
+    spellcasting:
+      spell_save_dc: 13
+      spell_attack_bonus: 5
+      spells_known: 3
+      spell_slots:
+        1st: 3
+        
+    spells:
+      oath_spells: ["protection_from_evil", "sanctuary"]
+      known: ["bless", "cure_wounds", "detect_magic"]
+      
+    class_features:
+      - "divine_sense"
+      - "lay_on_hands"
+      - "fighting_style_defense"
+      - "divine_smite"
+      - "divine_health"
+      - "channel_divinity"
+      
+    backstory: |
+      Born into dragonborn nobility, Aerdrie answered Bahamut's call to champion justice
+      and protect the innocent throughout Faerun.

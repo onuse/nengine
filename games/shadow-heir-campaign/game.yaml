@@ -1,13 +1,13 @@
-# Faerun Campaign - D&D 5e Adventure in the Forgotten Realms
-# Set in the legendary world of Faerun from Dungeons & Dragons
+# Shadow Heir Campaign - D&D 5e Heist Adventure in Faerun
+# A noir thief's journey through the legendary cities of the Forgotten Realms
 
 game:
-  title: "Faerun Campaign: Lost Mine of Phandelver"
+  title: "Shadow Heir: A Thief's Tour of Faerun"
   version: "1.0.0"
-  author: "Narrative Engine D&D Module"
-  description: "Begin your adventure in the Sword Coast region of Faerun. You've been hired to escort a wagon to the frontier town of Phandalin."
-  startingRoom: "high_road_ambush"
-  maxPartySize: 6
+  author: "Narrative Engine - Shadow Thieves Module"
+  description: "Your mentor dies in your arms at a celebration in Baldur's Gate, passing you a mysterious crystal and her legacy as master thief. Now thirty thieves watch as your rival draws his blade, and the true killer smiles from the crowd. Trust no one. The Shadow Thieves want you dead. The Zhentarim want the crystal. The Harpers want their secrets back. Run."
+  startingRoom: "shadow_guild_celebration"
+  maxPartySize: 4
   requiresCharacterCreation: true
   characterSystem: "dnd_5e"
   
@@ -66,15 +66,15 @@ ui:
         visible: false
 
   themeConfig:
-    name: "Forgotten Realms"
-    description: "Immersive D&D fantasy theme inspired by the Sword Coast"
-    
-    # Color palette inspired by medieval fantasy and D&D art
+    name: "Shadow Heir - Thieves' Noir"
+    description: "Dark fantasy heist theme blending shadows, gold, and danger"
+
+    # Color palette inspired by noir thief aesthetic - shadows and stolen gold
     colors:
-      # Primary colors - rich browns and golds like old parchment and leather
-      primary: "#8B4513"        # Saddle brown (leather bound books)
-      secondary: "#DAA520"      # Goldenrod (treasure and magic)
-      tertiary: "#654321"       # Dark brown (ancient wood)
+      # Primary colors - darkness and stolen gold
+      primary: "#2C1810"        # Deep shadow brown
+      secondary: "#D4AF37"      # Antique gold (stolen treasures)
+      tertiary: "#1A1A1A"       # Near black (night heists)
       
       # Backgrounds - parchment and stone textures
       background: "#2F2B1A"     # Dark parchment
@@ -195,14 +195,31 @@ ui:
 mechanics:
   combatSystem: "dnd-5e"
   initiativeSystem: true
-  
+
+  # Thief-focused gameplay - social engineering and stealth over combat
+  primarySkills:
+    - "stealth"
+    - "deception"
+    - "persuasion"
+    - "sleight_of_hand"
+    - "investigation"
+    - "insight"
+    - "perception"
+
+  heistMechanics:
+    enabled: true
+    planningPhase: true      # Allow players to plan heists
+    recruitCrew: true        # Build your thief crew
+    reputationSystem: true   # Actions affect how factions view you
+
   commands:
-    movement: ["north", "south", "east", "west", "northeast", "northwest", "southeast", "southwest", "up", "down", "enter", "exit"]
-    interaction: ["look", "examine", "search", "get", "take", "drop", "use", "open", "close", "unlock", "lock", "push", "pull", "read"]
-    conversation: ["talk", "ask", "tell", "persuade", "intimidate", "deceive", "give", "show", "trade"]
+    movement: ["north", "south", "east", "west", "northeast", "northwest", "southeast", "southwest", "up", "down", "enter", "exit", "climb", "sneak"]
+    interaction: ["look", "examine", "search", "get", "take", "drop", "use", "open", "close", "unlock", "lock", "push", "pull", "read", "pickpocket", "disarm"]
+    conversation: ["talk", "ask", "tell", "persuade", "intimidate", "deceive", "give", "show", "trade", "bribe", "threaten", "charm", "bluff"]
+    stealth: ["hide", "sneak", "shadow", "disguise", "forge", "case", "tail", "eavesdrop"]
     combat: ["attack", "cast", "defend", "dodge", "help", "hide", "ready", "dash", "disengage", "grapple", "shove", "flee"]
-    meta: ["inventory", "stats", "skills", "spells", "rest", "save", "load", "help", "score", "party", "conditions"]
-    special: ["perception", "investigation", "insight", "stealth", "roll"]
+    meta: ["inventory", "stats", "skills", "spells", "rest", "save", "load", "help", "score", "party", "conditions", "reputation", "crew"]
+    special: ["perception", "investigation", "insight", "stealth", "roll", "plan"]
 
   difficultyClasses:
     veryEasy: 5
@@ -235,40 +252,57 @@ llm:
     autoSwitch: false
 
   narrativeStyle:
-    tone: "epic-fantasy"
-    verbosity: "concise"
+    tone: "noir-heist"
+    verbosity: "atmospheric"
     perspective: "second"
 
   extraInstructions: |
-    You are a Dungeon Master for D&D 5e. Provide interesting descriptions and prioritize to mention the most obvious occurence in the scene.
+    You are a Dungeon Master for a D&D 5e HEIST campaign set in Faerun. This is noir fantasy - think Ocean's Eleven meets Thief meets Forgotten Realms.
+
+    TONE & ATMOSPHERE:
+    - Dark, atmospheric, tension-filled
+    - Focus on social dynamics, reading people, trust issues
+    - Describe shadows, suspicious glances, hidden motives
+    - Every NPC has secrets - hint at them through body language
+    - Combat means you failed - prefer stealth, talk, misdirection
+    - Make cities feel ALIVE - crowds, guards, opportunities
+
+    GAMEPLAY PHILOSOPHY:
+    - This is about SOCIAL ENGINEERING more than dice rolls
+    - Present multiple approaches: sneak, charm, distract, bribe, threaten
+    - NPCs have motivations - they can be manipulated, turned, bribed
+    - Information is treasure - eavesdrop, investigate, read between lines
+    - Reputation matters - word spreads about your methods
 
     ABSOLUTE REQUIREMENTS:
-    - Try to keep below 200 words per response
+    - Keep responses under 200 words but paint vivid scenes
     - NEVER control the player character
     - NEVER describe player actions or decisions
     - NEVER assume what the player does next
-    - Stop immediately after describing the scene
+    - Stop immediately after describing the scene and asking for action
 
     Response Structure:
-    1. Describe ONLY what the player observes
-    2. Provide actionable details (items, NPCs, exits)
-    3. If travelling as a group, describe team members actions if appropriate
-    4. Present immediate dangers or opportunities
-    5. End with "What do you do?" or similar prompt, on a new line
+    1. Set the scene with ATMOSPHERE (lighting, sounds, mood)
+    2. Describe NPCs through behavior and micro-expressions
+    3. Present environmental details that suggest opportunities
+    4. Hint at multiple approach vectors
+    5. Note guard patterns, escape routes, social dynamics
+    6. End with tension and "What do you do?"
 
     FORBIDDEN:
     - "You do..." / "You decide..." / "You move..."
     - Describing player emotions or thoughts
     - Making choices for the player
-    - Continuing past the immediate scene
+    - Linear quest-giving - present complications instead
 
     FOCUS:
-    - Environmental details, try to be vivid but concise
-    - Important items and NPCs in the scene
-    - NPC actions (not player actions)
-    - Clear, actionable situation
-    - When giving information about directions, give a hint of where they lead
-    - Player agency preserved
+    - Body language, micro-expressions, tone of voice
+    - Who's watching who, who trusts who
+    - Opportunities for deception, misdirection, manipulation
+    - Multiple solutions to every problem
+    - Consequences of being seen, heard, remembered
+    - The player is HUNTED - paranoia is appropriate
+    - Name-drop Faerun locations naturally when relevant
 
 content:
   worldData: "./content/world.yaml"

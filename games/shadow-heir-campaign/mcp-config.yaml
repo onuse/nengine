@@ -1,0 +1,178 @@
+# MCP Server Configuration for Faerun D&D Campaign
+# This file tells the GameMaster which MCP servers to load and how to configure them
+
+mcp_configuration:
+  version: "1.0.0"
+  game_system: "dnd_5e"
+  description: "MCP servers required for Faerun D&D campaign"
+
+  # Core servers required for all D&D games
+  required_servers:
+    - name: "world-content-mcp"
+      description: "Static world data and dynamic room creation"
+      config:
+        content_path: "./content/world.yaml"
+        enable_dynamic_rooms: true
+        region_templates: "./content/region-templates.yaml"
+      
+    - name: "entity-content-mcp" 
+      description: "NPCs, items, and entity management"
+      config:
+        npcs_path: "./content/npcs.yaml"
+        items_path: "./content/items.yaml"
+        enable_lazy_generation: true
+        generation_templates: "./content/entity-templates.yaml"
+        
+    - name: "monster-content-mcp"
+      description: "Bestiary with intelligent encounter search"
+      config:
+        monsters_path: "./content/monsters.yaml"
+        encounter_tables_path: "./content/encounter-tables.yaml"
+        enable_smart_search: true
+        level_scaling: true
+        
+    - name: "mechanics-content-mcp"
+      description: "D&D 5e rules, dice rolling, combat mechanics"
+      config:
+        rules_path: "./content/rules.yaml"
+        dice_system: "d20_system"
+        enable_advantage: true
+        death_saves: true
+        spell_slots: true
+        
+    - name: "character-state-mcp"
+      description: "Player character management and progression"
+      config:
+        character_schema: "./content/character-creation.yaml"
+        enable_leveling: true
+        multiclass_support: true
+        feat_system: true
+        
+    - name: "state-mcp"
+      description: "Game state persistence with Git versioning"
+      config:
+        state_path: "./game-state/"
+        git_enabled: true
+        auto_commit: true
+        branch_on_major_events: true
+        
+    - name: "narrative-history-mcp"
+      description: "Story progression and event tracking"
+      config:
+        enable_memory: true
+        event_importance_scoring: true
+        relationship_tracking: true
+
+  # Optional servers that enhance the experience
+  optional_servers:
+    - name: "spell-content-mcp"
+      description: "Complete D&D spell database with search"
+      condition: "has_spellcasters"
+      config:
+        spells_path: "./content/spells.yaml"
+        spell_search: true
+        spell_slot_tracking: true
+        
+    - name: "deity-content-mcp"
+      description: "Faerun pantheon and divine magic"
+      condition: "has_clerics_or_paladins"
+      config:
+        pantheon_path: "./content/deities.yaml"
+        domain_spells: true
+        divine_intervention: true
+        
+    - name: "faction-content-mcp"
+      description: "Organizations like Lords' Alliance, Zhentarim"
+      condition: "political_intrigue"
+      config:
+        factions_path: "./content/factions.yaml"
+        reputation_tracking: true
+        faction_missions: true
+        
+    - name: "weather-environment-mcp"
+      description: "Dynamic weather and environmental effects"
+      condition: "outdoor_exploration"
+      config:
+        weather_tables: "./content/weather.yaml"
+        seasonal_events: true
+        survival_mechanics: true
+
+  # Server startup order (dependencies)
+  startup_order:
+    1: ["state-mcp"]  # Must be first - provides Git backend
+    2: ["world-content-mcp", "entity-content-mcp", "mechanics-content-mcp"] # Core content
+    3: ["monster-content-mcp", "character-state-mcp"] # Game-specific
+    4: ["narrative-history-mcp"] # History tracking
+    5: ["spell-content-mcp", "deity-content-mcp", "faction-content-mcp"] # Optional enhancements
+
+  # Performance optimization
+  performance:
+    lazy_loading: true  # Only load content when requested
+    cache_frequently_used: true  # Keep common monsters/items in memory
+    batch_queries: true  # Combine related MCP calls
+    
+  # Memory management
+  memory_limits:
+    max_cached_monsters: 20  # Most recently used
+    max_cached_items: 50
+    max_cached_npcs: 30
+    context_window_reserve: 2000  # Tokens to keep free for responses
+
+# Game type detection rules
+game_type_detection:
+  spellcasters:
+    trigger: ["wizard", "sorcerer", "cleric", "druid", "bard", "warlock", "paladin", "ranger"]
+    action: "load_spell_content_mcp"
+    
+  divine_classes:
+    trigger: ["cleric", "paladin"]
+    action: "load_deity_content_mcp"
+    
+  political_campaign:
+    trigger: ["noble_background", "guild_artisan", "waterdeep", "baldurs_gate"]
+    action: "load_faction_content_mcp"
+    
+  wilderness_exploration:
+    trigger: ["ranger", "druid", "outlander_background", "survival_skill"]
+    action: "load_weather_environment_mcp"
+
+# MCP communication patterns
+communication:
+  # Batch related queries for efficiency
+  batching_rules:
+    - pattern: "monster + encounter + tactics"
+      description: "When requesting a monster, also get encounter context"
+      
+    - pattern: "item + lore + similar_items" 
+      description: "When showing an item, provide related options"
+      
+    - pattern: "npc + location + faction"
+      description: "NPCs come with context about where they are and who they serve"
+
+  # Context sharing between servers
+  shared_context:
+    current_party_level: "monster-content-mcp, mechanics-content-mcp"
+    party_composition: "spell-content-mcp, deity-content-mcp"
+    current_location: "world-content-mcp, monster-content-mcp, weather-environment-mcp"
+    active_quests: "narrative-history-mcp, faction-content-mcp"
+
+# Error handling and fallbacks
+error_handling:
+  server_failure:
+    action: "graceful_degradation"
+    fallback: "static_content_only"
+    
+  content_not_found:
+    action: "dynamic_generation"
+    notify_gm: true
+    
+  search_no_results:
+    action: "suggest_alternatives" 
+    expand_search_criteria: true
+
+# Debug and development
+debug:
+  log_mcp_queries: false
+  performance_monitoring: true
+  cache_hit_tracking: true
+  query_optimization_suggestions: true

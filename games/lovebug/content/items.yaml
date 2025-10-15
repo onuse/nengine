@@ -2,20 +2,6 @@
 # Props and objects in the Paris hotel room
 
 items:
-  - id: "hotel_key_card"
-    name: "Hotel Key Card"
-    description: "A plastic key card with '504' printed on it - your actual room number"
-    type: "key"
-    portable: true
-    usable: true
-    location: "hotel_room_405"
-
-    properties:
-      room_number: "504"
-      works_on: ["your_room"]
-
-    examine_text: "The key card clearly shows '504' - you definitely entered the wrong room."
-
   - id: "wine_bottle"
     name: "Bottle of Bordeaux"
     description: "An expensive bottle of French red wine, half empty"
@@ -31,45 +17,6 @@ items:
 
     examine_text: "A 2015 Château Margaux - excellent vintage. The women have been enjoying this."
     use_text: "The wine is rich and full-bodied, warming you from within."
-
-  - id: "champagne_flute"
-    name: "Crystal Champagne Flute"
-    description: "An elegant crystal glass with lipstick marks on the rim"
-    type: "container"
-    portable: true
-    usable: false
-    location: "hotel_room_405"
-
-    properties:
-      quality: "crystal"
-      contains: "champagne_traces"
-
-    examine_text: "The glass still has traces of champagne and a red lipstick mark - probably Scarlett's."
-
-  - id: "perfume_bottle"
-    name: "Designer Perfume"
-    description: "A bottle of Chanel No. 5 on the dresser"
-    type: "decorative"
-    portable: false
-    usable: false
-    location: "hotel_room_405"
-
-    examine_text: "The classic fragrance that's been filling the room. Sophisticated and sensual."
-
-  - id: "silk_robe"
-    name: "Silk Robe"
-    description: "A luxurious red silk robe draped over a chair"
-    type: "clothing"
-    portable: true
-    usable: false
-    location: "hotel_room_405"
-
-    properties:
-      color: "deep red"
-      material: "silk"
-      owner: "amelie"
-
-    examine_text: "Soft as a whisper, still warm from being worn. The silk slides through your fingers."
 
   - id: "jazz_speaker"
     name: "Bluetooth Speaker"
@@ -87,16 +34,6 @@ items:
     examine_text: "Soft jazz fills the room, creating an intimate atmosphere."
     use_text: "You adjust the music - the women don't seem to mind."
 
-  - id: "city_lights_view"
-    name: "View of Paris"
-    description: "The glittering lights of Paris through floor-to-ceiling windows"
-    type: "scenery"
-    portable: false
-    usable: false
-    location: "hotel_room_405"
-
-    examine_text: "The Eiffel Tower sparkles in the distance. The city of love spreads out below, full of possibility."
-
   - id: "king_bed"
     name: "King-Size Bed"
     description: "A massive bed with plush cream linens and too many pillows"
@@ -113,32 +50,19 @@ items:
     examine_text: "The bed dominates the room - impossibly soft-looking with high-thread-count sheets."
     use_text: "You sit on the edge. It's as comfortable as it looks."
 
-  - id: "marble_table"
-    name: "Marble Coffee Table"
-    description: "An elegant marble-topped table with wine bottles and glasses"
-    type: "furniture"
-    portable: false
-    usable: false
-    location: "hotel_room_405"
-
-    examine_text: "Wine bottles, glasses, and what looks like the remains of chocolate-covered strawberries."
-
-  - id: "room_504_key"
-    name: "Your Room Key"
-    description: "The key card to room 504 - your actual room"
-    type: "key"
+  - id: "a box of adult toys"
+    name: "A Box of Adult Toys"
+    description: "A discreet box containing various adult toys and accessories"
+    type: "container"
     portable: true
     usable: true
-    location: "inventory"
+    location: "hotel_room_405"
 
     properties:
-      room_number: "504"
-      works_on: ["your_room"]
+      contents: ["vibrators", "large dildos", "lubricant", "blindfolds", "handcuffs"]
+      owner: "naomi"
 
-    examine_text: "This will get you to your actual room... if you want to leave."
+    examine_text: "The box is filled with an assortment of toys - clearly well-used and well-loved."
 
 item_categories:
-  atmospheric: ["perfume_bottle", "jazz_speaker", "city_lights_view"]
-  interactive: ["wine_bottle", "champagne_flute", "king_bed"]
-  plot_relevant: ["hotel_key_card", "room_504_key"]
-  seductive_props: ["silk_robe", "wine_bottle", "king_bed"]
+  sex_props: [ "wine_bottle", "king_bed", "a box of adult toys"]

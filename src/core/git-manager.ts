@@ -2,6 +2,7 @@ import * as git from 'isomorphic-git';
 import * as fs from 'fs';
 import * as path from 'path';
 import { GitContext } from '../types/core';
+import { GameSaveMetadata, ContentHasher } from './content-hasher';
 
 export interface Commit {
   hash: string;
@@ -55,18 +56,29 @@ export class GitManager {
     }
   }
 
-  async saveState(message: string, data: any): Promise<string> {
+  async saveState(message: string, data: any, metadata?: GameSaveMetadata): Promise<string> {
     const timestamp = Date.now();
     const filename = `state_${timestamp}.json`;
     const filepath = path.join(this.repoPath, filename);
-    
+
     fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
-    
+
     await git.add({
       fs,
       dir: this.repoPath,
       filepath: filename
     });
+
+    // If metadata provided, save it to .meta.json and commit it too
+    if (metadata) {
+      ContentHasher.saveMetadata(this.repoPath, metadata);
+
+      await git.add({
+        fs,
+        dir: this.repoPath,
+        filepath: '.meta.json'
+      });
+    }
 
     const sha = await git.commit({
       fs,
@@ -74,6 +86,13 @@ export class GitManager {
       message,
       author: this.author
     });
+
+    // Update metadata with latest commit hash if metadata was provided
+    if (metadata) {
+      metadata.lastCommit = sha;
+      metadata.lastPlayed = new Date().toISOString();
+      ContentHasher.saveMetadata(this.repoPath, metadata);
+    }
 
     return sha;
   }
@@ -224,5 +243,44 @@ export class GitManager {
       commit: '',
       message: ''
     };
+  }
+
+  /**
+   * Load metadata from .meta.json in the save directory
+   */
+  async loadMetadata(): Promise<GameSaveMetadata | null> {
+    return ContentHasher.loadMetadata(this.repoPath);
+  }
+
+  /**
+   * Save metadata to .meta.json in the save directory
+   */
+  async saveMetadata(metadata: GameSaveMetadata): Promise<void> {
+    ContentHasher.saveMetadata(this.repoPath, metadata);
+  }
+
+  /**
+   * Get latest commit hash
+   */
+  async getLatestCommit(): Promise<string> {
+    try {
+      const commits = await this.getHistory(this.currentBranch, 1);
+      return commits.length > 0 ? commits[0].hash : '';
+    } catch {
+      return '';
+    }
+  }
+
+  /**
+   * Check if save directory has any commits (not counting initial README)
+   */
+  async hasSaves(): Promise<boolean> {
+    try {
+      const commits = await this.getHistory(this.currentBranch, 10);
+      // If more than 1 commit, we have saves (first is always README)
+      return commits.length > 1;
+    } catch {
+      return false;
+    }
   }
 }

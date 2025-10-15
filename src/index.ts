@@ -43,20 +43,56 @@ let currentGame: any = null;
 async function initializeGame() {
   try {
     const gameName = process.argv.find(arg => arg.startsWith('--game='))?.split('=')[1] || DEFAULT_GAME;
-    
+
     currentGame = await gameLoader.loadGame(gameName);
 
     console.log(`🎮 Loading game: ${currentGame.game.title}`);
     console.log(`🤖 Using model: ${currentGame.llm?.model || 'llama-3.3-70b-abliterated'}`);
 
+    // Check for existing save and content hash compatibility
+    const resumeCheck = await gameLoader.isResumeAvailable(gameName);
+
+    if (resumeCheck.available && resumeCheck.metadata) {
+      console.log(`💾 Found existing save from ${resumeCheck.metadata.lastPlayed}`);
+      console.log(`📊 Turn count: ${resumeCheck.metadata.turnCount || 0}`);
+      console.log(`🌿 Current branch: ${resumeCheck.metadata.currentBranch}`);
+      console.log(`✅ Content hash matches - resuming game state`);
+    } else if (resumeCheck.reason === 'content_changed') {
+      console.log(`⚠️  Content has changed since last save - starting fresh`);
+      console.log(`📝 Old content hash: ${resumeCheck.metadata?.contentHash.substring(0, 12)}...`);
+      console.log(`📝 New content hash: ${gameLoader.getContentHash().substring(0, 12)}...`);
+    } else {
+      console.log(`🆕 No existing save found - starting new game`);
+    }
+
     // Update Git manager to use game-specific saves
     const savesPath = gameLoader.getSavesPath();
     git.repoPath = savesPath || './game-state';
-    
+
     // Initialize MCP server manager with game path and starting room
     const startingRoom = currentGame.game.startingRoom || 'start';
     mcpManager = new MCPServerManager(gameLoader.getGamePath()!, savesPath || './game-state', startingRoom);
     await mcpManager.initialize();
+
+    // Set up content hash metadata for StateMCP
+    const stateMCP = mcpManager.getServer('state') as any;
+    if (stateMCP && typeof stateMCP.setGameMetadata === 'function') {
+      let metadata;
+
+      if (resumeCheck.available && resumeCheck.metadata) {
+        // Use existing metadata
+        metadata = resumeCheck.metadata;
+        console.log(`📦 Using existing save metadata`);
+      } else {
+        // Create new metadata
+        metadata = await gameLoader.createInitialMetadata(gameName);
+        console.log(`📦 Created new save metadata (hash: ${metadata.contentHash.substring(0, 12)}...)`);
+      }
+
+      stateMCP.setGameMetadata(metadata);
+    } else {
+      console.warn('[Warning] StateMCP does not support metadata - save compatibility checking disabled');
+    }
     
     // Initialize Narrative Controller with game configuration
     const narrativeConfig = {
@@ -175,6 +211,21 @@ wss.on('connection', (ws) => {
           break;
         case 'dialogue':
           handleDialogue(ws, data);
+          break;
+        case 'create_branch':
+          handleCreateBranch(ws, data);
+          break;
+        case 'switch_branch':
+          handleSwitchBranch(ws, data);
+          break;
+        case 'list_branches':
+          handleListBranches(ws, data);
+          break;
+        case 'rollback':
+          handleRollback(ws, data);
+          break;
+        case 'delete_branch':
+          handleDeleteBranch(ws, data);
           break;
         default:
           ws.send(JSON.stringify({ error: 'Unknown message type' }));
@@ -296,6 +347,12 @@ async function handlePlayerAction(ws: any, data: any) {
         const [, command, args] = commandMatch;
         console.log(`[PlayerAction] Parsed command: "${command}", args: "${args}"`);
 
+        if (command === 'restart') {
+          // Handle restart command - wipe saves and start fresh
+          await handleRestartCommand(ws, data.id);
+          return; // Don't send normal response
+        }
+
         if (command === 'generate' && args.startsWith('image')) {
           // Extract user instructions after "image"
           const userInstructions = args.replace(/^image\s*/, '').trim();
@@ -325,6 +382,109 @@ async function handlePlayerAction(ws: any, data: any) {
   }
 
   ws.send(JSON.stringify(response));
+}
+
+async function handleRestartCommand(ws: any, requestId: string) {
+  try {
+    console.log(`[Restart] Player requested game restart`);
+
+    const gameName = process.argv.find(arg => arg.startsWith('--game='))?.split('=')[1] || DEFAULT_GAME;
+    const savesPath = gameLoader.getSavesPath();
+
+    if (!savesPath) {
+      throw new Error('No game loaded');
+    }
+
+    // Archive the old save directory by renaming it
+    const timestamp = Date.now();
+    const archivePath = `${savesPath}_backup_${timestamp}`;
+
+    console.log(`[Restart] Archiving current save to: ${archivePath}`);
+    fs.renameSync(savesPath, archivePath);
+
+    // Recreate empty saves directory
+    fs.mkdirSync(savesPath, { recursive: true });
+
+    console.log(`[Restart] Old save archived. Reinitializing game...`);
+
+    // Reinitialize Git repository for the new save
+    const newGit = new GitManager(savesPath);
+
+    // Update the global git manager reference
+    git.repoPath = savesPath;
+
+    // Create fresh metadata
+    const freshMetadata = await gameLoader.createInitialMetadata(gameName);
+
+    // Reinitialize StateMCP with fresh metadata
+    const stateMCP = mcpManager.getServer('state') as any;
+    if (stateMCP) {
+      // Reset the StateMCP internal state
+      await stateMCP.initialize(); // Re-runs initialization which loads from Git
+
+      // Set fresh metadata
+      stateMCP.setGameMetadata(freshMetadata);
+    }
+
+    // Clear narrative history MCP
+    const narrativeHistoryMCP = mcpManager.getServer('narrative-history') as any;
+    if (narrativeHistoryMCP && typeof narrativeHistoryMCP.clearHistory === 'function') {
+      narrativeHistoryMCP.clearHistory();
+      console.log(`[Restart] Cleared narrative history`);
+    }
+
+    // Send clear history command to client
+    ws.send(JSON.stringify({
+      type: 'clear_history'
+    }));
+
+    // Small delay to ensure clear processes
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Send success notification
+    ws.send(JSON.stringify({
+      type: 'narrative_response',
+      id: requestId,
+      result: {
+        success: true,
+        narrative: `🔄 **Game Restarted!**\n\nYour previous save has been archived to:\n\`${path.basename(archivePath)}\`\n\nStarting fresh from the beginning.`,
+        restart: {
+          archivePath,
+          timestamp
+        }
+      }
+    }));
+
+    // Automatically send a "look" command to start the game fresh
+    console.log(`[Restart] Sending automatic 'look' command`);
+
+    const lookAction = {
+      type: 'interaction' as const,
+      rawInput: 'look'
+    };
+
+    const result = await narrativeController.processPlayerAction(lookAction);
+
+    // Send the initial narrative
+    ws.send(JSON.stringify({
+      type: 'narrative_response',
+      id: `restart_look_${Date.now()}`,
+      result
+    }));
+
+    console.log(`[Restart] Game restart complete with initial look`);
+
+  } catch (error: any) {
+    console.error('[Restart] Failed:', error);
+    ws.send(JSON.stringify({
+      type: 'narrative_response',
+      id: requestId,
+      result: {
+        success: false,
+        narrative: `❌ Restart failed: ${error.message}`
+      }
+    }));
+  }
 }
 
 async function handleImageGenerationCommand(ws: any, requestId: string, userInstructions: string) {
@@ -452,6 +612,149 @@ async function handleDialogue(ws: any, data: any) {
   }
   
   ws.send(JSON.stringify(response));
+}
+
+// Timeline/Branch Management Handlers
+
+async function handleCreateBranch(ws: any, data: any) {
+  try {
+    if (!mcpManager) {
+      throw new Error('MCP servers not initialized');
+    }
+
+    const { branchName, fromCommit } = data;
+
+    await mcpManager.executeTool('state', 'createBranch', {
+      name: branchName,
+      fromCommit: fromCommit
+    });
+
+    ws.send(JSON.stringify({
+      type: 'branch_created',
+      branchName,
+      fromCommit
+    }));
+
+  } catch (error: any) {
+    ws.send(JSON.stringify({
+      type: 'error',
+      message: `Failed to create branch: ${error.message}`
+    }));
+  }
+}
+
+async function handleSwitchBranch(ws: any, data: any) {
+  try {
+    if (!mcpManager) {
+      throw new Error('MCP servers not initialized');
+    }
+
+    const { branchName } = data;
+
+    await mcpManager.executeTool('state', 'switchBranch', {
+      branch: branchName
+    });
+
+    const state = await mcpManager.executeTool('state', 'getWorldState', {});
+    const history = await mcpManager.executeTool('state', 'getHistory', {
+      branch: branchName,
+      limit: 100
+    });
+
+    ws.send(JSON.stringify({
+      type: 'branch_switched',
+      branchName,
+      state,
+      historyCount: history.length
+    }));
+
+  } catch (error: any) {
+    ws.send(JSON.stringify({
+      type: 'error',
+      message: `Failed to switch branch: ${error.message}`
+    }));
+  }
+}
+
+async function handleListBranches(ws: any, data: any) {
+  try {
+    if (!mcpManager) {
+      throw new Error('MCP servers not initialized');
+    }
+
+    const branches = await mcpManager.executeTool('state', 'getBranches', {});
+
+    ws.send(JSON.stringify({
+      type: 'branches_list',
+      branches
+    }));
+
+  } catch (error: any) {
+    ws.send(JSON.stringify({
+      type: 'error',
+      message: `Failed to list branches: ${error.message}`
+    }));
+  }
+}
+
+async function handleRollback(ws: any, data: any) {
+  try {
+    if (!mcpManager) {
+      throw new Error('MCP servers not initialized');
+    }
+
+    const { commitHash } = data;
+
+    await mcpManager.executeTool('state', 'loadState', {
+      commitOrBranch: commitHash
+    });
+
+    const history = await mcpManager.executeTool('state', 'getHistory', {
+      limit: 100
+    });
+
+    // Find the index of the commit we rolled back to
+    const commitIndex = history.findIndex((c: any) => c.hash === commitHash);
+
+    ws.send(JSON.stringify({
+      type: 'rollback_complete',
+      commitHash,
+      historyCount: commitIndex >= 0 ? commitIndex + 1 : 0
+    }));
+
+  } catch (error: any) {
+    ws.send(JSON.stringify({
+      type: 'error',
+      message: `Rollback failed: ${error.message}`
+    }));
+  }
+}
+
+async function handleDeleteBranch(ws: any, data: any) {
+  try {
+    if (!mcpManager) {
+      throw new Error('MCP servers not initialized');
+    }
+
+    const { branchName } = data;
+
+    // Note: GitManager might not have a delete branch method yet
+    // This is a placeholder for future implementation
+    await mcpManager.executeTool('state', 'deleteBranch', {
+      branch: branchName
+    });
+
+    ws.send(JSON.stringify({
+      type: 'branch_deleted',
+      branchName
+    }));
+
+  } catch (error: any) {
+    ws.send(JSON.stringify({
+      type: 'error',
+      message: `Failed to delete branch: ${error.message}`
+    }));
+  }
 }
 
 // API endpoints

@@ -11,9 +11,10 @@ rooms:
 
       But you're not alone.
 
-      Three stunning women are here, lounging in various states of comfort. The air is thick with expensive perfume,
+      Four stunning women are here, lounging in various states of comfort. The air is thick with expensive perfume,
       and soft jazz plays from a speaker somewhere. Wine bottles and glasses sit on the marble coffee table.
       They all turn to look at you with expressions of surprise that quickly morph into something more intriguing.
+      Sophie is sitting shyly on the edge of the bed, her eyes wide with a mix of nervousness and curiosity.
 
     atmosphere: "intimate and charged"
     lighting: "soft amber lamplight"
@@ -34,6 +35,7 @@ rooms:
       - "amelie"
       - "scarlett"
       - "naomi"
+      - "sophie"
 
     initial_state:
       door_locked: false

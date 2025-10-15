@@ -1,0 +1,661 @@
+# D&D 5e Character Classes for Faerun Campaign
+
+classes:
+  fighter:
+    name: "Fighter"
+    description: "Masters of martial combat, skilled with a variety of weapons and armor"
+    hit_die: "d10"
+    primary_ability: "strength_or_dexterity"
+    saving_throws: ["strength", "constitution"]
+    
+    starting_equipment:
+      - "chain_mail or leather_armor_longbow_20_arrows"
+      - "martial_weapon_and_shield or two_martial_weapons"
+      - "light_crossbow_20_bolts or two_handaxes"
+      - "dungeoneers_pack or explorers_pack"
+      
+    proficiencies:
+      armor: ["light", "medium", "heavy", "shields"]
+      weapons: ["simple", "martial"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["acrobatics", "animal_handling", "athletics", "history", "insight", "intimidation", "perception", "survival"]
+      
+    class_features:
+      level_1:
+        - name: "Fighting Style"
+          description: "Choose a specialized combat technique"
+        - name: "Second Wind"
+          description: "Regain 1d10 + level HP as bonus action, once per rest"
+      level_2:
+        - name: "Action Surge"
+          description: "Take an additional action on your turn, once per rest"
+      level_3:
+        - name: "Martial Archetype"
+          description: "Choose Champion, Battle Master, or Eldritch Knight"
+      level_4:
+        - name: "Ability Score Improvement"
+          description: "Increase abilities or take a feat"
+      level_5:
+        - name: "Extra Attack"
+          description: "Attack twice when taking Attack action"
+          
+    subclasses:
+      champion:
+        name: "Champion"
+        description: "Simple yet effective warrior focused on raw physical prowess"
+      battle_master:
+        name: "Battle Master"
+        description: "Students of combat who use martial techniques and tactical superiority"
+      eldritch_knight:
+        name: "Eldritch Knight"
+        description: "Warriors who combine martial prowess with magical ability"
+
+  wizard:
+    name: "Wizard"
+    description: "Scholarly magic-users capable of manipulating the structures of reality"
+    hit_die: "d6"
+    primary_ability: "intelligence"
+    saving_throws: ["intelligence", "wisdom"]
+    
+    starting_equipment:
+      - "quarterstaff or dagger"
+      - "component_pouch or arcane_focus"
+      - "scholars_pack or explorers_pack"
+      - "spellbook"
+      
+    proficiencies:
+      armor: []
+      weapons: ["daggers", "darts", "slings", "quarterstaffs", "light_crossbows"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["arcana", "history", "insight", "investigation", "medicine", "religion"]
+      
+    spellcasting:
+      ability: "intelligence"
+      ritual_casting: true
+      spellbook: true
+      cantrips_known:
+        level_1: 3
+        level_4: 4
+        level_10: 5
+      spell_slots:
+        level_1: { 1st: 2 }
+        level_2: { 1st: 3 }
+        level_3: { 1st: 4, 2nd: 2 }
+        level_4: { 1st: 4, 2nd: 3 }
+        level_5: { 1st: 4, 2nd: 3, 3rd: 2 }
+        
+    class_features:
+      level_1:
+        - name: "Spellcasting"
+          description: "Cast wizard spells using Intelligence"
+        - name: "Arcane Recovery"
+          description: "Recover spell slots during a short rest"
+      level_2:
+        - name: "Arcane Tradition"
+          description: "Choose a school of magic to specialize in"
+      level_18:
+        - name: "Spell Mastery"
+          description: "Cast certain spells at will"
+      level_20:
+        - name: "Signature Spells"
+          description: "Two 3rd-level spells always prepared"
+          
+    subclasses:
+      evocation:
+        name: "School of Evocation"
+        description: "Masters of elemental magic and destructive spells"
+      abjuration:
+        name: "School of Abjuration"
+        description: "Specialists in protective and warding magic"
+      divination:
+        name: "School of Divination"
+        description: "Seers who glimpse the future and uncover secrets"
+
+  cleric:
+    name: "Cleric"
+    description: "Priestly champions who wield divine magic in service of a higher power"
+    hit_die: "d8"
+    primary_ability: "wisdom"
+    saving_throws: ["wisdom", "charisma"]
+    
+    starting_equipment:
+      - "mace or warhammer_if_proficient"
+      - "scale_mail or leather_armor or chain_mail_if_proficient"
+      - "light_crossbow_20_bolts or any_simple_weapon"
+      - "priests_pack or explorers_pack"
+      - "shield and holy_symbol"
+      
+    proficiencies:
+      armor: ["light", "medium", "shields"]
+      weapons: ["simple"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["history", "insight", "medicine", "persuasion", "religion"]
+      
+    spellcasting:
+      ability: "wisdom"
+      ritual_casting: true
+      prepare_spells: true
+      cantrips_known:
+        level_1: 3
+        level_4: 4
+        level_10: 5
+      spell_slots:
+        level_1: { 1st: 2 }
+        level_2: { 1st: 3 }
+        level_3: { 1st: 4, 2nd: 2 }
+        level_4: { 1st: 4, 2nd: 3 }
+        level_5: { 1st: 4, 2nd: 3, 3rd: 2 }
+        
+    class_features:
+      level_1:
+        - name: "Spellcasting"
+          description: "Cast cleric spells using Wisdom"
+        - name: "Divine Domain"
+          description: "Choose a domain related to your deity"
+      level_2:
+        - name: "Channel Divinity"
+          description: "Channel divine energy for magical effects"
+        - name: "Turn Undead"
+          description: "Make undead flee from your holy power"
+      level_5:
+        - name: "Destroy Undead"
+          description: "Instantly destroy weak undead"
+      level_10:
+        - name: "Divine Intervention"
+          description: "Call upon your deity for aid"
+          
+    divine_domains:
+      life:
+        name: "Life Domain"
+        description: "Gods of healing and vitality"
+        bonus_proficiencies: ["heavy_armor"]
+      light:
+        name: "Light Domain"
+        description: "Gods of sun, fire, and revelation"
+      war:
+        name: "War Domain"
+        description: "Gods of conflict and battle"
+        bonus_proficiencies: ["martial_weapons", "heavy_armor"]
+
+  rogue:
+    name: "Rogue"
+    description: "Scoundrels who use stealth and trickery to overcome obstacles"
+    hit_die: "d8"
+    primary_ability: "dexterity"
+    saving_throws: ["dexterity", "intelligence"]
+    
+    starting_equipment:
+      - "rapier or shortsword"
+      - "shortbow_20_arrows or shortsword"
+      - "burglars_pack or dungeoneers_pack or explorers_pack"
+      - "leather_armor two_daggers thieves_tools"
+      
+    proficiencies:
+      armor: ["light"]
+      weapons: ["simple", "hand_crossbows", "longswords", "rapiers", "shortswords"]
+      tools: ["thieves_tools"]
+      skills_choose: 4
+      skills_list: ["acrobatics", "athletics", "deception", "insight", "intimidation", "investigation", "perception", "performance", "persuasion", "sleight_of_hand", "stealth"]
+      
+    class_features:
+      level_1:
+        - name: "Expertise"
+          description: "Double proficiency bonus for two skills"
+        - name: "Sneak Attack"
+          description: "Deal extra damage when you have advantage"
+        - name: "Thieves' Cant"
+          description: "Secret language of rogues"
+      level_2:
+        - name: "Cunning Action"
+          description: "Dash, Disengage, or Hide as bonus action"
+      level_3:
+        - name: "Roguish Archetype"
+          description: "Choose Thief, Assassin, or Arcane Trickster"
+      level_5:
+        - name: "Uncanny Dodge"
+          description: "Halve damage from one attack per round"
+      level_7:
+        - name: "Evasion"
+          description: "Take no damage on successful Dex saves"
+          
+    subclasses:
+      thief:
+        name: "Thief"
+        description: "Masters of larceny and agility"
+      assassin:
+        name: "Assassin"
+        description: "Masters of disguise and deadly strikes"
+      arcane_trickster:
+        name: "Arcane Trickster"
+        description: "Rogues who enhance their skills with magic"
+
+  ranger:
+    name: "Ranger"
+    description: "Warriors of the wilderness who hunt monsters that threaten civilization"
+    hit_die: "d10"
+    primary_ability: "dexterity_and_wisdom"
+    saving_throws: ["strength", "dexterity"]
+    
+    starting_equipment:
+      - "scale_mail or leather_armor"
+      - "two_shortswords or two_simple_melee_weapons"
+      - "dungeoneers_pack or explorers_pack"
+      - "longbow and quiver_20_arrows"
+      
+    proficiencies:
+      armor: ["light", "medium", "shields"]
+      weapons: ["simple", "martial"]
+      tools: []
+      skills_choose: 3
+      skills_list: ["animal_handling", "athletics", "insight", "investigation", "nature", "perception", "stealth", "survival"]
+      
+    spellcasting:
+      ability: "wisdom"
+      ritual_casting: false
+      known_spells: true
+      spell_slots:
+        level_2: { 1st: 2 }
+        level_3: { 1st: 3 }
+        level_5: { 1st: 4, 2nd: 2 }
+        level_7: { 1st: 4, 2nd: 3 }
+        level_9: { 1st: 4, 2nd: 3, 3rd: 1 }
+        
+    class_features:
+      level_1:
+        - name: "Favored Enemy"
+          description: "Advantage on tracking and knowledge of chosen enemy types"
+        - name: "Natural Explorer"
+          description: "Expert at navigating chosen terrain"
+      level_2:
+        - name: "Fighting Style"
+          description: "Choose a specialized combat technique"
+        - name: "Spellcasting"
+          description: "Cast ranger spells using Wisdom"
+      level_3:
+        - name: "Ranger Archetype"
+          description: "Choose Hunter or Beast Master"
+        - name: "Primeval Awareness"
+          description: "Sense nearby creatures"
+      level_5:
+        - name: "Extra Attack"
+          description: "Attack twice when taking Attack action"
+          
+    subclasses:
+      hunter:
+        name: "Hunter"
+        description: "Apex predators who use specialized techniques"
+      beast_master:
+        name: "Beast Master"
+        description: "Rangers who forge powerful bonds with beasts"
+
+  paladin:
+    name: "Paladin"
+    description: "Holy warriors bound to a sacred oath"
+    hit_die: "d10"
+    primary_ability: "strength_and_charisma"
+    saving_throws: ["wisdom", "charisma"]
+    
+    starting_equipment:
+      - "martial_weapon_and_shield or two_martial_weapons"
+      - "five_javelins or any_simple_melee_weapon"
+      - "priests_pack or explorers_pack"
+      - "chain_mail and holy_symbol"
+      
+    proficiencies:
+      armor: ["light", "medium", "heavy", "shields"]
+      weapons: ["simple", "martial"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["athletics", "insight", "intimidation", "medicine", "persuasion", "religion"]
+      
+    spellcasting:
+      ability: "charisma"
+      ritual_casting: false
+      prepare_spells: true
+      spell_slots:
+        level_2: { 1st: 2 }
+        level_3: { 1st: 3 }
+        level_5: { 1st: 4, 2nd: 2 }
+        level_7: { 1st: 4, 2nd: 3 }
+        level_9: { 1st: 4, 2nd: 3, 3rd: 1 }
+        
+    class_features:
+      level_1:
+        - name: "Divine Sense"
+          description: "Detect celestials, fiends, and undead"
+        - name: "Lay on Hands"
+          description: "Heal with a pool of HP equal to 5 × level"
+      level_2:
+        - name: "Fighting Style"
+          description: "Choose a specialized combat technique"
+        - name: "Spellcasting"
+          description: "Cast paladin spells using Charisma"
+        - name: "Divine Smite"
+          description: "Expend spell slots for extra damage"
+      level_3:
+        - name: "Divine Health"
+          description: "Immune to disease"
+        - name: "Sacred Oath"
+          description: "Choose Devotion, Ancients, or Vengeance"
+      level_5:
+        - name: "Extra Attack"
+          description: "Attack twice when taking Attack action"
+      level_6:
+        - name: "Aura of Protection"
+          description: "You and allies gain bonus to saves"
+          
+    sacred_oaths:
+      devotion:
+        name: "Oath of Devotion"
+        description: "The ideal of the knight in shining armor"
+      ancients:
+        name: "Oath of the Ancients"
+        description: "Paladins who champion the light and life of nature"
+      vengeance:
+        name: "Oath of Vengeance"
+        description: "Dark knights who hunt down evil"
+
+  barbarian:
+    name: "Barbarian"
+    description: "Fierce warriors of primitive background who can enter a battle rage"
+    hit_die: "d12"
+    primary_ability: "strength"
+    saving_throws: ["strength", "constitution"]
+    
+    starting_equipment:
+      - "greataxe or any_martial_melee_weapon"
+      - "two_handaxes or any_simple_weapon"
+      - "explorers_pack and four_javelins"
+      
+    proficiencies:
+      armor: ["light", "medium", "shields"]
+      weapons: ["simple", "martial"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["animal_handling", "athletics", "intimidation", "nature", "perception", "survival"]
+      
+    class_features:
+      level_1:
+        - name: "Rage"
+          description: "Bonus damage, resistance to physical damage"
+        - name: "Unarmored Defense"
+          description: "AC = 10 + Dex modifier + Con modifier"
+      level_2:
+        - name: "Reckless Attack"
+          description: "Advantage on attacks, enemies have advantage against you"
+        - name: "Danger Sense"
+          description: "Advantage on Dex saves you can see"
+      level_3:
+        - name: "Primal Path"
+          description: "Choose Berserker, Totem Warrior, or Ancestral Guardian"
+      level_5:
+        - name: "Extra Attack"
+          description: "Attack twice when taking Attack action"
+        - name: "Fast Movement"
+          description: "+10 feet to speed when not in heavy armor"
+      level_7:
+        - name: "Feral Instinct"
+          description: "Advantage on initiative, act normally when surprised if raging"
+          
+    primal_paths:
+      berserker:
+        name: "Path of the Berserker"
+        description: "Barbarians who lose themselves to fury"
+      totem_warrior:
+        name: "Path of the Totem Warrior"
+        description: "Barbarians who accept spirit animals as guides"
+
+  bard:
+    name: "Bard"
+    description: "Inspiring magicians whose power echoes the music of creation"
+    hit_die: "d8"
+    primary_ability: "charisma"
+    saving_throws: ["dexterity", "charisma"]
+    
+    starting_equipment:
+      - "rapier or longsword or any_simple_weapon"
+      - "diplomats_pack or entertainers_pack"
+      - "lute or any_musical_instrument"
+      - "leather_armor and dagger"
+      
+    proficiencies:
+      armor: ["light"]
+      weapons: ["simple", "hand_crossbows", "longswords", "rapiers", "shortswords"]
+      tools: ["three_musical_instruments"]
+      skills_choose: 3
+      skills_list: ["any"]
+      
+    spellcasting:
+      ability: "charisma"
+      ritual_casting: true
+      known_spells: true
+      cantrips_known:
+        level_1: 2
+        level_4: 3
+        level_10: 4
+      spell_slots:
+        level_1: { 1st: 2 }
+        level_2: { 1st: 3 }
+        level_3: { 1st: 4, 2nd: 2 }
+        level_4: { 1st: 4, 2nd: 3 }
+        level_5: { 1st: 4, 2nd: 3, 3rd: 2 }
+        
+    class_features:
+      level_1:
+        - name: "Bardic Inspiration"
+          description: "Inspire others with stirring words or music"
+        - name: "Spellcasting"
+          description: "Cast bard spells using Charisma"
+      level_2:
+        - name: "Jack of All Trades"
+          description: "Half proficiency to non-proficient checks"
+        - name: "Song of Rest"
+          description: "Help allies regain extra HP during short rest"
+      level_3:
+        - name: "Expertise"
+          description: "Double proficiency for two skills"
+        - name: "Bard College"
+          description: "Choose Lore, Valor, or Glamour"
+      level_5:
+        - name: "Font of Inspiration"
+          description: "Regain Bardic Inspiration on short rest"
+      level_6:
+        - name: "Countercharm"
+          description: "Give allies advantage against charm and fear"
+          
+    bard_colleges:
+      lore:
+        name: "College of Lore"
+        description: "Bards who collect knowledge from all sources"
+      valor:
+        name: "College of Valor"
+        description: "Bards who inspire heroics in battle"
+
+  sorcerer:
+    name: "Sorcerer"
+    description: "Spellcasters who draw on inherent magic from a gift or bloodline"
+    hit_die: "d6"
+    primary_ability: "charisma"
+    saving_throws: ["constitution", "charisma"]
+    
+    starting_equipment:
+      - "light_crossbow_20_bolts or any_simple_weapon"
+      - "component_pouch or arcane_focus"
+      - "dungeoneers_pack or explorers_pack"
+      - "two_daggers"
+      
+    proficiencies:
+      armor: []
+      weapons: ["daggers", "darts", "slings", "quarterstaffs", "light_crossbows"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["arcana", "deception", "insight", "intimidation", "persuasion", "religion"]
+      
+    spellcasting:
+      ability: "charisma"
+      ritual_casting: false
+      known_spells: true
+      cantrips_known:
+        level_1: 4
+        level_4: 5
+        level_10: 6
+      spell_slots:
+        level_1: { 1st: 2 }
+        level_2: { 1st: 3 }
+        level_3: { 1st: 4, 2nd: 2 }
+        level_4: { 1st: 4, 2nd: 3 }
+        level_5: { 1st: 4, 2nd: 3, 3rd: 2 }
+        
+    class_features:
+      level_1:
+        - name: "Spellcasting"
+          description: "Cast sorcerer spells using Charisma"
+        - name: "Sorcerous Origin"
+          description: "Choose Draconic Bloodline or Wild Magic"
+      level_2:
+        - name: "Font of Magic"
+          description: "Create spell slots using sorcery points"
+      level_3:
+        - name: "Metamagic"
+          description: "Twist spells to suit your needs"
+      level_20:
+        - name: "Sorcerous Restoration"
+          description: "Regain sorcery points on short rest"
+          
+    sorcerous_origins:
+      draconic:
+        name: "Draconic Bloodline"
+        description: "Magic from ancient dragon heritage"
+      wild_magic:
+        name: "Wild Magic"
+        description: "Chaotic magic that surges unpredictably"
+
+  warlock:
+    name: "Warlock"
+    description: "Wielders of magic derived from a bargain with an extraplanar entity"
+    hit_die: "d8"
+    primary_ability: "charisma"
+    saving_throws: ["wisdom", "charisma"]
+    
+    starting_equipment:
+      - "light_crossbow_20_bolts or any_simple_weapon"
+      - "component_pouch or arcane_focus"
+      - "scholars_pack or dungeoneers_pack"
+      - "leather_armor any_simple_weapon two_daggers"
+      
+    proficiencies:
+      armor: ["light"]
+      weapons: ["simple"]
+      tools: []
+      skills_choose: 2
+      skills_list: ["arcana", "deception", "history", "intimidation", "investigation", "nature", "religion"]
+      
+    pact_magic:
+      ability: "charisma"
+      ritual_casting: false
+      known_spells: true
+      cantrips_known:
+        level_1: 2
+        level_4: 3
+        level_10: 4
+      spell_slots:
+        level_1: { 1st: 1 }
+        level_2: { 1st: 2 }
+        level_3: { 2nd: 2 }
+        level_5: { 3rd: 2 }
+        level_7: { 4th: 2 }
+        level_9: { 5th: 2 }
+      slot_level: "All slots same level, recover on short rest"
+        
+    class_features:
+      level_1:
+        - name: "Otherworldly Patron"
+          description: "Choose Archfey, Fiend, or Great Old One"
+        - name: "Pact Magic"
+          description: "Cast warlock spells using Charisma"
+      level_2:
+        - name: "Eldritch Invocations"
+          description: "Fragments of forbidden knowledge"
+      level_3:
+        - name: "Pact Boon"
+          description: "Gift from patron: Chain, Blade, or Tome"
+      level_11:
+        - name: "Mystic Arcanum"
+          description: "High-level spell once per long rest"
+      level_20:
+        - name: "Eldritch Master"
+          description: "Regain all spell slots in 1 minute"
+          
+    otherworldly_patrons:
+      archfey:
+        name: "The Archfey"
+        description: "Lords and ladies of the Feywild"
+      fiend:
+        name: "The Fiend"
+        description: "Devils, demons, or other infernal powers"
+      great_old_one:
+        name: "The Great Old One"
+        description: "Alien beings of incomprehensible nature"
+
+  druid:
+    name: "Druid"
+    description: "Priests of nature who wield elemental forces and transform into beasts"
+    hit_die: "d8"
+    primary_ability: "wisdom"
+    saving_throws: ["intelligence", "wisdom"]
+    
+    starting_equipment:
+      - "wooden_shield or any_simple_weapon"
+      - "scimitar or any_simple_melee_weapon"
+      - "leather_armor explorers_pack druidic_focus"
+      
+    proficiencies:
+      armor: ["light", "medium", "shields_non_metal"]
+      weapons: ["clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
+      tools: ["herbalism_kit"]
+      skills_choose: 2
+      skills_list: ["arcana", "animal_handling", "insight", "medicine", "nature", "perception", "religion", "survival"]
+      
+    spellcasting:
+      ability: "wisdom"
+      ritual_casting: true
+      prepare_spells: true
+      cantrips_known:
+        level_1: 2
+        level_4: 3
+        level_10: 4
+      spell_slots:
+        level_1: { 1st: 2 }
+        level_2: { 1st: 3 }
+        level_3: { 1st: 4, 2nd: 2 }
+        level_4: { 1st: 4, 2nd: 3 }
+        level_5: { 1st: 4, 2nd: 3, 3rd: 2 }
+        
+    class_features:
+      level_1:
+        - name: "Druidic"
+          description: "Secret language of druids"
+        - name: "Spellcasting"
+          description: "Cast druid spells using Wisdom"
+      level_2:
+        - name: "Wild Shape"
+          description: "Transform into beasts you've seen"
+        - name: "Druid Circle"
+          description: "Choose Circle of Land or Moon"
+      level_18:
+        - name: "Timeless Body"
+          description: "Age slower, immune to magical aging"
+      level_20:
+        - name: "Archdruid"
+          description: "Unlimited Wild Shape uses"
+          
+    druid_circles:
+      land:
+        name: "Circle of the Land"
+        description: "Mystics and sages who guard ancient knowledge"
+      moon:
+        name: "Circle of the Moon"
+        description: "Fierce guardians who use Wild Shape for combat"

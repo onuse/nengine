@@ -1,0 +1,513 @@
+# Shadow Heir - NPCs with Depth, Secrets, and Relationships
+# Every character has hidden motivations and complex connections
+
+npcs:
+  # ============================================================================
+  # CORE CAST - THE MURDER SCENE
+  # ============================================================================
+
+  - id: zara_nightwhisper_dying
+    name: "Zara Nightwhisper"
+    title: "Your Mentor - Dying"
+    age: 52
+    race: "half-elf"
+    class: "rogue/bard"
+    level: 15
+    description: |
+      The woman who found you as a street urchin, taught you everything, loved you like a daughter.
+      Now dying in your arms with poisoned lips, pressing a crystal into your palm.
+
+    appearance:
+      hair: "Silver-streaked black in a practical braid"
+      eyes: "Gray as storm clouds, now losing light"
+      build: "Lean graceful thief's body"
+      distinctive: "Scar across left eyebrow, hands stained with poison"
+
+    personality:
+      traits: ["protective", "secretive", "genuinely_loved_you"]
+      public_persona: "Master thief and Shadow Thieves lieutenant"
+      true_identity: "Harper deep cover agent for 30 years"
+
+    secrets:
+      - "Harper agent entire time - Shadow Thieves was cover"
+      - "Recruited you on Harper orders but came to genuinely love you"
+      - "Poisoned herself when Vex discovered her identity"
+      - "Crystal contains names of every Harper agent in Faerun"
+
+    relationships:
+      - character: "player"
+        type: "mentor_mother_figure"
+        tension: "Never told you truth, died protecting you"
+      - character: "keth_shadowblade"
+        type: "rejected_lover_20_years_ago"
+        tension: "He never forgave her for choosing duty over him"
+      - character: "vex_the_viper"
+        type: "discovered_by_and_murdered_by"
+        tension: "He's Zhentarim, she was investigating him"
+
+    death_scene_words: "Trust no one, child. Find the Gray Hand in Waterdeep. Tell them Crystal knows all. I'm sorry for the lies. But I loved you true."
+
+    voice: "Warm contralto, now barely a whisper"
+
+  - id: keth_shadowblade_hostile
+    name: "Keth Shadowblade"
+    title: "Your Rival - Her Lost Love - Your Hunter"
+    age: 38
+    race: "human"
+    class: "rogue/fighter"
+    level: 12
+
+    description: |
+      Second-best thief in the guild. Second in Zara's heart to you. Second has always been his curse.
+      Now he's first to want you dead - blinded by grief and Vex's manipulation.
+
+    appearance:
+      hair: "Dark brown, slicked back with expensive oil"
+      eyes: "Intense hazel that burn with fury around you"
+      build: "Broad-shouldered, scarred knuckles, dancer's grace"
+      clothing: "Black leather and silk, twin daggers named Mercy and Justice"
+      distinctive: "Tattoo of broken heart on wrist with Zara's name hidden in design"
+
+    personality:
+      traits: ["skilled", "passionate", "jealous", "honorable_within_limits"]
+      fatal_flaw: "Love turned to obsession - Zara's rejection broke something"
+      current_state: "Grief-maddened, believes you killed her"
+
+    secrets:
+      - "Loved Zara for 20 years since they were partners"
+      - "She rejected him when she took you as apprentice"
+      - "Deep down knows you're innocent but grief blinds him"
+      - "Vex manipulating him with false evidence"
+      - "Has Zara's real diary - would prove Harper identity"
+      - "Can become greatest ally if shown the truth"
+
+    combat_stats:
+      ac: 17
+      hp: 98
+      str: 16
+      dex: 18
+      con: 14
+      int: 12
+      wis: 13
+      cha: 14
+
+    dialogue_style: |
+      Clipped, furious, pain beneath every word. Calls you "apprentice" with contempt.
+      "She chose YOU! And this is how you repay her?!"
+      "Twenty years I loved her. Ten years you knew her. I will have justice."
+
+    potential_ally: true
+    redemption_requires: "Show him Zara's diary or Harper proof, high Persuasion"
+
+  - id: vex_the_viper
+    name: "Vex the Viper"
+    title: "The Smiling Killer - The True Murderer"
+    age: 29
+    race: "half-elf"
+    class: "rogue/assassin"
+    level: 11
+
+    description: |
+      They call him the Viper for his smile - the one you see right before the strike.
+      He organized tonight's celebration. He poisoned Zara's wine. He's framing you. And he's very good at it.
+
+    appearance:
+      hair: "Platinum blonde, fashionably styled"
+      eyes: "Pale green, dead behind the charm"
+      build: "Slim, elegant, moves like silk"
+      clothing: "Rich but practical - expensive enough to show status, practical enough to kill in"
+      distinctive: "That smile. Always that smile. Even when murdering."
+
+    personality:
+      traits: ["charming", "sociopathic", "ambitious", "methodical"]
+      public_persona: "Loyal lieutenant helping catch killer"
+      true_nature: "Zhentarim infiltrator destroying Shadow Thieves"
+
+    secrets:
+      - "Zhentarim deep cover agent for 3 years"
+      - "Poisoned Zara when she discovered his allegiance"
+      - "Already eliminated 7 other Shadow Thieves"
+      - "Works for Manshoon directly"
+      - "Plans to use crystal to destroy Harper network"
+      - "Will frame Keth next if needed"
+      - "Has Zhentarim wizard ready to teleport him if cornered"
+
+    combat_stats:
+      ac: 16
+      hp: 71
+      str: 10
+      dex: 20
+      con: 12
+      int: 16
+      wis: 14
+      cha: 18
+
+    tactics: "Doesn't fight directly. Uses others. Sends assassins. Manipulates. Always has escape plan."
+
+    dialogue_style: |
+      Smooth and sympathetic in public. Cold and mocking in private.
+      Public: "We must find who did this terrible thing to dear Zara..."
+      Private: "You're already dead, you just don't know it yet."
+
+    poison_used: "Midnight's Kiss - blue lips, paralysis, Zhentarim signature"
+
+  # ============================================================================
+  # BALDUR'S GATE - SHADOW THIEVES GUILD
+  # ============================================================================
+
+  - id: grimjaw_barkeep
+    name: "Grimjaw"
+    title: "Barkeep of the Blushing Mermaid"
+    age: 156
+    race: "dwarf"
+    class: "retired_rogue"
+    level: 10
+
+    description: |
+      Retired Shadow Thief who bought the Blushing Mermaid with stolen gold.
+      Neutral ground is sacred - he'll kill anyone who violates it.
+      Knows everyone's secrets. Sells information. Trusts no one.
+
+    appearance:
+      hair: "Iron-gray beard with scars cutting through it"
+      eyes: "Dark brown, calculating"
+      build: "Stocky dwarf with missing fingers on left hand"
+      clothing: "Clean leather apron over fine shirt - successful criminal"
+
+    personality:
+      traits: ["calculating", "neutral", "honorable_within_thieves_code"]
+      reputation: "Fair dealer - information costs but it's always accurate"
+
+    secrets:
+      - "Knew Zara was Harper - never told anyone, respected her game"
+      - "Suspects Vex but won't say without proof - bad for business"
+      - "Has safe deposit boxes with everyone's insurance"
+      - "Zara left box for you - password is 'the truth hurts'"
+
+    stats:
+      ac: 15
+      hp: 82
+      str: 14
+      dex: 12
+      con: 18
+
+    services:
+      information: "1-100 gold depending on value"
+      safe_haven: "Mermaid is neutral ground"
+      rumors: "Free with drinks"
+      safe_deposit: "Zara's box waiting for you"
+
+    dialogue_style: |
+      Gruff, economical. Dwarven accent.
+      "Information costs. You got coin or you got out."
+      "Zara was good people. Shame about the poison. Shame about the frame. Shame you're too dumb to see it."
+
+    location: "blushing_mermaid"
+
+  - id: silk
+    name: "Silk"
+    title: "Master of Disguise"
+    age: 31
+    race: "half-elf"
+    class: "rogue"
+    level: 8
+
+    description: |
+      At the celebration, currently in shock. Silk was loyal to Zara and believes you're innocent.
+      Master of disguise and false identities. Can help you escape if convinced.
+
+    personality:
+      traits: ["clever", "pragmatic", "loyal_to_zara", "believes_you"]
+
+    secrets:
+      - "Saw Vex near the wine before Zara drank"
+      - "Knows about three safe houses in Lower City"
+      - "Has collection of false papers and identities"
+
+    can_provide:
+      - "Disguises and false papers"
+      - "Safe house locations"
+      - "Witness testimony against Vex if you survive"
+
+    recruitment_dc: 12
+    location: "shadow_guild_celebration"
+
+  - id: whisper
+    name: "Whisper"
+    title: "Information Broker"
+    age: 45
+    race: "human"
+    class: "rogue/bard"
+    level: 9
+
+    description: |
+      Neutral information broker. Was at celebration. Knows something's wrong but staying out of it.
+      Will sell information to highest bidder - including information on you.
+
+    personality:
+      traits: ["neutral", "mercenary", "well_informed"]
+
+    services:
+      information: "Everything has a price"
+      tracking: "Can tell you where pursuers are - for gold"
+      rumors: "Knows Vex's movements and plans"
+
+    location: "shadow_guild_celebration"
+
+  - id: lockjaw
+    name: "Lockjaw"
+    title: "Enforcer Loyal to Keth"
+    age: 42
+    race: "half-orc"
+    class: "fighter"
+    level: 10
+
+    description: |
+      Keth's best friend and enforcer. Loyal to Keth absolutely.
+      Will hunt you because Keth hunts you. Honorable but deadly.
+
+    stats:
+      ac: 18
+      hp: 112
+      str: 18
+      dex: 14
+      con: 16
+
+    personality:
+      traits: ["loyal", "honorable", "dangerous", "follows_keth"]
+
+    combat_style: "Brutal and efficient. Great axe. No mercy in combat."
+
+    can_be_convinced: "Only if Keth is convinced first"
+
+    location: "shadow_guild_celebration"
+
+  # ============================================================================
+  # BALDUR'S GATE - CITY WATCH & OFFICIALS
+  # ============================================================================
+
+  - id: flaming_fist_patrol
+    name: "Flaming Fist Patrol"
+    race: "human/dwarf/various"
+    class: "guard"
+    description: "Members of Baldur's Gate's mercenary police force"
+
+    stats:
+      ac: 16
+      hp: 15
+      str: 14
+      dex: 12
+      con: 13
+
+    personality:
+      traits: ["professional", "bribable", "competent"]
+
+    can_be_bribed: "20-50 gold to look the other way"
+    can_be_talked_past: "DC 15 Deception or Persuasion"
+
+    location: "various_city_locations"
+
+  - id: city_watch_patrol
+    name: "City Watch"
+    race: "human"
+    class: "guard"
+    description: "Regular city watch - less professional than Flaming Fist"
+
+    stats:
+      ac: 14
+      hp: 11
+      str: 13
+      dex: 12
+      con: 12
+
+    personality:
+      traits: ["underpaid", "easily_distracted", "avoid_real_danger"]
+
+    can_be_distracted: "DC 12 Deception"
+    can_be_bribed: "10-20 gold"
+
+    location: "lower_city_streets"
+
+  # ============================================================================
+  # BALDUR'S GATE - DOCKS & HARBOR
+  # ============================================================================
+
+  - id: nervous_halfling_dockworker
+    name: "Pip Fastfingers"
+    race: "halfling"
+    class: "commoner"
+    age: 28
+
+    description: |
+      Dockworker who sees you at Gray Harbor. Knows trouble when he sees it.
+      Nervous but sympathetic - he's broken the law too.
+
+    personality:
+      traits: ["nervous", "sympathetic", "survivor"]
+
+    can_help: "Will point out unguarded ships or tell you guard patrol times for 5 gold"
+
+    location: "gray_harbor_docks"
+
+  - id: black_ship_captain
+    name: "Captain Jendara Darkwater"
+    title: "Captain of the Black Rose"
+    age: 38
+    race: "half-elf"
+    class: "rogue/fighter"
+    level: 11
+
+    description: |
+      Captain of the black-sailed ship. Smuggler, privateer, occasional pirate.
+      No flag, no loyalty, no questions asked - for the right price.
+
+    personality:
+      traits: ["mercenary", "competent", "dangerous", "pragmatic"]
+
+    services:
+      passage: "500 gold to Waterdeep, no questions"
+      hideout: "Can hide you in cargo hold for 100 gold"
+      information: "Knows about Zhentarim shipping routes"
+
+    secrets:
+      - "Actually Harper sympathizer - hates Zhentarim"
+      - "Would give discount if she knew about the crystal"
+      - "Has score to settle with Manshoon's organization"
+
+    location: "black_sailed_ship_deck"
+
+  # ============================================================================
+  # ICONIC FAERUN NPCs - COMPLICATIONS NOT CAMEOS
+  # ============================================================================
+
+  - id: volo
+    name: "Volothamp Geddarm"
+    title: "Volo the Verbose"
+    race: "human"
+    class: "bard"
+    level: 8
+
+    description: |
+      The famous travel writer happens to be in Baldur's Gate researching his next book.
+      If he sees you and writes about you, EVERYONE will know you're here.
+
+    personality:
+      traits: ["boastful", "curious", "cowardly", "loves_a_story"]
+
+    complication: |
+      If Volo learns your story, he'll want to document it.
+      This means EVERYONE knows about you - bad for a fugitive.
+      But he might have useful information about Harpers or Waterdeep.
+
+    dialogue: "A MURDER! A FRAME JOB! A MYSTERIOUS CRYSTAL! This is EXACTLY what my readers want!"
+
+  - id: jarlaxle_if_encountered
+    name: "Jarlaxle Baenre"
+    title: "Leader of Bregan D'aerthe"
+    race: "drow"
+    class: "rogue/fighter"
+    level: 18
+
+    description: |
+      The legendary drow mercenary might be in Baldur's Gate on business.
+      Thief to thief, he respects the craft. But everything has a price.
+
+    personality:
+      traits: ["cunning", "charming", "unpredictable", "respects_skill"]
+
+    potential_interaction: |
+      If you're VERY impressive in your escape, Jarlaxle might notice.
+      He could offer help - for a favor to be named later.
+      Never trust him, but his help is genuine. The favor will be expensive.
+
+    dialogue: "Impressive work, for a human. Tell me, how much would you charge to steal something from a dragon?"
+
+  # ============================================================================
+  # HARPER CONTACTS - THE HIDDEN NETWORK
+  # ============================================================================
+
+  - id: harper_contact_baldurs_gate
+    name: "Brother Tomas"
+    title: "Priest of Lathander - Secret Harper"
+    age: 54
+    race: "human"
+    class: "cleric"
+    level: 7
+
+    description: |
+      Runs a small shrine in Lower City. Actually Harper agent.
+      If the crystal reacts near his shrine, you'll know he's Harper.
+      He can confirm Zara's identity and give you safe passage north.
+
+    personality:
+      traits: ["kind", "cautious", "dedicated_harper", "skeptical_until_proven"]
+
+    can_provide:
+      - "Confirmation of Zara's Harper identity"
+      - "Letter of introduction to Gray Hand in Waterdeep"
+      - "Safe house location in Baldur's Gate"
+      - "Warning about Zhentarim infiltration"
+
+    secrets:
+      - "Knows about Vex - has been investigating him"
+      - "Can't move against Vex without proof"
+      - "Will help you if you bring evidence"
+
+    location: "shrine_of_lathander_lower_city"
+
+  # ============================================================================
+  # POTENTIAL CREW RECRUITS - ACT 1
+  # ============================================================================
+
+  - id: razira_the_cat
+    name: "Razira the Cat"
+    title: "Second-Story Expert"
+    age: 24
+    race: "tabaxi"
+    class: "rogue"
+    level: 6
+
+    description: |
+      Tabaxi thief who works independently. Amazing climber and acrobat.
+      Hiding in Lower City because she stole from the wrong merchant.
+      Needs to get out of Baldur's Gate - you need a crew. Perfect match.
+
+    personality:
+      traits: ["acrobatic", "curious", "loyal_once_earned", "loves_shiny_things"]
+
+    skills:
+      specialties: ["climbing", "acrobatics", "infiltration"]
+      valuable_for: "Second-story work, rooftop escapes, impossible climbs"
+
+    recruitment:
+      location: "lower_city_rooftops"
+      requires: "Help her escape the merchants hunting her"
+      cost: "Equal share of heist proceeds"
+
+    dialogue: "You run across rooftops like you have nine lives too. Perhaps we can help each other?"
+
+  - id: marcus_the_fence
+    name: "Marcus Silvergilt"
+    title: "Fence and Information Broker"
+    age: 45
+    race: "human"
+    class: "rogue/bard"
+    level: 5
+
+    description: |
+      Runs a "curiosities shop" in Lower City. Actually fences stolen goods.
+      Good with forgeries, false papers, and moving hot items.
+      Owes Zara a favor - will help you once if you mention her name.
+
+    personality:
+      traits: ["cautious", "well_connected", "values_reputation"]
+
+    services:
+      fencing: "Buys stolen goods at 40% value"
+      forgery: "Can create false papers, letters of introduction"
+      information: "Knows who's buying what, who's selling who out"
+
+    can_recruit: false
+    but_can_provide: "One favor in Zara's name, then he owes you nothing"
+
+    location: "silvers_curiosities_lower_city"

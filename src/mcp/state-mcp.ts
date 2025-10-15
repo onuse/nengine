@@ -8,6 +8,7 @@ import * as path from 'path';
 import { BaseMCPServer } from './base-mcp-server';
 import { MCPTool, EntityId, Position } from '../types/mcp-types';
 import { GitManager, Commit } from '../core/git-manager';
+import { GameSaveMetadata } from '../core/content-hasher';
 
 export interface WorldState {
   currentRoom: string;
@@ -43,12 +44,29 @@ export class StateMCP extends BaseMCPServer {
   private entityStates: Map<string, Record<string, any>> = new Map();
   private roomStates: Map<string, Record<string, any>> = new Map();
   private startingRoom: string;
+  private gameMetadata: GameSaveMetadata | null = null;
+  private turnCount: number = 0;
 
   constructor(gitRepoPath: string = './game-state', startingRoom: string = 'start') {
     super('state-mcp', '1.0.0', ['state-management', 'git-versioning', 'branching']);
     this.gitManager = new GitManager(gitRepoPath);
     this.startingRoom = startingRoom;
     this.currentState = this.initializeDefaultState();
+  }
+
+  /**
+   * Set game metadata for content hash tracking
+   * Should be called before first save
+   */
+  setGameMetadata(metadata: GameSaveMetadata): void {
+    this.gameMetadata = metadata;
+
+    // Restore turn count if resuming from existing save
+    if (metadata.turnCount !== undefined) {
+      this.turnCount = metadata.turnCount;
+    }
+
+    this.log(`Game metadata set for ${metadata.gameId} (Turn ${this.turnCount})`);
   }
 
   async initialize(): Promise<void> {
@@ -461,9 +479,20 @@ export class StateMCP extends BaseMCPServer {
   // Git Operations
   async saveState(message: string): Promise<string> {
     const stateData = this.serializeState();
-    const commitHash = await this.gitManager.saveState(message, stateData);
-    
-    this.log(`State saved: ${message} (${commitHash.substring(0, 8)})`);
+
+    // Increment turn count
+    this.turnCount++;
+
+    // Update metadata if set
+    if (this.gameMetadata) {
+      this.gameMetadata.turnCount = this.turnCount;
+      this.gameMetadata.lastPlayed = new Date().toISOString();
+      // lastCommit will be updated by GitManager after commit
+    }
+
+    const commitHash = await this.gitManager.saveState(message, stateData, this.gameMetadata || undefined);
+
+    this.log(`State saved: ${message} (${commitHash.substring(0, 8)}) [Turn ${this.turnCount}]`);
     return commitHash;
   }
 

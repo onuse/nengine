@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'yaml';
 import { GameUIConfig } from '../types/ui-config';
+import { ContentHasher, GameSaveMetadata, CachedContentHasher } from './content-hasher';
 
 export interface GameManifest {
   game: {
@@ -41,6 +42,7 @@ export class GameLoader {
   private currentGame: string | null = null;
   private gameManifest: GameManifest | null = null;
   private gamePath: string | null = null;
+  private contentHasher: CachedContentHasher = new CachedContentHasher();
 
   constructor(gamesPath: string = './games') {
     this.gamesPath = path.resolve(gamesPath);
@@ -199,6 +201,97 @@ export class GameLoader {
     content.npcs = content.npcs || './content/npcs.yaml';
     content.items = content.items || './content/items.yaml';
     content.dialogues = content.dialogues || './content/dialogues/';
+  }
+
+  /**
+   * Get content hash for current game
+   */
+  getContentHash(): string {
+    if (!this.gamePath) {
+      throw new Error('No game loaded');
+    }
+    return this.contentHasher.getContentHash(this.gamePath);
+  }
+
+  /**
+   * Check if save is available and compatible with current content
+   */
+  async isResumeAvailable(gameName: string): Promise<{
+    available: boolean;
+    reason?: string;
+    metadata?: GameSaveMetadata;
+  }> {
+    const gamePath = path.join(this.gamesPath, gameName);
+    const savesPath = path.join(gamePath, 'saves');
+
+    // Check if saves directory exists
+    if (!fs.existsSync(savesPath)) {
+      return {
+        available: false,
+        reason: 'no_save_directory'
+      };
+    }
+
+    // Check if .git exists (has any saves at all)
+    const gitPath = path.join(savesPath, '.git');
+    if (!fs.existsSync(gitPath)) {
+      return {
+        available: false,
+        reason: 'no_saves'
+      };
+    }
+
+    // Load metadata
+    const metadata = ContentHasher.loadMetadata(savesPath);
+    if (!metadata) {
+      return {
+        available: false,
+        reason: 'no_metadata'
+      };
+    }
+
+    // Check content hash compatibility
+    const currentHash = ContentHasher.generateContentHash(gamePath);
+    const compatible = ContentHasher.compareHashes(currentHash, metadata.contentHash);
+
+    if (!compatible) {
+      return {
+        available: false,
+        reason: 'content_changed',
+        metadata
+      };
+    }
+
+    // Resume is available!
+    return {
+      available: true,
+      metadata
+    };
+  }
+
+  /**
+   * Create initial metadata for a new game save
+   */
+  async createInitialMetadata(gameName: string): Promise<GameSaveMetadata> {
+    const gamePath = path.join(this.gamesPath, gameName);
+    const manifest = this.gameManifest;
+
+    if (!manifest) {
+      throw new Error('No game manifest loaded');
+    }
+
+    const contentHash = ContentHasher.generateContentHash(gamePath);
+
+    return {
+      contentHash,
+      gameVersion: manifest.game.version || '1.0.0',
+      gameId: manifest.game.id || gameName,
+      lastCommit: '',
+      lastPlayed: new Date().toISOString(),
+      currentBranch: 'main',
+      turnCount: 0,
+      createdAt: new Date().toISOString()
+    };
   }
 
   /**

@@ -1,0 +1,596 @@
+# D&D 5e Items and Equipment for Faerun Campaign
+
+weapons:
+  # Simple Melee Weapons
+  club:
+    name: "Club"
+    type: "weapon"
+    category: "simple_melee"
+    damage: "1d4"
+    damage_type: "bludgeoning"
+    cost: { value: 1, currency: "sp" }
+    weight: 2
+    properties: ["light"]
+    
+  dagger:
+    name: "Dagger"
+    type: "weapon" 
+    category: "simple_melee"
+    damage: "1d4"
+    damage_type: "piercing"
+    cost: { value: 2, currency: "gp" }
+    weight: 1
+    properties: ["finesse", "light", "thrown"]
+    range: { normal: 20, long: 60 }
+    
+  javelin:
+    name: "Javelin"
+    type: "weapon"
+    category: "simple_melee"
+    damage: "1d6"
+    damage_type: "piercing"
+    cost: { value: 5, currency: "sp" }
+    weight: 2
+    properties: ["thrown"]
+    range: { normal: 30, long: 120 }
+    
+  mace:
+    name: "Mace"
+    type: "weapon"
+    category: "simple_melee"
+    damage: "1d6"
+    damage_type: "bludgeoning"
+    cost: { value: 5, currency: "gp" }
+    weight: 4
+    
+  spear:
+    name: "Spear"
+    type: "weapon"
+    category: "simple_melee"
+    damage: "1d6"
+    damage_type: "piercing"
+    cost: { value: 1, currency: "gp" }
+    weight: 3
+    properties: ["thrown", "versatile"]
+    versatile_damage: "1d8"
+    range: { normal: 20, long: 60 }
+
+  # Simple Ranged Weapons
+  light_crossbow:
+    name: "Light Crossbow"
+    type: "weapon"
+    category: "simple_ranged"
+    damage: "1d8"
+    damage_type: "piercing"
+    cost: { value: 25, currency: "gp" }
+    weight: 5
+    properties: ["ammunition", "loading", "two-handed"]
+    range: { normal: 80, long: 320 }
+    ammunition: "crossbow_bolts"
+    
+  shortbow:
+    name: "Shortbow"
+    type: "weapon"
+    category: "simple_ranged"
+    damage: "1d6"
+    damage_type: "piercing"
+    cost: { value: 25, currency: "gp" }
+    weight: 2
+    properties: ["ammunition", "two-handed"]
+    range: { normal: 80, long: 320 }
+    ammunition: "arrows"
+
+  # Martial Melee Weapons
+  longsword:
+    name: "Longsword"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "1d8"
+    damage_type: "slashing"
+    cost: { value: 15, currency: "gp" }
+    weight: 3
+    properties: ["versatile"]
+    versatile_damage: "1d10"
+    
+  rapier:
+    name: "Rapier"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "1d8"
+    damage_type: "piercing"
+    cost: { value: 25, currency: "gp" }
+    weight: 2
+    properties: ["finesse"]
+    
+  scimitar:
+    name: "Scimitar"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "1d6"
+    damage_type: "slashing"
+    cost: { value: 25, currency: "gp" }
+    weight: 3
+    properties: ["finesse", "light"]
+    
+  greatsword:
+    name: "Greatsword"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "2d6"
+    damage_type: "slashing"
+    cost: { value: 50, currency: "gp" }
+    weight: 6
+    properties: ["heavy", "two-handed"]
+    
+  battleaxe:
+    name: "Battleaxe"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "1d8"
+    damage_type: "slashing"
+    cost: { value: 10, currency: "gp" }
+    weight: 4
+    properties: ["versatile"]
+    versatile_damage: "1d10"
+    
+  warhammer:
+    name: "Warhammer"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "1d8"
+    damage_type: "bludgeoning"
+    cost: { value: 15, currency: "gp" }
+    weight: 2
+    properties: ["versatile"]
+    versatile_damage: "1d10"
+
+  # Martial Ranged Weapons
+  longbow:
+    name: "Longbow"
+    type: "weapon"
+    category: "martial_ranged"
+    damage: "1d8"
+    damage_type: "piercing"
+    cost: { value: 50, currency: "gp" }
+    weight: 2
+    properties: ["ammunition", "heavy", "two-handed"]
+    range: { normal: 150, long: 600 }
+    ammunition: "arrows"
+    
+  heavy_crossbow:
+    name: "Heavy Crossbow"
+    type: "weapon"
+    category: "martial_ranged"
+    damage: "1d10"
+    damage_type: "piercing"
+    cost: { value: 50, currency: "gp" }
+    weight: 18
+    properties: ["ammunition", "heavy", "loading", "two-handed"]
+    range: { normal: 100, long: 400 }
+    ammunition: "crossbow_bolts"
+
+armor:
+  # Light Armor
+  padded:
+    name: "Padded"
+    type: "armor"
+    category: "light"
+    ac: 11
+    dex_bonus: "full"
+    cost: { value: 5, currency: "gp" }
+    weight: 8
+    stealth: "disadvantage"
+    
+  leather:
+    name: "Leather"
+    type: "armor"
+    category: "light"
+    ac: 11
+    dex_bonus: "full"
+    cost: { value: 10, currency: "gp" }
+    weight: 10
+    
+  studded_leather:
+    name: "Studded Leather"
+    type: "armor"
+    category: "light"
+    ac: 12
+    dex_bonus: "full"
+    cost: { value: 45, currency: "gp" }
+    weight: 13
+
+  # Medium Armor
+  hide:
+    name: "Hide"
+    type: "armor"
+    category: "medium"
+    ac: 12
+    dex_bonus: "max_2"
+    cost: { value: 10, currency: "gp" }
+    weight: 12
+    
+  chain_shirt:
+    name: "Chain Shirt"
+    type: "armor"
+    category: "medium"
+    ac: 13
+    dex_bonus: "max_2"
+    cost: { value: 50, currency: "gp" }
+    weight: 20
+    
+  scale_mail:
+    name: "Scale Mail"
+    type: "armor"
+    category: "medium"
+    ac: 14
+    dex_bonus: "max_2"
+    cost: { value: 50, currency: "gp" }
+    weight: 45
+    stealth: "disadvantage"
+    
+  breastplate:
+    name: "Breastplate"
+    type: "armor"
+    category: "medium"
+    ac: 14
+    dex_bonus: "max_2"
+    cost: { value: 400, currency: "gp" }
+    weight: 20
+    
+  half_plate:
+    name: "Half Plate"
+    type: "armor"
+    category: "medium"
+    ac: 15
+    dex_bonus: "max_2"
+    cost: { value: 750, currency: "gp" }
+    weight: 40
+    stealth: "disadvantage"
+
+  # Heavy Armor
+  ring_mail:
+    name: "Ring Mail"
+    type: "armor"
+    category: "heavy"
+    ac: 14
+    dex_bonus: "none"
+    cost: { value: 30, currency: "gp" }
+    weight: 40
+    stealth: "disadvantage"
+    
+  chain_mail:
+    name: "Chain Mail"
+    type: "armor"
+    category: "heavy"
+    ac: 16
+    dex_bonus: "none"
+    cost: { value: 75, currency: "gp" }
+    weight: 55
+    stealth: "disadvantage"
+    strength_requirement: 13
+    
+  splint:
+    name: "Splint"
+    type: "armor"
+    category: "heavy"
+    ac: 17
+    dex_bonus: "none"
+    cost: { value: 200, currency: "gp" }
+    weight: 60
+    stealth: "disadvantage"
+    strength_requirement: 15
+    
+  plate:
+    name: "Plate"
+    type: "armor"
+    category: "heavy"
+    ac: 18
+    dex_bonus: "none"
+    cost: { value: 1500, currency: "gp" }
+    weight: 65
+    stealth: "disadvantage"
+    strength_requirement: 15
+
+  # Shield
+  shield:
+    name: "Shield"
+    type: "armor"
+    category: "shield"
+    ac: 2
+    cost: { value: 10, currency: "gp" }
+    weight: 6
+
+ammunition:
+  arrows:
+    name: "Arrows"
+    type: "ammunition"
+    quantity: 20
+    cost: { value: 1, currency: "gp" }
+    weight: 1
+    
+  crossbow_bolts:
+    name: "Crossbow Bolts"
+    type: "ammunition"
+    quantity: 20
+    cost: { value: 1, currency: "gp" }
+    weight: 1.5
+
+adventuring_gear:
+  backpack:
+    name: "Backpack"
+    type: "equipment"
+    cost: { value: 2, currency: "gp" }
+    weight: 5
+    capacity: 30
+    
+  bedroll:
+    name: "Bedroll"
+    type: "equipment"
+    cost: { value: 5, currency: "sp" }
+    weight: 7
+    
+  blanket:
+    name: "Blanket"
+    type: "equipment"
+    cost: { value: 5, currency: "sp" }
+    weight: 3
+    
+  rope_hemp:
+    name: "Rope, Hemp (50 feet)"
+    type: "equipment"
+    cost: { value: 2, currency: "gp" }
+    weight: 10
+    
+  torch:
+    name: "Torch"
+    type: "equipment"
+    cost: { value: 1, currency: "cp" }
+    weight: 1
+    light: { bright: 20, dim: 40, duration: "1 hour" }
+    
+  tinderbox:
+    name: "Tinderbox"
+    type: "equipment"
+    cost: { value: 5, currency: "sp" }
+    weight: 1
+    
+  rations:
+    name: "Rations (1 day)"
+    type: "equipment"
+    cost: { value: 2, currency: "sp" }
+    weight: 2
+    
+  waterskin:
+    name: "Waterskin"
+    type: "equipment"
+    cost: { value: 2, currency: "gp" }
+    weight: 5
+    capacity: "4 pints"
+    
+  lantern_hooded:
+    name: "Lantern, Hooded"
+    type: "equipment"
+    cost: { value: 5, currency: "gp" }
+    weight: 2
+    light: { bright: 30, dim: 60, duration: "6 hours per oil flask" }
+    fuel: "oil"
+    
+  oil_flask:
+    name: "Oil (flask)"
+    type: "equipment"
+    cost: { value: 1, currency: "sp" }
+    weight: 1
+
+tools:
+  thieves_tools:
+    name: "Thieves' Tools"
+    type: "tool"
+    cost: { value: 25, currency: "gp" }
+    weight: 1
+    proficiency: "thieves_tools"
+    
+  herbalism_kit:
+    name: "Herbalism Kit"
+    type: "tool"
+    cost: { value: 5, currency: "gp" }
+    weight: 3
+    proficiency: "herbalism_kit"
+    
+  smiths_tools:
+    name: "Smith's Tools"
+    type: "tool"
+    cost: { value: 20, currency: "gp" }
+    weight: 8
+    proficiency: "smiths_tools"
+    
+  forgery_kit:
+    name: "Forgery Kit"
+    type: "tool"
+    cost: { value: 15, currency: "gp" }
+    weight: 5
+    proficiency: "forgery_kit"
+
+# Magic Items (Iconic D&D Items)
+magic_items:
+  # Common Magic Items
+  bag_of_holding:
+    name: "Bag of Holding"
+    type: "wondrous_item"
+    rarity: "uncommon"
+    description: "This bag has an interior space considerably larger than its outside dimensions"
+    properties:
+      weight: 15
+      interior_space: "64 cubic feet"
+      weight_limit: "500 pounds"
+    value: 4000
+    
+  potion_of_healing:
+    name: "Potion of Healing"
+    type: "potion"
+    rarity: "common"
+    description: "A character who drinks this potion regains 2d4 + 2 hit points"
+    healing: "2d4+2"
+    value: 50
+    
+  # Iconic Weapons
+  flame_tongue:
+    name: "Flame Tongue"
+    type: "weapon"
+    weapon_type: "longsword"
+    rarity: "rare"
+    requires_attunement: true
+    description: "You can use a bonus action to speak this magic sword's command word"
+    properties:
+      bonus_damage: "2d6 fire"
+      light: { bright: 40, dim: 80 }
+    value: 5000
+    
+  frost_brand:
+    name: "Frost Brand"
+    type: "weapon"
+    weapon_type: "longsword"
+    rarity: "very_rare"
+    requires_attunement: true
+    description: "When you hit with an attack using this magic sword, the target takes an extra 1d6 cold damage"
+    properties:
+      bonus_damage: "1d6 cold"
+      fire_resistance: true
+      cold_immunity: "in temperatures as low as -50 degrees Fahrenheit"
+    value: 25000
+    
+  # Legendary Items from Faerun Lore
+  blackrazor:
+    name: "Blackrazor"
+    type: "weapon"
+    weapon_type: "greatsword"
+    rarity: "legendary"
+    requires_attunement: true
+    sentient: true
+    description: "This sentient weapon hungers for souls and grows stronger with each life it takes"
+    legendary: true
+    properties:
+      bonus_to_hit: 3
+      bonus_damage: "3d6 necrotic"
+      temp_hp_on_kill: "1d10+10"
+    personality:
+      alignment: "chaotic_neutral"
+      intelligence: 17
+      wisdom: 10
+      charisma: 19
+    value: 200000
+    
+  defender:
+    name: "Defender"
+    type: "weapon"
+    weapon_type: "longsword"
+    rarity: "legendary"
+    requires_attunement: true
+    description: "The first time you attack with the sword on each of your turns, you can transfer some or all of the sword's bonus to your Armor Class"
+    properties:
+      bonus_to_hit: 3
+      bonus_damage: 3
+      transferable_ac: "up to +3"
+    value: 150000
+    
+  # Armor
+  dragon_scale_mail:
+    name: "Dragon Scale Mail"
+    type: "armor"
+    armor_type: "scale_mail"
+    rarity: "very_rare"
+    requires_attunement: true
+    description: "Made from the scales of a dragon, this armor provides resistance to the damage type associated with the dragon"
+    ac: 14
+    dex_bonus: "max_2"
+    stealth: "no_disadvantage"
+    damage_resistance: "varies_by_dragon"
+    value: 8000
+    
+  # Rings
+  ring_of_protection:
+    name: "Ring of Protection"
+    type: "ring"
+    rarity: "rare"
+    requires_attunement: true
+    description: "You gain a +1 bonus to AC and saving throws while wearing this ring"
+    properties:
+      ac_bonus: 1
+      saving_throw_bonus: 1
+    value: 3500
+    
+  ring_of_spell_storing:
+    name: "Ring of Spell Storing"
+    type: "ring" 
+    rarity: "rare"
+    requires_attunement: true
+    description: "This ring stores spells cast into it, holding them until the attuned wearer uses them"
+    properties:
+      spell_levels: 5
+      max_spell_level: 5
+    value: 24000
+
+# Faerun-Specific Items
+faerun_items:
+  # Waterdhavian Items
+  waterdhavian_noble_outfit:
+    name: "Waterdhavian Noble's Outfit"
+    type: "clothing"
+    cost: { value: 75, currency: "gp" }
+    weight: 8
+    description: "Fine clothes marking you as Waterdhavian nobility"
+    social_benefit: "Advantage on social interactions with Waterdeep nobles"
+    
+  lords_alliance_signet:
+    name: "Lords' Alliance Signet Ring"
+    type: "ring"
+    rarity: "uncommon"
+    description: "Official ring of the Lords' Alliance"
+    properties:
+      organization: "lords_alliance"
+      rank: "varies"
+    
+  # Dwarven Items
+  dwarven_waraxe:
+    name: "Dwarven Waraxe"
+    type: "weapon"
+    category: "martial_melee"
+    damage: "1d10"
+    damage_type: "slashing"
+    cost: { value: 30, currency: "gp" }
+    weight: 8
+    properties: ["versatile"]
+    versatile_damage: "1d12"
+    racial_requirement: "dwarf"
+    
+  # Elven Items
+  elven_cloak:
+    name: "Elven Cloak"
+    type: "clothing"
+    rarity: "uncommon"
+    description: "This cloak shifts color to match surroundings"
+    properties:
+      stealth_bonus: "advantage in natural environments"
+    
+  # Regional Items
+  neverwinter_steel:
+    name: "Neverwinter Steel Blade"
+    type: "weapon"
+    weapon_type: "longsword"
+    rarity: "uncommon"
+    description: "Forged in the fires of Mount Hotenow, this blade never loses its edge"
+    properties:
+      durability: "never_dulls"
+      bonus_damage: 1
+    origin: "neverwinter"
+    
+  purple_dragon_sword:
+    name: "Purple Dragon Knight's Sword"
+    type: "weapon"
+    weapon_type: "longsword"
+    rarity: "rare"
+    description: "Ceremonial sword of Cormyr's elite Purple Dragon Knights"
+    properties:
+      bonus_to_hit: 1
+      bonus_damage: 1
+      command_presence: "advantage on intimidation against Cormyrian soldiers"
+    origin: "cormyr"

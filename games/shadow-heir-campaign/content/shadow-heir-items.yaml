@@ -1,0 +1,279 @@
+# Shadow Heir Specific Items - Thief Tools and Quest Items
+
+# ============================================================================
+# KEY QUEST ITEM - THE HARPER CRYSTAL
+# ============================================================================
+
+harper_crystal:
+  name: "The Crystal"
+  title: "Harper Seeing Stone - Zara's Last Gift"
+  type: "quest_item"
+  rarity: "artifact"
+  description: |
+    A palm-sized crystal that pulses with warmth. Clear as glass with faint blue-white veins.
+    Zara pressed this into your hand as she died, whispering "Trust no one..."
+
+    It grows warmer near Harper agents or safe houses. It reacts to Harper symbols.
+    You don't know yet: it contains encrypted data on every Harper agent in Faerun.
+    If Zhentarim get it, the entire Harper network falls.
+  properties:
+    pulsates: "Matches your heartbeat"
+    warmth: "Grows warmer near Harpers or Harper locations"
+    glows: "Emits blue-white light near Harper symbols"
+    unbreakable: "Cannot be destroyed by normal means"
+  weight: 0.5
+  cannot_sell: true
+  cannot_drop: true
+  story_critical: true
+
+# ============================================================================
+# ZARA'S BELONGINGS
+# ============================================================================
+
+zaras_dagger:
+  name: "Zara's Mercy"
+  type: "weapon"
+  weapon_type: "dagger"
+  rarity: "uncommon"
+  description: |
+    Zara's favorite throwing dagger. Silver blade, worn leather grip that fits your hand perfectly.
+    She taught you to throw with this when you were twelve. Harper symbol engraved on blade.
+  damage: "1d4+1"
+  damage_type: "piercing"
+  properties: ["finesse", "light", "thrown", "silvered", "returns_to_hand"]
+  range: { normal: 30, long: 90 }
+  weight: 1
+
+zaras_lockpicks:
+  name: "Zara's Masterwork Lockpicks"
+  type: "tool"
+  rarity: "rare"
+  description: |
+    Finest lockpicks you've ever seen. Mithral and darkwood, perfectly balanced.
+    Initials "Z.N." on case. Below: "Those who harp" (worn but readable).
+  properties:
+    bonus: "+2 to lockpicking"
+    never_break: "Never break, even on critical failure"
+    hidden_picks: "Three hidden picks for handcuffs/shackles"
+  weight: 0.5
+
+zaras_cloak:
+  name: "Shadow Silk Cloak"
+  type: "clothing"
+  rarity: "rare"
+  description: |
+    Zara's midnight-blue cloak. Silk so fine it weighs nothing.
+    Interior has Harper symbols stitched in moonlight-visible thread.
+  properties:
+    stealth: "+2 Stealth in dim light/darkness"
+    shadow_blend: "Bonus action once per short rest for advantage on Stealth"
+    weather_proof: "Never gets wet or dirty"
+  weight: 1
+
+zaras_journal:
+  name: "Zara's Personal Journal"
+  type: "quest_item"
+  rarity: "unique"
+  description: |
+    Leather-bound journal from Zara's apartment. Half thieves' cant, half Harper code.
+    Last entry: "Tomorrow I confront him. If something happens, crystal knows all."
+  reveals: "Zara's Harper identity, proof against Vex, personal notes about you"
+  weight: 2
+
+# ============================================================================
+# THIEF TOOLS
+# ============================================================================
+
+smoke_pellets:
+  name: "Alchemical Smoke Pellets"
+  type: "consumable"
+  quantity: 3
+  description: "Throw to create 20-foot heavily obscured cube for 1 minute"
+  cost: { value: 10, currency: "gp" }
+  weight: 0.1
+
+grappling_hook_silk:
+  name: "Silk Rope & Mithral Grapple"
+  type: "equipment"
+  rarity: "uncommon"
+  description: "50 feet spider-silk rope, silent mithral grapple. Holds 800 lbs, makes no sound."
+  weight: 3
+  cost: { value: 75, currency: "gp" }
+
+glass_cutter_diamond:
+  name: "Diamond Glass Cutter"
+  type: "tool"
+  description: "Cuts windows silently. 10 minutes for window-sized opening, no noise."
+  weight: 0.5
+  cost: { value: 100, currency: "gp" }
+
+dark_lantern:
+  name: "Thief's Dark Lantern"
+  type: "equipment"
+  description: "Hooded lantern with directional shutters. 60-foot beam, instant close."
+  light: { beam: 60, duration: "6 hours per oil" }
+  weight: 2
+  cost: { value: 12, currency: "gp" }
+
+climbing_claws:
+  name: "Climbing Claws"
+  type: "equipment"
+  rarity: "uncommon"
+  description: "Hand/foot claws for climbing. Grants climbing speed, can climb impossible surfaces."
+  weight: 2
+  cost: { value: 50, currency: "gp" }
+
+disguise_kit_master:
+  name: "Master Disguise Kit"
+  type: "tool"
+  rarity: "rare"
+  description: "+2 disguise checks. Materials for 20 personas, includes forgeable documents."
+  weight: 8
+  cost: { value: 150, currency: "gp" }
+
+poison_needle_ring:
+  name: "Poison Needle Ring"
+  type: "ring"
+  description: "Hidden needle in band. Delivers one dose poison via touch (target CON save)."
+  weight: 0.1
+  cost: { value: 75, currency: "gp" }
+
+# ============================================================================
+# POISONS
+# ============================================================================
+
+midnight_kiss_poison:
+  name: "Midnight's Kiss"
+  type: "poison"
+  rarity: "rare"
+  description: |
+    The poison that killed Zara. Calimshan venom, Zhentarim signature.
+    Blue lips, paralysis, death. If you find this on someone, they're Zhentarim.
+  effect: "DC 20 CON save or paralyzed 1d4 minutes then death"
+  doses: 1
+  cost: { value: 500, currency: "gp" }
+  signature: "Blue lips, distinctive symptoms"
+
+truth_serum:
+  name: "Serum of Truth"
+  type: "potion"
+  description: "DC 15 WIS save or answer questions truthfully for 10 minutes."
+  doses: 1
+  cost: { value: 150, currency: "gp" }
+
+sleep_powder:
+  name: "Sleep Powder"
+  type: "poison"
+  description: "Blow in face/mix in drink. DC 13 CON or unconscious 1 hour. Non-lethal."
+  doses: 3
+  cost: { value: 30, currency: "gp" }
+
+# ============================================================================
+# BALDUR'S GATE SPECIFIC
+# ============================================================================
+
+shadow_thieves_signet:
+  name: "Shadow Thieves Guild Ring"
+  type: "ring"
+  description: |
+    Your guild ring. Black iron, stylized dagger. Marks you as Shadow Thieves.
+    Problem: guild now hunts you. Wearing it is dangerous but useful.
+  recognition: "Shadow Thieves recognize you (help or attack depends on loyalty)"
+  weight: 0.1
+
+flaming_fist_uniform:
+  name: "Flaming Fist Uniform"
+  type: "clothing"
+  description: "Baldur's Gate mercenary police uniform. Advantage to pass as Fist. Arrest if caught."
+  weight: 8
+  cost: { value: 50, currency: "gp" }
+  illegal: true
+
+counting_house_key:
+  name: "Counting House Vault Key"
+  type: "key"
+  description: "Key to safety deposit #247 under false name 'Tomas Blackwick'. Contains 500 gold."
+  unlocks: "Your emergency fund in Baldur's Gate Counting House"
+  value: 500
+  weight: 0.1
+
+zaras_apartment_key:
+  name: "Brass Key with Z Initial"
+  type: "key"
+  description: "Found on Zara's body. You never knew she had a separate apartment."
+  unlocks: "Zara's hidden apartment in Lower City"
+  weight: 0.1
+
+harper_safe_house_token:
+  name: "Wooden Harper Token"
+  type: "quest_item"
+  description: "Found in Zara's apartment. Harper symbol. Opens Harper safe house door."
+  unlocks: "Harper safe house in ancient tunnels"
+  weight: 0.1
+
+# ============================================================================
+# EVIDENCE AGAINST VEX
+# ============================================================================
+
+poisoned_wine_glass:
+  name: "Zara's Wine Glass (Evidence)"
+  type: "quest_item"
+  description: "Shattered glass from celebration. Contains Midnight's Kiss traces - Zhentarim poison."
+  evidence_against: "Vex"
+  weight: 0.5
+  fragile: true
+
+vexs_zhentarim_orders:
+  name: "Encoded Orders to Vex"
+  type: "quest_item"
+  description: "Orders from Manshoon's organization. Found in Vex's rooms. Proves Zhentarim allegiance."
+  evidence_against: "Vex"
+  decryption: "DC 18 Investigation or Harper cipher from Zara's journal"
+  weight: 0.5
+
+# ============================================================================
+# CREW RECRUITMENT ITEMS
+# ============================================================================
+
+silks_disguise_collection:
+  name: "Silk's Disguise Materials"
+  type: "tool"
+  rarity: "rare"
+  description: "If you recruit Silk: materials for 5 identities per person, +3 disguise checks."
+  provided_by: "Silk (if recruited)"
+
+raziras_climbing_kit:
+  name: "Razira's Tabaxi Climbing Kit"
+  type: "equipment"
+  rarity: "rare"
+  description: "If you recruit Razira: climb speed 2x walking, any surface, no checks needed."
+  provided_by: "Razira (if recruited)"
+
+# ============================================================================
+# FAERUN TOURIST TREASURES
+# ============================================================================
+
+elfsong_ghost_token:
+  name: "Elfsong Tavern Token"
+  type: "trinket"
+  description: "Wooden token blessed by ghost (supposedly). Memento of Baldur's Gate."
+  weight: 0.1
+  cost: { value: 1, currency: "gp" }
+
+waterdeep_yawning_portal_coin:
+  name: "Yawning Portal Survivor Coin"
+  type: "trinket"
+  rarity: "uncommon"
+  description: "Copper coin showing Undermountain well. Given to survivors who return from the dungeon."
+  prestige: "Respected by adventurers"
+  weight: 0.1
+
+candlekeep_library_token:
+  name: "Candlekeep Entry Token"
+  type: "document"
+  rarity: "rare"
+  description: "Wooden token granting one-time entry to Candlekeep. Requires donating unique book to obtain."
+  properties:
+    entry: "One visit to greatest library in Faerun"
+  weight: 0.1
+  value: 1000
