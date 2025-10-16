@@ -56,7 +56,7 @@ npm run dev
 
 Once the server starts successfully, open your browser to:
 ```
-http://localhost:3000
+http://localhost:3001
 ```
 
 ## Verifying the Correct Game Loaded
@@ -95,14 +95,14 @@ npm run dev:mygame
 
 **Solution**: Use `npm run dev:lovebug` instead of `npm run dev -- --game=lovebug`
 
-### Port 3000 already in use
+### Port 3001 already in use
 
 **Problem**: Another instance is running.
 
 **Solution**:
 ```powershell
-# Find process using port 3000
-netstat -ano | findstr :3000
+# Find process using port 3001
+netstat -ano | findstr :3001
 
 # Kill the process (replace PID with actual process ID)
 taskkill /F /PID [PID]

@@ -667,8 +667,9 @@ async function confirmEdit() {
 
       addMessage(`🌿 Created timeline branch: "${branchName}"`, 'system');
 
-      if (messageIndex > 0 && messages.value[messageIndex - 1].commitHash) {
-        await rollbackToCommit(messages.value[messageIndex - 1].commitHash);
+      const prevMessage = messages.value[messageIndex - 1];
+      if (messageIndex > 0 && prevMessage?.commitHash) {
+        await rollbackToCommit(prevMessage.commitHash);
       }
 
       messages.value.splice(messageIndex);
@@ -761,23 +762,25 @@ async function handleBranchFromMessage(message: GameMessage) {
 async function rollbackToCommit(commitHash: string) {
   if (!ws) return;
 
+  const wsInstance = ws; // Capture ws in a const to satisfy TypeScript
+
   return new Promise<void>((resolve) => {
     const handler = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
 
       if (data.type === 'rollback_complete') {
-        ws?.removeEventListener('message', handler);
+        wsInstance.removeEventListener('message', handler);
         resolve();
       } else if (data.type === 'error') {
-        ws?.removeEventListener('message', handler);
+        wsInstance.removeEventListener('message', handler);
         addMessage(`❌ Rollback failed: ${data.message}`, 'error');
         resolve();
       }
     };
 
-    ws.addEventListener('message', handler);
+    wsInstance.addEventListener('message', handler);
 
-    ws.send(JSON.stringify({
+    wsInstance.send(JSON.stringify({
       type: 'rollback',
       commitHash
     }));

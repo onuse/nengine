@@ -109,8 +109,8 @@ export class CreativeServerProvider implements LLMProvider {
 
       const planningMessages = this.formatPlanningPrompt(prompt);
 
-      // Use higher temperature for creative planning
-      const planningTemp = Math.min(1.2, this.config.temperature + 0.3);
+      // Use moderate temperature for grounded planning
+      const planningTemp = Math.min(0.9, this.config.temperature + 0.1);
 
       const planningResponse = await this.client.post('/chat/completions', {
         model: this.currentModel,
@@ -120,7 +120,7 @@ export class CreativeServerProvider implements LLMProvider {
         // top_k: 100,  // Not supported by this API
         // repetition_penalty: 1.3,  // Not supported by this API
         frequency_penalty: 0.5,
-        presence_penalty: 0.7,  // Even higher for planning - we want NEW ideas
+        presence_penalty: 0.4,  // Lower - less pressure to invent dramatic events
         seed: Math.floor(Math.random() * 1000000),
         max_tokens: 400  // Allow more detailed planning
       });
@@ -346,7 +346,7 @@ export class CreativeServerProvider implements LLMProvider {
 
     // Recent history (use full history provided - controller manages the limit)
     if (prompt.recentHistory.length > 0) {
-      contextContent += `PREVIOUS NARRATIVE (what has already been described - DO NOT REPEAT):\n`;
+      contextContent += `PREVIOUS NARRATIVE (what has already been described - avoiding repeating content):\n`;
       contextContent += `───────────────────────────────────────\n`;
       const recentEvents = prompt.recentHistory
         .map((event, index) => {
@@ -356,7 +356,7 @@ export class CreativeServerProvider implements LLMProvider {
         .join('\n\n───────────────────────────────────────\n\n');
       contextContent += recentEvents + '\n';
       contextContent += `───────────────────────────────────────\n\n`;
-      contextContent += `IMPORTANT: The above narrative has already been told. Your response must be FRESH and DIFFERENT. Do not reuse the same descriptions, phrases, or scenarios. Move the story forward with NEW content.\n\n`;
+      contextContent += `IMPORTANT: The above narrative has already been told. Your response must build on this. Do not reuse the same descriptions, phrases, or events. Move the story forward by building on these events and ideas.\n\n`;
     }
 
     // Available actions
@@ -378,7 +378,7 @@ export class CreativeServerProvider implements LLMProvider {
     // The actual query
     messages.push({
       role: 'user',
-      content: prompt.query + '\n\nRespond with vivid, immersive narrative that is FRESH and ORIGINAL. Do not repeat or rephrase content from previous turns. Include dialogue if NPCs speak. Describe NEW sensory details, NEW actions, and NEW atmosphere. Move the story forward with novel content.'
+      content: prompt.query + '\n\nRespond with immersive narrative that moves the scene or narrative forward. Do not repeat or rephrase content from previous turns. Include dialogue if NPCs speak. Describe NEW sensory details, NEW actions, and NEW atmosphere. Move the events forward with relevant content.'
     });
 
     return messages;
@@ -387,34 +387,61 @@ export class CreativeServerProvider implements LLMProvider {
   private formatPlanningPrompt(prompt: LLMPrompt): any[] {
     const messages: any[] = [];
 
-    // System message for planning
+    // System message for planning - include game-specific instructions
+    let systemMessage = `You are a story planner tasked with picking appropriate (to the scene and type of narrative) events that should happen next.
+
+Key principles:
+- Pay respect to the game type, explore where this type of narrative should go
+- Characters should behave as would be fitting for this scenario and genre expectations
+- Respect the scene's tone and pacing when appropriate - not every moment needs revelations or plot twists
+- The player drives the story, but other characters certainly have agency too if it fits the narrative
+
+Generate 3-5 bullet points of short action items with what would fit this scene to happen next. Write it as a non descriptive bullet point list, the narrator will take care of textual flourish later.`;
+
+    // CRITICAL: Include game-specific instructions from systemContext
+    if (prompt.systemContext) {
+      systemMessage += '\n\n' + prompt.systemContext;
+    }
+
     messages.push({
       role: 'system',
-      content: `You are a creative story planner. Given the current situation and context, generate a bullet-point list of specific, concrete events that should happen next. Be as creative, but stick to what is absolutely appropriate for the scenario, the setting, the context and the other instructions.`
+      content: systemMessage
     });
 
-    // Context for planning
+    // Context for planning - give planner FULL context like the narrator gets
     let contextContent = '';
 
     if (prompt.worldState) {
       contextContent += `CURRENT SITUATION:\n`;
       contextContent += `Location: ${prompt.worldState.currentRoomName}\n`;
+      contextContent += `Description: ${prompt.worldState.roomDescription || 'An unremarkable location.'}\n`;
+
+      // Include FULL character information for planning
       if (prompt.worldState.presentNPCs?.length > 0) {
-        contextContent += `Characters present: ${prompt.worldState.presentNPCs.map(n => n.name).join(', ')}\n`;
+        contextContent += `\nCHARACTERS PRESENT:\n`;
+        for (const npc of prompt.worldState.presentNPCs) {
+          // Give planner everything the narrator gets
+          contextContent += `- ${npc.name}: ${npc.description}\n`;
+        }
       }
+
+      if (prompt.worldState.visibleItems?.length > 0) {
+        contextContent += `\nVisible items: ${prompt.worldState.visibleItems.join(', ')}\n`;
+      }
+
       contextContent += '\n';
     }
 
-    // Include recent history for context
+    // Include recent history for context (same as narrator gets)
     if (prompt.recentHistory.length > 0) {
       contextContent += `WHAT JUST HAPPENED:\n`;
       const lastEvent = prompt.recentHistory[prompt.recentHistory.length - 1];
-      contextContent += lastEvent.description.substring(0, 200) + '...\n\n';
+      contextContent += lastEvent.description.substring(0, 300) + '...\n\n';
     }
 
     messages.push({
       role: 'user',
-      content: contextContent + `Based on the player's action: "${prompt.query}"\n\nGenerate 3-5 SPECIFIC things that should happen next. Be unexpected and creative:\n\n• `
+      content: contextContent + `Player's action: "${prompt.query}"\n\nConsidering the scene and setting, what should happen in response? Be specific but proportional to the action.\n\n• `
     });
 
     return messages;
@@ -435,7 +462,7 @@ export class CreativeServerProvider implements LLMProvider {
 ${plan}
 ───────────────────────────────────────
 
-CRITICAL: Your narrative MUST include ALL of the above planned events. Weave them naturally into the story - don't just list them. Make the scene dynamic with these specific events happening.`;
+CRITICAL: Your narrative should include the above planned events. Weave them naturally into the story - don't just list them. Make an interesting scene with appropriate language with these specific events happening, and add appropriate flourish and details.`;
 
         originalMessages[i].content = enhancedContent;
         break;
