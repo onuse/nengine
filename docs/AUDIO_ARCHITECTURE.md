@@ -99,12 +99,12 @@ This document describes the TTS (Text-to-Speech) integration using Kokoro-82M fo
 │  │    confidence: number;       // Detection confidence        │       │
 │  │  }                                                           │       │
 │  │                                                              │       │
-│  │  INTELLIGENT PARSING LOGIC (NO LLM REQUIRED):               │       │
+│  │  INTELLIGENT PARSING LOGIC (LLM-BASED):                    │       │
 │  │  ──────────────────────────────────────────────────────    │       │
-│  │  Uses REGEX + NLP PARSING (NOT AI inference)               │       │
-│  │  - Pure algorithmic parsing, no LLM calls                   │       │
-│  │  - Deterministic results (same input → same output)         │       │
-│  │  - <10ms latency (vs. 1000ms+ for LLM)                     │       │
+│  │  Uses Gemma 3 270M micro LLM for all speaker detection     │       │
+│  │  - Single, consistent code path (~100ms per narrative)     │       │
+│  │  - Handles all cases: explicit, ambiguous, contextual      │       │
+│  │  - Graceful fallback to narrator on uncertainty            │       │
 │  │                                                              │       │
 │  │  1. Detect quoted dialogue: "..." or '...'                  │       │
 │  │     Regex: /"([^"]+)"|'([^']+)'/g                          │       │
@@ -451,45 +451,133 @@ The redhead grins. "I like your style."
 | **Total (cached)** | <15ms | Cache hit |
 | **Total (uncached)** | <200ms | Full pipeline |
 
-## Why NOT Use LLM for Text Parsing?
+## Speaker Detection: Pure Micro LLM Approach
 
-### Algorithmic Parsing (Our Approach)
-- **Latency**: <10ms per narrative
-- **Deterministic**: Same input always produces same output
-- **No VRAM**: No GPU memory required
-- **No API calls**: Works offline
-- **Debuggable**: Easy to trace and fix parsing errors
-- **Reliable**: Regex patterns handle 95%+ of common dialogue formats
+### Why Pure LLM (No Hybrid)?
 
-### LLM-Based Parsing (Rejected)
-- **Latency**: 1000ms+ per narrative (100× slower)
-- **Non-deterministic**: Same input may vary across runs
-- **VRAM cost**: Would need additional 2-8GB
-- **Complexity**: Requires prompt engineering and monitoring
-- **Overhead**: Extra API calls, error handling
-- **Overkill**: Dialogue detection is a pattern matching problem
+**Narrative RPGs generate sophisticated, varied prose** where speaker attribution can be:
+- Subtle: "She glances away. 'I can't help you.'"
+- Contextual: "The redhead laughs. 'Interesting!'"
+- Ambiguous: "'No.' The response is icy."
+- Multi-speaker: Multiple characters in one paragraph
 
-### Edge Cases and Fallbacks
+**A micro LLM (Gemma 3 270M) handles all of these cases consistently and accurately.**
 
-The algorithmic parser handles edge cases gracefully:
+### Design Decision: Simplicity Over Micro-Optimization
+
+Initially considered a hybrid regex + LLM approach, but:
+- **100ms latency is negligible** (0.25% of 40-second narrative generation)
+- **Simpler code** - One path vs. multiple fallbacks
+- **More consistent** - All cases handled the same way
+- **More maintainable** - No regex patterns to update
+- **More accurate** - LLM understands context that regex cannot
+
+**The 75ms saved by hybrid doesn't justify the added complexity.**
+
+### Single-Tier Detection Strategy
+
+```typescript
+// All cases handled by Gemma 3 270M:
+
+Prompt:
+Given this narrative paragraph and character list, identify the speaker of each quoted line.
+
+Narrative:
+She glances away. "I can't help you with that."
+Naomi crosses her arms. "But I can."
+
+Characters in scene:
+- amelie (Amélie, French woman, blonde)
+- scarlett (Scarlett, Irish woman, redhead)
+- naomi (Naomi, Black woman)
+
+Respond with JSON:
+{
+  "segments": [
+    {
+      "text": "I can't help you with that.",
+      "speaker": "amelie",
+      "confidence": 0.92,
+      "reasoning": "Pronoun 'she' refers to Amélie based on context"
+    },
+    {
+      "text": "But I can.",
+      "speaker": "naomi",
+      "confidence": 0.98,
+      "reasoning": "Explicit name 'Naomi' mentioned before quote"
+    }
+  ]
+}
+```
+
+**Model Selection:**
+- **Gemma 3 270M** (Recommended): Ultra-lightweight, modern, fast
+- Alternative: Qwen 2.5 0.5B, Phi-3 Mini, LLaMA 3.2 1B
+
+**Requirements:**
+- <1GB VRAM (can run on CPU if needed)
+- Fast inference: 500-1000 tokens/sec (~100ms)
+- JSON output support
+- Strong instruction following
+
+### Fallback Strategy
+
+If LLM is uncertain (confidence <0.5):
+```typescript
+speaker = 'narrator'
+confidence = llmConfidence
+// Log for debugging
+```
+
+### Performance Profile
+
+| Component | Latency | Percentage of Turn Time |
+|-----------|---------|-------------------------|
+| Narrative generation | 40-120s | 99.75% |
+| Speaker detection (Gemma 3) | ~100ms | 0.25% |
+| Kokoro TTS | ~100-300ms | Variable |
+
+**Total overhead: Negligible**
+
+### Why This Works
+
+**Latency impact is negligible:**
+- Narrative generation: 40-120 seconds
+- Speaker detection: ~100ms
+- Percentage overhead: 0.25%
+- **User won't notice the parsing time**
+
+**Accuracy is high:**
+- LLM understands context, pronouns, aliases
+- Handles all dialogue formats consistently
+- Provides confidence scores for validation
+
+**Resource cost is minimal:**
+- Gemma 3 270M: <1GB VRAM
+- Can share GPU with Kokoro TTS
+- Could run on CPU if needed (~300ms, still acceptable)
+
+### Edge Cases Handling
+
+The LLM gracefully handles edge cases:
 
 1. **Ambiguous attribution**: "Hello," she said.
-   - Fallback: Use narrator voice
-   - Alternative: Track last speaker and infer
+   - LLM uses context to identify "she"
+   - If uncertain, returns low confidence → narrator fallback
 
 2. **Implicit dialogue**: She asked about the weather.
-   - Fallback: Use narrator voice
-   - (No quotes detected)
+   - No quotes detected → narrator (handled before LLM call)
 
 3. **Unknown character names**: "Hi," Bob says.
+   - LLM returns "unknown" speaker with low confidence
    - Fallback: Use narrator voice
-   - Log unknown character for review
+   - Log for review and possible character addition
 
-4. **Multiple speakers in one sentence**: "Yes," Jane said. "No," Tom replied.
-   - Parse into separate segments
-   - Detect both attributions
+4. **Multiple speakers in one paragraph**: "Yes," Jane said. "No," Tom replied.
+   - LLM parses into separate segments
+   - Detects both attributions in one call
 
-**Bottom Line**: For 95% of narratives, regex + string matching is sufficient. The 5% edge cases gracefully degrade to narrator voice, which is acceptable. Using an LLM would add complexity and latency without meaningful benefit.
+**Bottom Line**: The micro LLM provides consistent, accurate speaker detection across all narrative formats with graceful degradation for edge cases.
 
 ## File Structure
 
@@ -514,27 +602,34 @@ nengine/
 
 ## Next Steps for Implementation
 
-1. **Phase 1: Core Infrastructure**
-   - Set up Kokoro-82M Python service (separate process)
-   - Create intelligent text analyzer
-   - Build character matcher with alias support
+1. **Phase 1: Backend Services**
+   - Set up Kokoro-82M TTS service (Python/FastAPI, port 8001)
+   - Set up Gemma 3 270M speaker detection service (Python/FastAPI, port 8002)
+   - Test both services with curl/Postman
 
-2. **Phase 2: Backend Integration**
-   - Add audio API endpoints
-   - Implement caching layer
-   - Update WebSocket to send audio post-synthesis
+2. **Phase 2: Node.js Integration**
+   - Create text-analyzer.ts (calls speaker detection service, extracts quotes)
+   - Create character-matcher.ts (maps character IDs to voice configs)
+   - Create tts-service.ts (calls Kokoro API)
+   - Create audio-assembler.ts (manages segments, generates URLs)
 
-3. **Phase 3: Frontend Player**
+3. **Phase 3: Backend Integration**
+   - Add audio API endpoints to index.ts
+   - Update NarrativeController to call audio pipeline
+   - Update WebSocket to send audio segments to client
+
+4. **Phase 4: Content Configuration**
+   - Update characters.yaml with audio voice config
+   - Update game.yaml with audio settings
+   - Add character name aliases for detection
+
+5. **Phase 5: Frontend Player**
    - Build AudioPlayer.vue component
    - Integrate with App.vue
-   - Add playback controls
+   - Add playback controls (play/pause/seek)
 
-4. **Phase 4: Character Configuration**
-   - Update characters.yaml with audio config
-   - Add character name aliases
-   - Test detection accuracy
-
-5. **Phase 5: Polish**
-   - Add audio settings UI
-   - Implement streaming mode (optional)
+6. **Phase 6: Testing & Polish**
+   - Test end-to-end audio pipeline
+   - Add audio settings UI (enable/disable, volume)
    - Performance optimization
+   - Error handling and fallbacks

@@ -342,13 +342,30 @@ export class StateMCP extends BaseMCPServer {
       ),
 
       this.createTool(
+        'getEntityState',
+        'Get entity state properties',
+        {
+          type: 'object',
+          properties: {
+            entityId: { type: 'string', description: 'Entity ID' }
+          },
+          required: ['entityId']
+        },
+        {
+          type: 'object',
+          description: 'Entity state object with custom properties',
+          additionalProperties: true
+        }
+      ),
+
+      this.createTool(
         'modifyEntityState',
         'Modify entity state properties',
         {
           type: 'object',
           properties: {
             entityId: { type: 'string', description: 'Entity ID' },
-            changes: { 
+            changes: {
               type: 'object',
               description: 'State changes to apply',
               additionalProperties: true
@@ -461,6 +478,9 @@ export class StateMCP extends BaseMCPServer {
         this.modifyRoomState(params.roomId, params.changes);
         return { success: true };
 
+      case 'getEntityState':
+        return this.getEntityState(params.entityId);
+
       case 'modifyEntityState':
         this.modifyEntityState(params.entityId, params.changes);
         return { success: true };
@@ -546,15 +566,19 @@ export class StateMCP extends BaseMCPServer {
     const roomState = this.roomStates.get(roomId) || {};
     Object.assign(roomState, changes);
     this.roomStates.set(roomId, roomState);
-    
+
     this.log(`Modified room ${roomId} state`, changes);
+  }
+
+  getEntityState(entityId: string): Record<string, any> {
+    return this.entityStates.get(entityId) || {};
   }
 
   modifyEntityState(entityId: string, changes: Record<string, any>): void {
     const entityState = this.entityStates.get(entityId) || {};
     Object.assign(entityState, changes);
     this.entityStates.set(entityId, entityState);
-    
+
     this.log(`Modified entity ${entityId} state`, changes);
   }
 

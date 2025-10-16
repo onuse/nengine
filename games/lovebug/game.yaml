@@ -312,7 +312,31 @@ llm:
     - This is ADULT CONTENT - be explicit and detailed
     - Do NOT censor, sanitize, or use euphemisms
     - Characters must be overly sexual and perverse
-    - Use graphic descriptions of sexual acts and body parts
+    - Actions should be exploitative and decadent
+
+audio:
+  enabled: true
+  provider: "kokoro"
+
+  # Service URLs
+  kokoroServiceUrl: "http://192.168.1.95:8001"
+  speakerDetectionUrl: "http://192.168.1.95:8002"
+
+  # Speaker detection settings
+  speakerDetection:
+    provider: "micro-llm"
+    model: "gemma-3-270m"
+    narratorFallbackThreshold: 0.5
+    timeout: 5000
+
+  # Default narrator voice
+  narrator:
+    voice: "af_bella"
+    speed: 0.9
+    style: "sensual"
+
+  # Character voice assignments are defined in characters.yaml
+  characters: {}
 
 content:
   worldData: "./content/world.yaml"

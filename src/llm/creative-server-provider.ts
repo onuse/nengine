@@ -109,6 +109,11 @@ export class CreativeServerProvider implements LLMProvider {
 
       const planningMessages = this.formatPlanningPrompt(prompt);
 
+      // DEBUG: Log the exact prompt being sent to the LLM
+      console.log(`[CreativeServerProvider] ===== PHASE 1 PROMPT TO LLM =====`);
+      console.log(JSON.stringify(planningMessages, null, 2));
+      console.log(`[CreativeServerProvider] ===== END PHASE 1 PROMPT =====`);
+
       // Use moderate temperature for grounded planning
       const planningTemp = Math.min(0.9, this.config.temperature + 0.1);
 
@@ -136,6 +141,11 @@ export class CreativeServerProvider implements LLMProvider {
 
       const narrativeMessages = this.formatNarrativePrompt(prompt, plan);
 
+      // DEBUG: Log the exact prompt being sent to the LLM
+      console.log(`[CreativeServerProvider] ===== PHASE 2 PROMPT TO LLM =====`);
+      console.log(JSON.stringify(narrativeMessages, null, 2));
+      console.log(`[CreativeServerProvider] ===== END PHASE 2 PROMPT =====`);
+
       // Add significant temperature variation for narrative
       const tempVariation = (Math.random() - 0.5) * 0.4;
       const variedTemp = Math.max(0.8, Math.min(1.3, this.config.temperature + tempVariation + 0.2));
@@ -154,12 +164,13 @@ export class CreativeServerProvider implements LLMProvider {
       });
 
       const phase2Time = Date.now() - phase2Start;
+      const content = response.data.choices[0].message.content;
       console.log(`[CreativeServerProvider] Phase 2 completed in ${phase2Time}ms (${(phase2Time/1000).toFixed(1)}s)`);
+      console.log(`[CreativeServerProvider] Narrative generated:\n${content}`);
 
       const responseTime = Date.now() - startTime;
       console.log(`[CreativeServerProvider] Two-phase generation completed in ${responseTime}ms (${(responseTime/1000).toFixed(1)}s)`);
 
-      const content = response.data.choices[0].message.content;
       return this.parseResponse(content, prompt);
 
     } catch (error: any) {
@@ -393,10 +404,10 @@ export class CreativeServerProvider implements LLMProvider {
 Key principles:
 - Pay respect to the game type, explore where this type of narrative should go
 - Characters should behave as would be fitting for this scenario and genre expectations
-- Respect the scene's tone and pacing when appropriate - not every moment needs revelations or plot twists
-- The player drives the story, but other characters certainly have agency too if it fits the narrative
+- Respect the scene's tone and pacing when appropriate
+- Build on the narrative, give characters agency, make them do the exciting next move
 
-Generate 3-5 bullet points of short action items with what would fit this scene to happen next. Write it as a non descriptive bullet point list, the narrator will take care of textual flourish later.`;
+Generate 5-10 bullet points of short action items with what would fit this scene to happen next. Write it as a non descriptive bullet point list, the narrator will take care of textual flourish later.`;
 
     // CRITICAL: Include game-specific instructions from systemContext
     if (prompt.systemContext) {
@@ -432,11 +443,19 @@ Generate 3-5 bullet points of short action items with what would fit this scene 
       contextContent += '\n';
     }
 
-    // Include recent history for context (same as narrator gets)
+    // Include FULL recent history for context (same as narrator gets)
     if (prompt.recentHistory.length > 0) {
-      contextContent += `WHAT JUST HAPPENED:\n`;
-      const lastEvent = prompt.recentHistory[prompt.recentHistory.length - 1];
-      contextContent += lastEvent.description.substring(0, 300) + '...\n\n';
+      contextContent += `PREVIOUS EVENTS (what has already happened - avoid repeating):\n`;
+      contextContent += `───────────────────────────────────────\n`;
+      const recentEvents = prompt.recentHistory
+        .map((event, index) => {
+          const turnNum = prompt.recentHistory.length - index;
+          return `[${turnNum} turns ago]\n${event.description}`;
+        })
+        .join('\n\n───────────────────────────────────────\n\n');
+      contextContent += recentEvents + '\n';
+      contextContent += `───────────────────────────────────────\n\n`;
+      contextContent += `IMPORTANT: The above events have already occurred. Your plan must move the story FORWARD from this point. Do not repeat similar events, discoveries, or character actions. Plan what happens NEXT.\n\n`;
     }
 
     messages.push({

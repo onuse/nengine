@@ -53,18 +53,18 @@
           <div class="input-section">
             <input
               v-model="inputCommand"
-              @keyup.enter="handleCommand"
+              @keyup.enter="handleContinue"
               class="command-input"
               :disabled="isProcessing"
-              :placeholder="isProcessing ? 'Processing...' : 'Type your command here and press Enter...'"
+              :placeholder="isProcessing ? 'Processing...' : 'Type your command or press Enter to continue...'"
             />
             <button
-              @click="toggleRollbackMenu"
-              class="rollback-button"
-              :disabled="isProcessing || gameHistory.length === 0"
-              title="Rollback to previous state"
+              @click="handleContinue"
+              class="continue-button"
+              :disabled="isProcessing"
+              :title="inputCommand.trim() ? 'Send command' : 'Continue the scene'"
             >
-              {{ getIcon('rollback', '⏪') }} Rollback
+              {{ inputCommand.trim() ? '▶️ Send' : '▶️ Continue' }}
             </button>
           </div>
 
@@ -151,11 +151,15 @@
     <div v-else class="loading-container">
       <p>Loading game...</p>
     </div>
+
+    <!-- Audio Player -->
+    <AudioPlayer ref="audioPlayer" :auto-play="true" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, nextTick, computed } from 'vue';
+import AudioPlayer from './components/AudioPlayer.vue';
 
 interface GameState {
   currentRoom: any;
@@ -235,6 +239,7 @@ const phaseEstimates: Record<string, number> = {
 
 const inputCommand = ref('');
 const messagesContainer = ref<HTMLElement>();
+const audioPlayer = ref<InstanceType<typeof AudioPlayer> | null>(null);
 
 let ws: WebSocket | null = null;
 
@@ -415,6 +420,12 @@ function handleServerMessage(data: any) {
     // Handle narrative responses from the server
     if (data.result && data.result.narrative) {
       addMessage(data.result.narrative, 'description', data.result.commitHash);
+
+      // Handle audio if available
+      if (data.result.audio && data.result.audio.segments && audioPlayer.value) {
+        console.log('[AudioPlayer] Received audio segments:', data.result.audio.segments.length);
+        audioPlayer.value.loadSegments(data.result.audio.segments);
+      }
     } else if (data.result && data.result.error) {
       addMessage(`${getIcon('error', '❌')} Error: ${data.result.error}`, 'error');
     } else if (data.error) {
@@ -427,30 +438,53 @@ function handleServerMessage(data: any) {
   }
 }
 
-function handleCommand() {
-  if (!inputCommand.value.trim() || isProcessing.value) return;
-  
+function handleContinue() {
+  if (isProcessing.value) return;
+
   const command = inputCommand.value.trim();
-  addMessage(`> ${command}`, 'command');
-  inputCommand.value = '';
-  
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    isProcessing.value = true;
-    processingMessage.value = 'Processing command...';
-    startProcessingTimer();
-    
-    // Send as player_action message for the narrative engine
-    ws.send(JSON.stringify({
-      type: 'player_action',
-      id: Date.now().toString(),
-      action: { 
-        type: 'interaction',
-        description: command 
-      },
-      rawInput: command
-    }));
+
+  // If there's input, send it as a command
+  if (command) {
+    addMessage(`> ${command}`, 'command');
+    inputCommand.value = '';
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      isProcessing.value = true;
+      processingMessage.value = 'Processing command...';
+      startProcessingTimer();
+
+      ws.send(JSON.stringify({
+        type: 'player_action',
+        id: Date.now().toString(),
+        action: {
+          type: 'interaction',
+          description: command
+        },
+        rawInput: command
+      }));
+    } else {
+      addMessage(`${getIcon('error', '❌')} Not connected to server`);
+    }
   } else {
-    addMessage(`${getIcon('error', '❌')} Not connected to server`);
+    // No input - continue the scene without player intervention
+    addMessage('⏩ Continue', 'system');
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      isProcessing.value = true;
+      processingMessage.value = 'Continuing scene...';
+      startProcessingTimer();
+
+      ws.send(JSON.stringify({
+        type: 'player_action',
+        id: Date.now().toString(),
+        action: {
+          type: 'continue'
+        },
+        rawInput: '' // Empty input signals "continue"
+      }));
+    } else {
+      addMessage(`${getIcon('error', '❌')} Not connected to server`);
+    }
   }
 }
 
@@ -1105,10 +1139,10 @@ body {
   box-sizing: border-box;
 }
 
-.rollback-button {
+.continue-button {
   background: var(--color-background);
-  color: var(--color-secondary);
-  border: 2px solid var(--color-secondary);
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
   padding: 8px 16px;
   font-family: inherit;
   font-size: 14px;
@@ -1116,15 +1150,16 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  min-width: 120px;
 }
 
-.rollback-button:hover:not(:disabled) {
-  background: var(--color-secondary);
+.continue-button:hover:not(:disabled) {
+  background: var(--color-primary);
   color: var(--color-background);
   box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
 }
 
-.rollback-button:disabled {
+.continue-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }

@@ -7,6 +7,7 @@ import { MCPServerManager } from '../mcp/mcp-server-manager';
 import { LLMProvider, LLMPrompt, LLMResponse, WorldContext, Event, Action, NPCContext } from './types';
 import { CreativeServerProvider } from './creative-server-provider';
 import { AgentOrchestrator } from '../agents/agent-orchestrator';
+import { AudioAssembler, AudioResponse, TextAnalyzerContext } from '../audio';
 
 export interface NarrativeConfig {
   llmProvider: 'creative-server';  // Only creative-server supported
@@ -43,6 +44,7 @@ export interface NarrativeResult {
   stateChanges: any[];
   nextActions: Action[];
   commitHash?: string;  // Git commit hash for this action (enables rollback)
+  audio?: AudioResponse;  // Audio segments for TTS playback
   error?: string;
 }
 
@@ -54,9 +56,11 @@ export class NarrativeController {
   private conversationStates: Map<string, any> = new Map();
   private requestCache: Map<string, any> = new Map();
   private agentOrchestrator?: AgentOrchestrator;
+  private audioAssembler?: AudioAssembler;
 
-  constructor(mcpManager: MCPServerManager, config: Partial<NarrativeConfig> = {}) {
+  constructor(mcpManager: MCPServerManager, config: Partial<NarrativeConfig> = {}, audioAssembler?: AudioAssembler) {
     this.mcpManager = mcpManager;
+    this.audioAssembler = audioAssembler;
     this.config = {
       llmProvider: 'creative-server',
       model: 'llama-3.3-70b-abliterated',
@@ -68,7 +72,7 @@ export class NarrativeController {
 
     // Initialize LLM provider
     this.initializeLLMProvider();
-    
+
     // Initialize agent system if configured
     if (this.config.useAgents) {
       this.agentOrchestrator = new AgentOrchestrator(
@@ -115,14 +119,17 @@ export class NarrativeController {
       
       // Step 4: Generate LLM response with context
       const llmResponse = await this.generateNarrativeResponse(context, classifiedAction, mechanicalResults);
-      
-      // Step 5: Apply state changes
+
+      // Step 5: Generate audio for the narrative (if enabled)
+      const audioResponse = await this.processAudioForNarrative(llmResponse.narrative, context);
+
+      // Step 6: Apply state changes
       const stateChanges = await this.applyStateChanges(llmResponse, mechanicalResults);
 
-      // Step 6: Record event in history
+      // Step 7: Record event in history
       this.recordEvent(classifiedAction, llmResponse, mechanicalResults);
 
-      // Step 7: Save state to Git and get commit hash (for rollback support)
+      // Step 8: Save state to Git and get commit hash (for rollback support)
       let commitHash: string | undefined;
       try {
         commitHash = await this.mcpManager.executeTool(
@@ -136,7 +143,7 @@ export class NarrativeController {
         // Continue without commit hash - rollback won't be available for this turn
       }
 
-      // Step 8: Determine next available actions
+      // Step 9: Determine next available actions
       const nextActions = await this.getAvailableActions(context);
 
       return {
@@ -145,7 +152,8 @@ export class NarrativeController {
         dialogue: llmResponse.dialogue,
         stateChanges,
         nextActions,
-        commitHash
+        commitHash,
+        audio: audioResponse
       };
 
     } catch (error: any) {
@@ -183,7 +191,11 @@ export class NarrativeController {
       };
 
       const response = await this.llmProvider.complete(prompt);
-      
+
+      // Generate audio for the response
+      const worldContext = await this.assembleContext({ type: 'dialogue', rawInput: 'conversation_start', target: npcId } as PlayerAction);
+      const audioResponse = await this.processAudioForNarrative(response.narrative, worldContext);
+
       // Record conversation start
       this.recordEvent({
         type: 'dialogue',
@@ -196,7 +208,8 @@ export class NarrativeController {
         narrative: response.narrative,
         dialogue: response.dialogue,
         stateChanges: [],
-        nextActions: await this.getConversationActions(npcId)
+        nextActions: await this.getConversationActions(npcId),
+        audio: audioResponse
       };
 
     } catch (error: any) {
@@ -230,10 +243,14 @@ export class NarrativeController {
       };
 
       const response = await this.llmProvider.complete(prompt);
-      
+
+      // Generate audio for the response
+      const worldContext = await this.assembleContext({ type: 'dialogue', rawInput: dialogue, target: npcId } as PlayerAction);
+      const audioResponse = await this.processAudioForNarrative(response.narrative, worldContext);
+
       // Update relationship based on dialogue
       await this.updateRelationshipFromDialogue(npcId, playerId, dialogue, response);
-      
+
       // Record dialogue event
       this.recordEvent({
         type: 'dialogue',
@@ -246,7 +263,8 @@ export class NarrativeController {
         narrative: response.narrative,
         dialogue: response.dialogue,
         stateChanges: [],
-        nextActions: await this.getConversationActions(npcId)
+        nextActions: await this.getConversationActions(npcId),
+        audio: audioResponse
       };
 
     } catch (error: any) {
@@ -277,32 +295,37 @@ export class NarrativeController {
   private async classifyAction(action: PlayerAction): Promise<PlayerAction> {
     // Enhanced action classification - could use LLM for ambiguous cases
     const input = action.rawInput.toLowerCase().trim();
-    
+
+    // Continue pattern - no player input, just let the scene unfold
+    if (input === 'continue' || action.type === 'continue') {
+      return { ...action, type: 'interaction', rawInput: 'continue' };
+    }
+
     // Movement patterns
     if (input.match(/^(go|move|walk|run|enter|exit|leave)\s+(to\s+)?(.+)/)) {
       return { ...action, type: 'movement' };
     }
-    
+
     // Dialogue patterns
     if (input.match(/^(say|tell|ask|speak)\s+/) || input.startsWith('"')) {
       return { ...action, type: 'dialogue' };
     }
-    
+
     // Interaction patterns
     if (input.match(/^(use|take|pick|grab|open|close|push|pull|examine|look)\s+/)) {
       return { ...action, type: 'interaction' };
     }
-    
+
     // Combat patterns
     if (input.match(/^(attack|fight|hit|strike|cast|shoot)\s+/)) {
       return { ...action, type: 'combat' };
     }
-    
+
     // Skill check patterns
     if (input.match(/^(sneak|hide|search|investigate|listen|climb)\s*/)) {
       return { ...action, type: 'skill_check' };
     }
-    
+
     // Default to interaction
     return { ...action, type: 'interaction' };
   }
@@ -324,42 +347,99 @@ export class NarrativeController {
         const npcId = typeof npcEntity === 'string' ? npcEntity : npcEntity.id;
         const npcTemplate = await this.mcpManager.executeTool('entity-content', 'getNPCTemplate', { npcId });
         const relationship = await this.getRelationship(npcId, 'player');
-        
+
+        // Check dynamic state for nameKnown flag
+        let entityState: any = {};
+        try {
+          entityState = await this.mcpManager.executeTool('state', 'getEntityState', { entityId: npcId }) || {};
+        } catch (error) {
+          // Entity state doesn't exist yet - will default to nameKnown: false
+          console.log(`[NarrativeController] No dynamic state for ${npcId}, name will be unknown`);
+        }
+
+        const nameKnown = entityState.nameKnown === true;
+
         if (npcTemplate.template) {
-          // Build comprehensive NPC description including appearance details
-          let fullDescription = npcTemplate.template.description || '';
+          let displayName: string;
+          let fullDescription: string;
 
-          // Add appearance details if available
-          if (npcTemplate.template.appearance) {
+          if (!nameKnown) {
+            // NAME UNKNOWN - Only provide observable appearance details
+            // Generate appearance-based descriptor
             const app = npcTemplate.template.appearance;
-            const details: string[] = [];
+            const descriptors: string[] = [];
 
-            if (app.hair) details.push(`Hair: ${app.hair}`);
-            if (app.eyes) details.push(`Eyes: ${app.eyes}`);
-            if (app.build) details.push(`Build: ${app.build}`);
-            if (app.style) details.push(`Wearing: ${app.style}`);
-            if (app.distinctive) details.push(`Distinctive: ${app.distinctive}`);
+            if (app) {
+              // Build natural descriptor from appearance
+              if (app.build) descriptors.push(app.build);
+              if (app.hair) {
+                const hairColor = app.hair.toLowerCase().match(/(blonde|red|auburn|brown|black|white|gray|silver)/i)?.[0];
+                if (hairColor) descriptors.push(hairColor);
+              }
 
-            if (details.length > 0) {
-              fullDescription += (fullDescription ? ' ' : '') + details.join('. ') + '.';
+              // Add general descriptor (woman/man based on context)
+              descriptors.push('woman'); // Could be derived from template or appearance
             }
-          }
 
-          // Add personality traits if available
-          if (npcTemplate.template.personality?.traits) {
-            fullDescription += ` Personality: ${npcTemplate.template.personality.traits.join(', ')}.`;
-          }
+            displayName = descriptors.length > 0 ? descriptors.join(' ') : 'stranger';
 
-          // Add secrets (hidden information that GM knows but player doesn't)
-          if (npcTemplate.template.secrets && npcTemplate.template.secrets.length > 0) {
-            fullDescription += ` [GM Knowledge - Secrets: ${npcTemplate.template.secrets.join('; ')}]`;
+            // Build minimal description - ONLY observable details
+            const observableDetails: string[] = [];
+            if (app) {
+              if (app.hair) observableDetails.push(`Hair: ${app.hair}`);
+              if (app.eyes) observableDetails.push(`Eyes: ${app.eyes}`);
+              if (app.build) observableDetails.push(`Build: ${app.build}`);
+              if (app.style) observableDetails.push(`Wearing: ${app.style}`);
+              if (app.distinctive) observableDetails.push(`Distinctive: ${app.distinctive}`);
+            }
+
+            fullDescription = observableDetails.length > 0
+              ? observableDetails.join('. ') + '.'
+              : 'A person you haven\'t met yet.';
+
+            // NO personality traits (you can't see those)
+            // NO secrets (obviously hidden)
+            // NO real name anywhere in the context
+
+          } else {
+            // NAME KNOWN - Provide full character information
+            displayName = npcTemplate.template.name;
+
+            // Build comprehensive NPC description
+            fullDescription = npcTemplate.template.description || '';
+
+            // Add appearance details if available
+            if (npcTemplate.template.appearance) {
+              const app = npcTemplate.template.appearance;
+              const details: string[] = [];
+
+              if (app.hair) details.push(`Hair: ${app.hair}`);
+              if (app.eyes) details.push(`Eyes: ${app.eyes}`);
+              if (app.build) details.push(`Build: ${app.build}`);
+              if (app.style) details.push(`Wearing: ${app.style}`);
+              if (app.distinctive) details.push(`Distinctive: ${app.distinctive}`);
+
+              if (details.length > 0) {
+                fullDescription += (fullDescription ? ' ' : '') + details.join('. ') + '.';
+              }
+            }
+
+            // Add personality traits
+            if (npcTemplate.template.personality?.traits) {
+              fullDescription += ` Personality: ${npcTemplate.template.personality.traits.join(', ')}.`;
+            }
+
+            // Add secrets (GM knowledge)
+            if (npcTemplate.template.secrets && npcTemplate.template.secrets.length > 0) {
+              fullDescription += ` [GM Knowledge - Secrets: ${npcTemplate.template.secrets.join('; ')}]`;
+            }
           }
 
           presentNPCs.push({
             id: npcId,
-            name: npcTemplate.template.name,
+            name: displayName,
             description: fullDescription,
-            currentMood: 'neutral',
+            currentMood: entityState.currentMood || 'neutral',
             relationship: {
               trust: relationship.trust || 0,
               fear: relationship.fear || 0,
@@ -452,25 +532,30 @@ export class NarrativeController {
   }
 
   private buildActionQuery(action: PlayerAction, mechanicalResults: any): string {
+    // Special handling for "continue" - let the scene unfold naturally
+    if (action.rawInput.toLowerCase() === 'continue') {
+      return `The player is watching the scene unfold without taking action.\n\nContinue the scene naturally. Let the characters and events progress on their own. The NPCs should take initiative, react to the situation, or move the scene forward. Generate a compelling continuation that advances the narrative.`;
+    }
+
     let query = `The player attempts to: "${action.rawInput}"\n\n`;
-    
+
     if (mechanicalResults.skillCheck) {
       const check = mechanicalResults.skillCheck;
       query += `Skill check result: ${check.success ? 'SUCCESS' : 'FAILURE'} (rolled ${check.roll.total} vs DC ${check.difficulty})\n`;
     }
-    
+
     if (mechanicalResults.combat) {
       const combat = mechanicalResults.combat;
       query += `Combat result: ${combat.hit ? 'HIT' : 'MISS'} ${combat.damage ? `for ${combat.damage} damage` : ''}\n`;
     }
-    
+
     if (mechanicalResults.movement) {
       const movement = mechanicalResults.movement;
       query += `Movement result: ${movement.success ? 'SUCCESS' : 'BLOCKED'} - ${movement.message}\n`;
     }
 
     query += "\nGenerate a compelling narrative response that incorporates these results. Include sensory details, atmosphere, and any dialogue from NPCs if appropriate.";
-    
+
     return query;
   }
 
@@ -789,6 +874,19 @@ export class NarrativeController {
     return this.agentOrchestrator?.getNoveltyHistory() || null;
   }
 
+  // Audio system control
+  setAudioAssembler(audioAssembler: AudioAssembler): void {
+    this.audioAssembler = audioAssembler;
+    console.log('[NarrativeController] Audio assembler connected');
+  }
+
+  getAudioStatus(): any {
+    if (!this.audioAssembler) {
+      return { enabled: false, available: false };
+    }
+    return this.audioAssembler.getStatus();
+  }
+
   // Cleanup
   async shutdown(): Promise<void> {
     console.log('[NarrativeController] Shutting down...');
@@ -959,5 +1057,74 @@ IMPORTANT RULES:
    */
   private clearRequestCache(): void {
     this.requestCache.clear();
+  }
+
+  /**
+   * Process narrative text and generate audio (if audio is enabled)
+   */
+  private async processAudioForNarrative(narrative: string, context: WorldContext): Promise<AudioResponse | undefined> {
+    // Skip if audio is not enabled or not available
+    if (!this.audioAssembler) {
+      return undefined;
+    }
+
+    try {
+      console.log('[NarrativeController] Processing audio for narrative...');
+
+      // Build audio context for speaker detection
+      const audioContext: TextAnalyzerContext = {
+        currentRoom: context.currentRoomName,
+        recentSpeakers: this.getRecentSpeakers(3),  // Last 3 speakers for context
+        previousNarrative: this.getPreviousNarrative()
+      };
+
+      // Call audio pipeline
+      const audioResponse = await this.audioAssembler.processNarrative(narrative, audioContext);
+
+      console.log(`[NarrativeController] Audio generated: ${audioResponse.segments.length} segments, ${audioResponse.totalDuration.toFixed(2)}s total`);
+
+      return audioResponse;
+    } catch (error) {
+      console.error('[NarrativeController] Failed to generate audio:', error);
+      // Don't fail the entire request if audio generation fails
+      return undefined;
+    }
+  }
+
+  /**
+   * Get recent speakers from event history for audio context
+   */
+  private getRecentSpeakers(count: number): string[] {
+    const speakers: string[] = [];
+
+    // Look through recent events to find speakers
+    for (let i = this.eventHistory.length - 1; i >= 0 && speakers.length < count; i--) {
+      const event = this.eventHistory[i];
+
+      // Extract speaker from dialogue events
+      if (event.type === 'dialogue' && event.actor) {
+        if (!speakers.includes(event.actor)) {
+          speakers.push(event.actor);
+        }
+      }
+
+      // Could also analyze event.description for quoted dialogue
+      // but event.actor is more reliable
+    }
+
+    return speakers;
+  }
+
+  /**
+   * Get previous narrative for audio context continuity
+   */
+  private getPreviousNarrative(): string | undefined {
+    if (this.eventHistory.length === 0) {
+      return undefined;
+    }
+
+    // Return the last event's narrative
+    const lastEvent = this.eventHistory[this.eventHistory.length - 1];
+    return lastEvent.description;
   }
 }

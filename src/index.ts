@@ -10,6 +10,7 @@ import { MCPServerManager } from './mcp/mcp-server-manager';
 import { NarrativeController } from './llm/narrative-controller';
 import { GameLoader } from './core/game-loader';
 import { ImageService } from './services/image-service';
+import { AudioAssembler } from './audio';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -129,6 +130,28 @@ async function initializeGame() {
       console.log('[ImageService] Could not connect to entity MCP:', error);
     }
 
+    // Initialize audio system if enabled in game config
+    if (currentGame.audio && currentGame.audio.enabled) {
+      try {
+        console.log('🎵 Initializing Audio System...');
+        audioAssembler = new AudioAssembler({
+          audioConfig: currentGame.audio,
+          gameId: gameName,
+          mcpManager: mcpManager  // Pass MCP manager to load character voices
+        });
+
+        // Connect audio assembler to narrative controller
+        narrativeController.setAudioAssembler(audioAssembler);
+
+        console.log('✓ Audio System initialized');
+      } catch (error) {
+        console.error('⚠️  Audio System initialization failed:', error);
+        console.log('Game will continue without audio support');
+      }
+    } else {
+      console.log('🔇 Audio System disabled in game configuration');
+    }
+
     console.log(`Game loaded: ${currentGame.game.title}`);
     console.log('MCP servers initialized');
     console.log('Narrative Controller initialized');
@@ -144,6 +167,7 @@ const git = new GitManager('./game-state');
 let mcpManager: MCPServerManager;
 let narrativeController: NarrativeController;
 let imageService: ImageService;
+let audioAssembler: AudioAssembler | null = null;
 
 // Status Broadcasting System
 class StatusBroadcaster {
@@ -353,6 +377,18 @@ async function handlePlayerAction(ws: any, data: any) {
           return; // Don't send normal response
         }
 
+        if (command === 'continue') {
+          // Handle /continue command - let the scene unfold without player input
+          console.log(`[PlayerAction] Continue command - letting scene unfold naturally`);
+          const playerAction = {
+            type: 'continue' as const,
+            rawInput: 'continue'
+          };
+          response.result = await narrativeController.processPlayerAction(playerAction);
+          ws.send(JSON.stringify(response));
+          return;
+        }
+
         if (command === 'generate' && args.startsWith('image')) {
           // Extract user instructions after "image"
           const userInstructions = args.replace(/^image\s*/, '').trim();
@@ -363,6 +399,18 @@ async function handlePlayerAction(ws: any, data: any) {
           return; // Don't send normal response
         }
       }
+    }
+
+    // Handle empty input as "continue" command
+    if (!input || input.trim() === '') {
+      console.log(`[PlayerAction] Empty input - continuing scene naturally`);
+      const playerAction = {
+        type: 'continue' as const,
+        rawInput: 'continue'
+      };
+      response.result = await narrativeController.processPlayerAction(playerAction);
+      ws.send(JSON.stringify(response));
+      return;
     }
 
     const playerAction = {
@@ -1017,6 +1065,62 @@ app.get('/api/images/entity/:entityId', (req, res) => {
       url: `/api/images/${metadata.id}`,
       metadata
     });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Audio endpoints
+app.get('/api/audio/status', async (req, res) => {
+  if (!audioAssembler) {
+    res.json({
+      enabled: false,
+      available: false,
+      reason: 'Audio system not initialized'
+    });
+    return;
+  }
+
+  try {
+    const status = audioAssembler.getStatus();
+    res.json(status);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/audio/health', async (req, res) => {
+  if (!audioAssembler) {
+    res.status(503).json({ error: 'Audio system not initialized' });
+    return;
+  }
+
+  try {
+    const health = await audioAssembler.checkHealth();
+    res.json(health);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/audio/:segmentId.mp3', async (req, res) => {
+  if (!audioAssembler) {
+    res.status(503).json({ error: 'Audio system not initialized' });
+    return;
+  }
+
+  try {
+    const { segmentId } = req.params;
+    const audioBuffer = await audioAssembler.getSegmentBuffer(segmentId);
+
+    if (!audioBuffer) {
+      res.status(404).json({ error: 'Audio segment not found' });
+      return;
+    }
+
+    res.set('Content-Type', 'audio/mpeg');
+    res.set('Cache-Control', 'public, max-age=3600'); // Cache audio for 1 hour
+    res.send(audioBuffer);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

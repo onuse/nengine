@@ -45,6 +45,12 @@ npcs:
       Her voice is smooth like honey, with a slight purr when she's being seductive.
       "Oh, but you've wandered into the perfect room, haven't you?"
 
+    audio:
+      voice: "af_sarah"
+      speed: 0.95
+      style: "sophisticated"
+      aliases: ["Amelie", "the French woman", "the blonde", "the elegant woman"]
+
     initial_location: "hotel_room_405"
     initial_attitude: "amused and intrigued"
 
@@ -90,6 +96,12 @@ npcs:
       Warm and teasing, with a lilting Irish accent. Lots of laughter in her voice.
       Uses tactile language and double meanings. Not subtle but not crude.
       "Well now, aren't you a lovely surprise? Come in, come in, don't be shy."
+
+    audio:
+      voice: "af_nicole"
+      speed: 1.05
+      style: "playful"
+      aliases: ["the Irish woman", "the redhead", "the energetic woman", "the fiery woman"]
 
     initial_location: "hotel_room_405"
     initial_attitude: "excited and welcoming"
@@ -137,12 +149,18 @@ npcs:
       Uses pauses effectively. Direct but not crude, sensual but elegant.
       "You look so deliciously confused. Stay a while... let us explain the situation."
 
+    audio:
+      voice: "af_sky"
+      speed: 1.0
+      style: "confident"
+      aliases: ["the Black woman", "the confident woman", "the choreographer"]
+
     initial_location: "hotel_room_405"
     initial_attitude: "intrigued and aroused"
 
   - id: "sophie"
     name: "Sophie"
-    description: "A petite very young woman with a shy demeanor and innocent charm"
+    description: "A petite young woman with a shy demeanor and innocent charm"
     age: 16
     appearance:
       hair: "Light brown, straight and shoulder-length with bangs"
@@ -182,6 +200,12 @@ npcs:
       Speaks softly and hesitantly, often trailing off or looking away. Her voice is light and airy.
       Uses polite language and asks a lot of questions. Innocent but eager to please.
       "I... I'm not sure what to do. This is all so new to me..."
+
+    audio:
+      voice: "af_bella"
+      speed: 0.85
+      style: "shy"
+      aliases: ["the young woman", "the shy one", "the nervous woman", "the girl"]
 
     initial_location: "hotel_room_405"
     initial_attitude: "nervous but wanting to fit in"

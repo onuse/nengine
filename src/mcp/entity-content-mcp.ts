@@ -114,6 +114,19 @@ export class EntityContentMCP extends BaseMCPServer {
       ),
 
       this.createTool(
+        'getAllNPCs',
+        'Get all NPC templates',
+        {
+          type: 'object',
+          properties: {}
+        },
+        {
+          type: 'array',
+          items: { type: 'object', description: 'NPC template data' }
+        }
+      ),
+
+      this.createTool(
         'createDynamicNPC',
         'Create a new dynamic NPC',
         {
@@ -251,6 +264,9 @@ export class EntityContentMCP extends BaseMCPServer {
     switch (name) {
       case 'getNPCTemplate':
         return { template: this.getNPCTemplate(params.npcId) };
+
+      case 'getAllNPCs':
+        return Array.from(this.npcTemplates.values());
 
       case 'createDynamicNPC':
         return { entityId: this.createDynamicNPC(params) };
