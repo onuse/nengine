@@ -29,6 +29,11 @@ export class TextAnalyzer {
   private narratorFallbackThreshold: number;
   private isHealthy: boolean = false;
 
+  // Success rate monitoring (recommended by AI server team)
+  private totalAttempts: number = 0;
+  private successfulAttempts: number = 0;
+  private retryCount: number = 0;
+
   constructor(
     serviceUrl: string,
     narratorFallbackThreshold: number = 0.5
@@ -104,92 +109,130 @@ export class TextAnalyzer {
       ];
     }
 
-    // Call Gemma 3 for speaker detection
-    try {
-      const detectionRequest: SpeakerDetectionRequest = {
-        narrative,
-        characters: this.formatCharactersForDetection(characters),
-        context: context
-          ? {
-              currentRoom: context.currentRoom,
-              recentSpeakers: context.recentSpeakers,
-            }
-          : undefined,
-      };
-
-      console.log(`[TextAnalyzer] Analyzing text (${narrative.length} chars) with ${characters.length} characters`);
-
-      const response = await this.client.post<SpeakerDetectionResponse>(
-        '/parse-speakers',
-        detectionRequest
-      );
-
-      if (!response.data.success) {
-        throw new Error('Speaker detection failed - service returned success=false');
-      }
-
-      console.log(
-        `[TextAnalyzer] Detection complete: ${response.data.segments.length} segments, ` +
-        `${response.data.processing_time_ms}ms processing time`
-      );
-
-      // Convert detected segments to audio segments
-      const audioSegments: AudioSegment[] = response.data.segments.map((detected) => {
-        // Apply narrator fallback for low confidence
-        let speaker = detected.speaker;
-        let voiceConfig: VoiceConfig;
-        let confidence = detected.confidence;
-
-        if (confidence < this.narratorFallbackThreshold) {
-          console.log(
-            `[TextAnalyzer] Low confidence (${confidence.toFixed(2)}) for "${detected.text.substring(0, 30)}...", ` +
-            `falling back to narrator`
-          );
-          speaker = 'narrator';
-          voiceConfig = narratorVoice;
-        } else if (speaker === 'narrator') {
-          voiceConfig = narratorVoice;
-        } else {
-          // Look up character voice config
-          const character = characters.find((c) => c.id === speaker);
-          if (character) {
-            voiceConfig = character.audio;
-          } else {
-            console.warn(`[TextAnalyzer] Unknown character "${speaker}", falling back to narrator`);
-            speaker = 'narrator';
-            voiceConfig = narratorVoice;
-            confidence = 0.5;
+    // Call speaker detection with retry logic (recommended by AI server team)
+    const detectionRequest: SpeakerDetectionRequest = {
+      narrative,
+      characters: this.formatCharactersForDetection(characters),
+      context: context
+        ? {
+            currentRoom: context.currentRoom,
+            recentSpeakers: context.recentSpeakers,
           }
+        : undefined,
+    };
+
+    console.log(`[TextAnalyzer] Analyzing text (${narrative.length} chars) with ${characters.length} characters`);
+
+    // Retry logic: 2-3 attempts as recommended
+    const maxRetries = 3;
+    let lastError: any = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        this.totalAttempts++;
+
+        if (attempt > 1) {
+          console.log(`[TextAnalyzer] Retry attempt ${attempt}/${maxRetries}`);
+          this.retryCount++;
         }
 
-        return {
-          id: this.generateSegmentId(detected.text, speaker),
-          speaker,
-          text: detected.text,
-          voiceConfig,
-          confidence,
-          reasoning: detected.reasoning,
-        };
-      });
+        const response = await this.client.post<SpeakerDetectionResponse>(
+          '/parse-speakers',
+          detectionRequest
+        );
 
-      return audioSegments;
-    } catch (error) {
-      const axiosError = error as any;
+        if (!response.data.success) {
+          throw new Error('Speaker detection failed - service returned success=false');
+        }
 
-      // If speaker detection fails, fall back to narrator for entire text
-      console.error('[TextAnalyzer] Speaker detection failed, falling back to narrator:', axiosError.message);
+        // Success!
+        this.successfulAttempts++;
+        const successRate = (this.successfulAttempts / this.totalAttempts * 100).toFixed(1);
 
-      return [
-        {
-          id: this.generateSegmentId(narrative, 'narrator'),
-          speaker: 'narrator',
-          text: narrative.trim(),
-          voiceConfig: narratorVoice,
-          confidence: 0.3,
-          reasoning: 'Speaker detection service failed - fallback to narrator',
-        },
-      ];
+        console.log(
+          `[TextAnalyzer] Detection complete: ${response.data.segments.length} segments, ` +
+          `${response.data.processing_time_ms}ms processing time ` +
+          `(success rate: ${successRate}%, retries: ${this.retryCount})`
+        );
+
+        // Convert detected segments to audio segments
+        const audioSegments: AudioSegment[] = response.data.segments.map((detected) => {
+          // Apply narrator fallback for low confidence
+          let speaker = detected.speaker;
+          let voiceConfig: VoiceConfig;
+          let confidence = detected.confidence;
+
+          if (confidence < this.narratorFallbackThreshold) {
+            console.log(
+              `[TextAnalyzer] Low confidence (${confidence.toFixed(2)}) for "${detected.text.substring(0, 30)}...", ` +
+              `falling back to narrator`
+            );
+            speaker = 'narrator';
+            voiceConfig = narratorVoice;
+          } else if (speaker === 'narrator') {
+            voiceConfig = narratorVoice;
+          } else {
+            // Look up character voice config
+            const character = characters.find((c) => c.id === speaker);
+            if (character) {
+              voiceConfig = character.audio;
+            } else {
+              console.warn(`[TextAnalyzer] Unknown character "${speaker}", falling back to narrator`);
+              speaker = 'narrator';
+              voiceConfig = narratorVoice;
+              confidence = 0.5;
+            }
+          }
+
+          return {
+            id: this.generateSegmentId(detected.text, speaker),
+            speaker,
+            text: detected.text,
+            voiceConfig,
+            confidence,
+            reasoning: detected.reasoning,
+          };
+        });
+
+        return audioSegments;
+      } catch (error) {
+        lastError = error;
+        const axiosError = error as any;
+
+        if (attempt < maxRetries) {
+          console.warn(
+            `[TextAnalyzer] Speaker detection attempt ${attempt}/${maxRetries} failed: ${axiosError.message}`
+          );
+          // Brief delay before retry (exponential backoff: 100ms, 200ms)
+          await new Promise(resolve => setTimeout(resolve, attempt * 100));
+        } else {
+          console.error(
+            `[TextAnalyzer] All ${maxRetries} attempts failed. Last error: ${axiosError.message}`
+          );
+        }
+      }
     }
+
+    // All retries failed - fall back to narrator for entire text
+    const successRate = this.totalAttempts > 0
+      ? (this.successfulAttempts / this.totalAttempts * 100).toFixed(1)
+      : '0.0';
+
+    console.error(
+      `[TextAnalyzer] Speaker detection failed after ${maxRetries} attempts, falling back to narrator ` +
+      `(overall success rate: ${successRate}%)`
+    );
+
+    return [
+      {
+        id: this.generateSegmentId(narrative, 'narrator'),
+        speaker: 'narrator',
+        text: narrative.trim(),
+        voiceConfig: narratorVoice,
+        confidence: 0.3,
+        reasoning: 'Speaker detection service failed after retries - fallback to narrator',
+      },
+    ];
   }
 
   /**
@@ -238,4 +281,29 @@ export class TextAnalyzer {
   public getServiceUrl(): string {
     return this.serviceUrl;
   }
+
+  /**
+   * Get success rate statistics (for monitoring)
+   */
+  public getStats(): {
+    totalAttempts: number;
+    successfulAttempts: number;
+    failedAttempts: number;
+    retryCount: number;
+    successRate: string;
+  } {
+    const failedAttempts = this.totalAttempts - this.successfulAttempts;
+    const successRate = this.totalAttempts > 0
+      ? (this.successfulAttempts / this.totalAttempts * 100).toFixed(1)
+      : '0.0';
+
+    return {
+      totalAttempts: this.totalAttempts,
+      successfulAttempts: this.successfulAttempts,
+      failedAttempts,
+      retryCount: this.retryCount,
+      successRate: `${successRate}%`,
+    };
+  }
 }
+

@@ -331,8 +331,14 @@ async function loadGameConfig() {
 
 function connectWebSocket() {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const wsUrl = `${protocol}//${window.location.host}`;
-  
+
+  // In development (Vite on 3000), connect to backend on 3001
+  // In production (Express serves everything), use current host
+  const isDev = window.location.port === '3000';
+  const wsUrl = isDev
+    ? `${protocol}//localhost:3001`
+    : `${protocol}//${window.location.host}`;
+
   console.log('Attempting to connect to:', wsUrl);
   addMessage(`${getIcon('connecting', '🔌')} Connecting to server...`);
 

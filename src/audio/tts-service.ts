@@ -184,6 +184,7 @@ export class TTSService {
       };
 
       console.log(`[TTSService] Batch synthesizing ${segments.length} segments`);
+      console.log(`[TTSService] DEBUG - Request payload:`, JSON.stringify(request, null, 2));
 
       const response = await this.client.post<KokoroBatchResponse>(
         '/synthesize/batch',

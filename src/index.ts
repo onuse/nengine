@@ -1103,7 +1103,8 @@ app.get('/api/audio/health', async (req, res) => {
   }
 });
 
-app.get('/api/audio/:segmentId.mp3', async (req, res) => {
+// Serve generated audio files (WAV format)
+app.get('/api/audio/:segmentId.wav', async (req, res) => {
   if (!audioAssembler) {
     res.status(503).json({ error: 'Audio system not initialized' });
     return;
@@ -1118,7 +1119,7 @@ app.get('/api/audio/:segmentId.mp3', async (req, res) => {
       return;
     }
 
-    res.set('Content-Type', 'audio/mpeg');
+    res.set('Content-Type', 'audio/wav');
     res.set('Cache-Control', 'public, max-age=3600'); // Cache audio for 1 hour
     res.send(audioBuffer);
   } catch (error: any) {

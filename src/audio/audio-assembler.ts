@@ -155,8 +155,8 @@ export class AudioAssembler {
 
     console.log(`[AudioAssembler] Text analysis complete: ${segments.length} segments`);
 
-    // Step 2: Synthesize audio for all segments
-    const synthesizedSegments = await this.ttsService.synthesizeBatch(segments);
+    // Step 2: Synthesize audio for all segments (using WAV format)
+    const synthesizedSegments = await this.ttsService.synthesizeBatch(segments, 'wav');
 
     console.log(`[AudioAssembler] Audio synthesis complete`);
 
@@ -176,7 +176,7 @@ export class AudioAssembler {
    */
   private async saveAudioSegments(segments: SynthesizedAudioSegment[]): Promise<void> {
     const savePromises = segments.map(async (segment) => {
-      const filePath = path.join(this.audioStoragePath, `${segment.id}.mp3`);
+      const filePath = path.join(this.audioStoragePath, `${segment.id}.wav`);
 
       try {
         await fs.writeFile(filePath, segment.audioBuffer);
@@ -198,7 +198,7 @@ export class AudioAssembler {
     const segmentResponses: AudioSegmentResponse[] = segments.map((seg) => ({
       id: seg.id,
       speaker: seg.speaker,
-      url: `/api/audio/${seg.id}.mp3`,
+      url: `/api/audio/${seg.id}.wav`,
       text: seg.text,
       duration: seg.duration,
     }));
@@ -223,7 +223,7 @@ export class AudioAssembler {
    * Get audio segment file path
    */
   public getSegmentPath(id: string): string {
-    return path.join(this.audioStoragePath, `${id}.mp3`);
+    return path.join(this.audioStoragePath, `${id}.wav`);
   }
 
   /**
@@ -271,6 +271,13 @@ export class AudioAssembler {
     speakerDetectionHealthy: boolean;
     segmentCount: number;
     characterCount: number;
+    speakerDetectionStats?: {
+      totalAttempts: number;
+      successfulAttempts: number;
+      failedAttempts: number;
+      retryCount: number;
+      successRate: string;
+    };
   } {
     return {
       enabled: this.config.enabled,
@@ -278,6 +285,7 @@ export class AudioAssembler {
       speakerDetectionHealthy: this.textAnalyzer.isServiceHealthy(),
       segmentCount: this.audioSegments.size,
       characterCount: this.characterMatcher.size(),
+      speakerDetectionStats: this.textAnalyzer.getStats(),
     };
   }
 
@@ -304,7 +312,7 @@ export class AudioAssembler {
     try {
       const files = await fs.readdir(this.audioStoragePath);
       const deletePromises = files
-        .filter((f) => f.endsWith('.mp3'))
+        .filter((f) => f.endsWith('.wav'))
         .map((f) => fs.unlink(path.join(this.audioStoragePath, f)));
 
       await Promise.all(deletePromises);
@@ -326,7 +334,7 @@ export class AudioAssembler {
       let totalSize = 0;
 
       for (const file of files) {
-        if (file.endsWith('.mp3')) {
+        if (file.endsWith('.wav')) {
           const stats = await fs.stat(path.join(this.audioStoragePath, file));
           totalSize += stats.size;
         }
